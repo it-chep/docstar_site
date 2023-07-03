@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+{% load cache %}
+{% block title %}
+{{  title }}
+{% endblock %}
+
+{% block content %}
+    <div class="doctor_name">
+        <h1>{{ doctor.name }}</h1>
+    </div>
+    <div class="doctor_speciallity">
+        <h2>{{ doctor.speciallity }}</h2>
+    </div>
+    <div class="doctor_card container">
+        <div class="card_content">
+            <div class="container_ava">
+                <div class="doc_avatar">
+                    <img class="avatar" src="{{ doctor.avatar_url | default_if_none:"#"}}">
+                    <div class="text">
+                        <a>Город: {{ doctor.city }}</a>
+                    </div>
+                </div>
+            </div>
+
+        <div class="social_container inst">
+            <div class="inst_head">
+                <a href="{{ doctor.inst_url }}">INSTAGRAM*</a>
+            </div>
+                <div class="line"> </div>
+        </div>
+
+         <div class="social_container subs">
+            <h2>Количество подписчиков инст:</h2>
+                <div class="subs_head">
+                    <p>{{ doctor.subscribers_inst }}</p>
+                </div>
+{#                    <div class="line"> </div>#}
+            </div>
+
+        {% if doctor.vk_url != '---' %}
+            <div class="social_container vk">
+                <div class="vk_head">
+                    <a href="{{ doctor.vk_url }}">Вконтакте</a>
+                </div>
+                    <div class="line"> </div>
+            </div>
+        {% endif %}
+        {% if doctor.dzen_url != '---' %}
+            <div class="social_container dzen">
+                <div class="dzen_head">
+                    <a href="{{ doctor.dzen_url }}">ЯндексДзен</a>
+                </div>
+                    <div class="line"> </div>
+            </div>
+        {% endif %}
+        {% if doctor.tg_url != '---' %}
+            <div class="social_container tg">
+                <div class="tg_head">
+                    <a href="{{ doctor.tg_url }}">Telegram</a>
+                </div>
+                    <div class="line"> </div>
+            </div>
+        {% endif %}
+
+        
+        {% if doctor.medical_directions != '---' %}
+            <div class="blog">
+                <div class="blog_head">
+                    <p class="direct"><a>Направление:</a> {{ doctor.medical_directions }}</p>
+                </div>
+{#                    <div class="line"> </div>#}
+            </div>
+        {% endif %}
+
+
+        {% if doctor.additional_speciallity != '---' %}
+            <div class="blog">
+                <div class="blog_head">
+                    <p><a>Доп.специальность:</a> {{ doctor.additional_speciallity }}</p>
+                </div>
+{#                    <div class="line"> </div>#}
+            </div>
+        {% endif %}
+
+        {% if doctor.main_blog_theme != '---' %}
+            <div class="blog">
+                <div class="blog_head">
+                    <p class="theme"><a>Тематика блога:</a> {{ doctor.main_blog_theme }}</p>
+                </div>
+{#                    <div class="line"> </div>#}
+            </div>
+        {% endif %}
+
+
+
+        {% if doctor.prodoctorov != '---' and doctor.prodoctorov != "" %}
+
+        <a class="prodoc" href="{{ doctor.prodoctorov }}"><button class="prodoc_btn"> Записаться на прием </button></a>
+
+        {% endif %}
+
+        {% if doctor.email  ==  request.user.email  %}
+            <a class="edit_block" href="{{ doctor.get_absolute_edit }}">
+            <button class="edit_btn">ИЗМЕНИТЬ</button>
+            </a>
+        {% endif %}
+
+
+        </div>
+    </div>
+{#<div>{{ request.user.email }} {{ doctor.email }}</div>#}
+{% endblock %}

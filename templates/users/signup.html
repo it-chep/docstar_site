@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block head_title %}
+    Регистрация
+{% endblock %}
+
+{% block extralinks %}
+        <link type="text/css" rel="stylesheet" href="{% static 'css/users.css' %}">
+
+    {#    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">#}
+{% endblock %}
+
+{% block content %}
+
+    <div class="container">
+        <form class="form-signin text-center">
+            {% csrf_token %}
+            <h1 class="h3 mb-3 font-weight-normal">Регистрация</h1>
+
+            <div class="input-group mb-3">
+                <label for="email">Ваш email:</label>
+                <input type="email" class="form-control input_off" id="email" name="email"
+                       placeholder="my.email@docstar.club"
+                       data-email-pattern>
+            </div>
+            <p id="error-email" class="error-message off">Такого email нет в клубе Docstar, попробуйте
+                другой</p>
+
+            <div class="input-group form-group">
+                <label for="password">Пароль:</label>
+                <input type="password" id="password" name="password" placeholder="Придумайте пароль" required
+                       class="form-control">
+            </div>
+            <button class="btn btn-lg btn-primary mt-5 register btn-blue" type="submit">Зарегистрироваться</button>
+        </form>
+    </div>
+    <div id="signup_popup" class="popup">
+        <div class="popup-content">
+            <span class="close">&times;</span>
+            <h2>Регистрация закрыта :(</h2>
+            <p>Приносим свои извинения, в связи с обновлением базы данных, регистрация не работает. Попробуйте через
+                пару минут</p>
+        </div>
+    </div>
+
+    <div id="end_signup_popup" class="end_popup">
+        <div class="popup-content">
+            <span class="end_close">&times;</span>
+            <h2>Отправили письмо на вашу почту!</h2>
+            <p>Чтобы завершить регистрацию, вам нужно открыть почтовый ящик, который вы только что указали, найти там
+                письмо, нажать на кнопку в этом письме. Вас перекинет на страницу
+                нашего сайти, там произойдет проверка вашего email, и если все будет хорошо, вас пропустит дальше )</p>
+        </div>
+    </div>
+
+    <script src="{% static 'js/email.js' %}"></script>
+    <script src="{% static 'js/response_signup.js' %}"></script>
+
+{% endblock %}

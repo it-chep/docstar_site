@@ -1,0 +1,72 @@
+{% load static %}
+{#{% load docstar_site_tags %}#}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <title>
+        {% block head_title %}
+            {{ title }}
+        {% endblock %}
+    </title>
+    <link rel="shortcut icon" href="../static/img/dcs.png" type="image/png">
+    <link type="text/css" rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <script defer src="{% static '/js/main.js' %}"></script>
+    <link type="text/css" rel="stylesheet" href="{% static '/css/users_style.css' %}">
+
+    {% block extralinks %}
+    {% endblock %}
+
+</head>
+<body>
+<div class="nav_bar open">
+    <header class="header">
+
+        <button class="header__burger-btn" id="burger">
+            <span></span><span></span><span></span>
+        </button>
+        <nav class="menu">
+            <div class="menu_list">
+                <div class="menu_item"><a href="{% url 'homepage' %}" class="menu_link">Найти врачей</a></div>
+                <div class="menu_item"><a href="https://doctor.readyschool.ru/docstar" class="menu_link">Что за
+                    клуб?</a></div>
+                <div class="menu_item"><a href="https://instagram.com/docstar_clinic" class="menu_link">DOCSTAR
+                    CLINIC</a></div>
+                <div class="menu_item"><a href="https://readyschool.ru/teach/control/stream/view/id/473870825"
+                                          class="menu_link">Лекции и База знаний</a></div>
+                <div class="menu_item"><a href="https://t.me/Club_Docstar_bot?start=question"
+                                          class="menu_link">Задать вопрос</a></div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="nav_bar_container">
+        <a href="{% url 'homepage' %}" class="g">
+            <div class="bar_item">Найти врачей</div>
+        </a>
+        <a href="https://doctor.readyschool.ru/docstar" class="g">
+            <div class="bar_item">Что за клуб?</div>
+        </a>
+        <a href="https://instagram.com/docstar_clinic" class="g">
+            <div class="bar_item">DOCSTAR CLINIC</div>
+        </a>
+        <a href="https://readyschool.ru/teach/control/stream/view/id/473870825" class="g">
+            <div class="bar_item">Лекции и База знаний</div>
+        </a>
+        <a href="https://t.me/Club_Docstar_bot?start=question" class="g">
+            <div class="bar_item">Задать вопрос</div>
+        </a>
+    </div>
+
+    <div class="login_doc"><a href="{% url 'chek_getcourse' %}">Я участник клуба</a></div>
+
+</div>
+
+{% block content %}
+{% endblock %}
+
+
+</body>
+
+</html>

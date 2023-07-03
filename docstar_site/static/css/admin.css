@@ -1,0 +1,16 @@
+.get_course_api{
+    width: 450px;
+    position: absolute;
+    margin-left: 5px;
+}
+
+/*.gk{*/
+/*    width: 400px;*/
+/*    position: absolute;*/
+/*    display: inline-block;*/
+/*}*/
+
+button{
+    color: white;
+    background-color: blue;
+}

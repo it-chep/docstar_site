@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head_title %}
+    Вход
+{% endblock %}
+
+{% block extralinks %}
+    <link type="text/css" rel="stylesheet" href="{% static 'css/users.css' %}">
+
+{% endblock %}
+
+
+{% block content %}
+    <div class="container">
+        <form class="form-signin text-center">
+            {% csrf_token %}
+            <h1 class="h3 mb-3 font-weight-normal">Войдите в аккаунт</h1>
+            <div class="input-group mb-3">
+                <label for="email">Ваш email:</label>
+                <input type="email" class="form-control  input_off" id="email" name="email"
+                       placeholder="my.email@docstar.club"
+                       data-email-pattern>
+            </div>
+            <p id="error-email" class="error-message off">Такого email нет в клубе Docstar, попробуйте
+                другой</p>
+
+            <div class="input-group form-group">
+                <label for="password">Пароль:</label>
+                <input type="password" id="password" name="password" required class="form-control  pass_input_off"
+                       placeholder="Введите пароль">
+            </div>
+            <p id="error-pass" class="error-message off">Что-то пошло не так, возможно вы неправильно написали пароль.
+                Проверьте раскладку, на котоой вы пишите и попробуйте снова.
+                Также вы можете поменять пароль нажав на кнопку забыл пароль
+            </p>
+            <button class="btn btn-lg btn-blue btn-block mt-5" type="submit">Войти</button>
+        </form>
+        <div class="forgot_password">
+            <a class="forgot_link" href="{% url 'forgot_password' %}">Забыли пароль?</a>
+        </div>
+        <hr id="line" class="off">
+        <p id="signup_warning" class=" text-center off signup_warning_txt">Если у вас нет аккаунта, вы можете
+            зарегистрироваться по кнопке ниже</p>
+        <a id="signup_btn" href="{% url 'signup' %}" class="btn btn-lg btn-primary mt-5 btn-blue register off">Зарегистрироваться</a>
+        {#    <a href="{% url 'password_reset' %}" class="btn btn-primary">Забыли пароль</a>#}
+    </div>
+    <div class="popup">
+        <div class="close"></div>
+    </div>
+    <div class="end_popup">
+        <div class="end_close"></div>
+    </div>
+
+
+    <script src="{% static 'js/response_signup.js' %}"></script>
+
+{% endblock %}

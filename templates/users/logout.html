@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head_title %}
+    Выход
+{% endblock %}
+
+{% block extralinks %}
+    <link rel="stylesheet" type="text/css" href="{% static "css/logout.css" %}">
+{% endblock %}
+
+{% block content %}
+    <div class="gk_form_container index">
+
+        <h1>Выход из аккаунта</h1>
+
+        <p class="pre_exit_txt">Вы уверены, что хотите выйти из аккаунта ?</p>
+
+        <form action="{% url 'logout' %}" method="POST" class="exit_form_container">
+            {% csrf_token %}
+            <button type="submit" class="autorize_btn voity_btn exit_site">Выйти</button>
+        </form>
+{#        <script src="{% static 'js/logout.js' %}"></script>#}
+
+    </div>
+
+
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head_title %}
+    Что-то пошло не по плану
+{% endblock %}
+
+{% block extralinks %}
+    <link rel="stylesheet" href="{% static 'css/register.css' %}">
+{% endblock %}
+
+{% block content %}
+    <h1>Что-то пошло не по плану :(</h1>
+    <div class="register-container">
+
+        <div class="register-box">
+            <p>К сожалению, с регистрацией что-то пошло не по плану.</p>
+            <p>Обратитесь в техподдержку по кнопке ниже и напишите свой email.</p>
+            <label>
+                <input type="email" id="email-input" placeholder="Email">
+            </label>
+            <a href="#" id="support-link">Обратиться в техподдержку</a>
+
+
+        </div>
+    </div>
+    <script>const supportLink = document.getElementById("support-link");
+    const emailInput = document.getElementById("email-input");
+
+    supportLink.addEventListener("click", function (event) {
+        event.preventDefault();
+
+        const email = emailInput.value.trim();
+
+        if (email === "") {
+            alert("Пожалуйста введите email");
+            return;
+        }
+
+        const url = "https://t.me/Club_Docstar_bot?start=question" + email;
+
+        window.location.href = url;
+    });</script>
+{% endblock %}

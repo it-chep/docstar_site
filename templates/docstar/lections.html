@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}
+{{  title }}
+{% endblock %}
+
+{% block content %}
+
+    <div>
+
+    <ul>
+        {% for lection in lections %}
+        <li>{{ lection.lection_name }}</li>
+            <a href="{{ lection.get_absolute_url }}">
+            <button>Посмотреть</button>
+            </a>
+        {% endfor %}
+    </ul>
+
+    </div>
+
+{% endblock %}

@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="gk_form_container index">
+    <h1>
+    {{ answer }}
+    </h1>
+
+    {% if result == 1 %}
+        <div class="autorizeTrue">
+            <div class="autorize_btnTrue" >
+                <a class="autorize_buttonTrue" href="{% url 'signup' %}">Авторизоваться на сайте</a>
+            </div>
+        </div>
+        <div class="gk_form_container" >
+        {% if request.user.is_authenticated %}
+        <a href="{% url 'account_logout' %}" >
+            <button  class="chek_gk gk_login" style="top:25px;">Выйти</button>
+        </a>
+
+        {% else %}
+        <a href="{% url 'account_login' %}" >
+            <button  class="chek_gk gk_login" style="top:25px;">Я авторизован на этом сайте (Войти)</button>
+        </a>
+        {% endif %}
+        </div>
+    {% else %}
+        <div class="autorize">
+            <a class="autorize_btn" href="https://doctor.readyschool.ru/docstar">
+                <div class="autorize_button " >Попасть в клуб</div>
+            </a>
+        </div>
+    {% endif %}
+    </div>
+{% endblock %}

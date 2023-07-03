@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}
+{{  title }}
+{% endblock %}
+
+{% block content %}
+
+    <div>
+    <div class="lection_name">
+        {{ lection.lection_name }}
+    </div>
+
+    <iframe width="500" height="500" src="{{ lection.youtube_url }}" allowfullscreen="" allow="autoplay; encrypted-media" frameborder="0">
+        <div style='background-image: url("{{ lection.youtube_url }}");'></div>
+    </iframe>
+
+    <div class="autor_link">
+        {{ lection.lector_inst }}
+    </div>
+
+    </div>
+
+{% endblock %}

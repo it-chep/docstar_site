@@ -1,0 +1,29 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ошибка 404</title>
+    <link href="{% static "css/styles.css" %}" rel="stylesheet">
+{#    <link href="{% static 'img' %}" type="image/png">#}
+</head>
+<body>
+    <div class="container_404">
+        <img class="er" src="{% static "img/Mask group.png"%}">
+
+        <div class="dop_container">
+{#        <img class="vova" src="{% static "img/Ellipse 29.svg" %}">#}
+        <img src="{% static "img/vova123.png" %}">
+
+        <div class="error_text_container">
+        <p class="error_text">Упс.....</p>
+        <p class="error_text sec">Такой страницы нет ;(</p>
+            <p class="p_404">Перейдите на главную</p>
+            <a class="a_404" href="{% url 'homepage' %}"><div class="btn_404">Перейти</div></a>
+        </div>
+            </div>
+
+{#        <div class="club_time">Самое время вступить в клуб!</div>#}
+    </div>
+</body>
+</html>

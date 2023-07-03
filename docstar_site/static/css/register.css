@@ -1,0 +1,47 @@
+h1{
+  margin-top: 50px ;
+}
+.register-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 35vh;
+}
+
+.register-box {
+  width: 400px;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  padding: 20px;
+  text-align: center;
+}
+
+.register-box p {
+  margin-bottom: 10px;
+}
+
+#support-link {
+  display: block;
+  background-color: #01abaa;
+  color: #fff;
+  border: none;
+  margin-top: 15px;
+  padding: 10px 20px;
+  border-radius: 5px;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+#support-link:hover {
+  background-color: #007f7f;
+}
+
+.email-input {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  width: 100%;
+  box-sizing: border-box;
+}

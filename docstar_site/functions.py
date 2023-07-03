@@ -1,0 +1,81 @@
+from translate import Translator
+from .models import *
+
+
+def get_eng_slug(text, src='ru', dest='en'):
+    try:
+        translator = Translator(from_lang=src, to_lang=dest)
+        translation = translator.translate(text)
+        return translation
+
+    except Exception as e:
+        return e
+
+
+def validate_data(data):
+    valid_ans = str(data if data != '' else '---')
+    return valid_ans
+
+
+def validate_foreign(city, speciallity, city_list, spec_list):
+    if city in city_list:
+        return City.objects.get(name=city)
+
+    if speciallity in spec_list:
+        return Speciallity.objects.get(name=speciallity)
+
+
+def subs_to_str(number):
+    try:
+        if number == '':
+            return 'Нет доступа'
+        number = int(number)
+        if number <= 1000:
+            return number
+
+        elif number < 1000000:
+            if str(number//100 % 10) != '0':
+                return str(number//1000) + '.' + str(number//100 % 10) + 'к'
+            else:
+                return str(number//1000) + 'к'
+
+        elif number >= 1000000:
+            if str(number//100000 % 10) != '0':
+                return str(number//1000000) + '.' + str(number//100000 % 10) + 'м'
+            else:
+                return str(number//1000000) + 'м'
+    except Exception as ex:
+        return 0
+
+
+def get_params(data):
+
+    params = {
+        'email': data[1],
+        'name': data[5] + '' + data[6],
+        'inst_url': validate_data(data[22]),
+        'vk_url': validate_data(data[23]),
+        'dzen_url': validate_data(data[24]),
+        'tg_url': validate_data(data[25]),
+        'main_theme': validate_data(data[29]),
+        'subs': subs_to_str(data[30]),
+        'additional_speciallity': validate_data(data[31]),
+        'medical_direcion': validate_data(data[32]),
+        'prodoc': validate_data(data[33])
+    }
+
+    return params
+
+
+# email = data[i][1]
+# name = data[i][5] + '' + data[i][6]
+# city = validate_foreign(city=data[i][11])
+# inst_url = validate_data(data[i][22])
+# vk_url = validate_data(data[i][23])
+# dzen_url = validate_data(data[i][24])
+# tg_url = validate_data(data[i][25])
+# speciallity = validate_foreign(speciallity=data[i][28])
+# main_theme = validate_data(int(data[i][29]))
+# subs = subs_to_str(data[i][30])
+# additional_speciallity = validate_data(data[i][31])
+# medical_direcion = validate_data(data[i][32])

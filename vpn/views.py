@@ -70,6 +70,12 @@ def get_statistic_all_vpn(request: HttpRequest):
 
     # Фильтр по скидке блоггера
     blogger_discount_param = request.GET.get('blogger_discount')
+    if blogger_discount_param != "" and blogger_discount_param is not None:
+        try:
+            blogger_discount_param = int(blogger_discount_param)
+        except ValueError:
+            return HttpResponse(status=500, content='В поле фильтра скидки пользователя нужно указывать число')
+
     if blogger_discount_param:
         bloggers = bloggers.filter(discount=blogger_discount_param)
 

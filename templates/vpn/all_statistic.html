@@ -3,7 +3,13 @@
 {% block content %}
     <div style="float: left; width: 50%;">
         <h2>Клиенты</h2>
-
+        <form method="get">
+            {{ client_filter_form.as_p }}
+            <input type="hidden" name="blogger_discount" value="{{ request.GET.blogger_discount }}">
+            <input type="hidden" name="blogger_date" value="{{ request.GET.blogger_date }}">
+            <button class="filter_vpn" type="submit">Применить фильтр для клиентов</button>
+            <a href="?">Очистить фильтры</a>
+        </form>
         <p>Купило: {{ clients.count }}</p>
         <table border="1">
             <tr>
@@ -30,6 +36,13 @@
     </div>
     <div style="float: left; width: 50%;">
         <h2>Блоггеры</h2>
+        <form method="get">
+            {{ blogger_filter_form.as_p }}
+            <input type="hidden" name="client_date" value="{{ request.GET.client_date }}">
+            <input type="hidden" name="client_utm" value="{{ request.GET.client_utm }}">
+            <button class="filter_vpn" type="submit">Применить фильтр для блоггеров</button>
+            <a href="?">Очистить фильтры</a>
+        </form>
         <p>Блоггеры: {{ bloggers.count }}</p>
         <table border="1">
             <tr>
@@ -48,4 +61,55 @@
             {% endfor %}
         </table>
     </div>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+
+        /* Стили для левой части */
+        .left-side {
+            float: left;
+            width: 50%;
+        }
+
+        h2 {
+            margin-top: 15px;
+            font-size: 24px;
+            font-weight: 900;
+        }
+
+        form {
+            margin: 20px;
+        }
+
+        .filter_vpn {
+            margin-top: 10px;
+            padding: 10px;
+            background: #01abaa;
+            color: white;
+            border: none;
+            border-radius: 15px;
+        }
+
+        /* Стили для правой части */
+        .right-side {
+            float: left;
+            width: 50%;
+        }
+
+    </style>
 {% endblock %}

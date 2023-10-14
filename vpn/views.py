@@ -11,7 +11,9 @@ from django.db.utils import IntegrityError
 
 from vpn.utils import validate_vpn_save_data_error
 from vpn.decorators import validate_json_request
+from vpn.forms import ClientFilterForm, BloggerFilterForm
 from vpn.models import *
+from vpn.filters import filter_date_from_param
 
 
 # Только для salebot
@@ -47,24 +49,53 @@ def get_statistic_vpn(request: HttpRequest, data: dict = None):
             return JsonResponse(response_data)
         else:
             return HttpResponse(status=400, content='Блогера с таким sb_id не существует')
-    else:
-        return HttpResponse(status=403, content='Эндпоинт поддерживает только запросы методом POST')
 
 
 @csrf_exempt
 def get_statistic_all_vpn(request: HttpRequest):
     clients = Client.objects.all()
     bloggers = Blogger.objects.all()
+
+    client_filter_form = ClientFilterForm(request.GET)
+    blogger_filter_form = BloggerFilterForm(request.GET)
+
+    client_date_param = request.GET.get('client_date')
+    if client_date_param:
+        clients = filter_date_from_param(client_date_param, clients)
+
+    # Фильтр по utm клиента
+    client_utm_param = request.GET.get('client_utm')
+    if client_utm_param:
+        clients = clients.filter(utm=UTM.objects.filter(name=client_utm_param).first())
+
+    # Фильтр по скидке блоггера
+    blogger_discount_param = request.GET.get('blogger_discount')
+    if blogger_discount_param:
+        bloggers = bloggers.filter(discount=blogger_discount_param)
+
+    # Фильтр по дате блоггера
+    blogger_date_param = request.GET.get('blogger_date')
+    if blogger_date_param:
+        bloggers = filter_date_from_param(blogger_date_param, bloggers)
+
     context = {
         'clients': clients,
         'bloggers': bloggers,
         'clients_count': clients.count(),
         'bloggers_count': bloggers.count(),
+        'client_filter_form': client_filter_form,
+        'blogger_filter_form': blogger_filter_form,
     }
-    if request.method == "POST":
-        return JsonResponse(status=200, data={'clients': clients.count(), 'blogger': bloggers.count()})
 
     return render(request, 'vpn/all_statistic.html', context)
+
+
+@csrf_exempt
+def get_statistic_all_vpn_bot(request: HttpRequest):
+    if request.method == "POST":
+        clients = Client.objects.all().count()
+        bloggers = Blogger.objects.all().count()
+        return JsonResponse(status=200, data={'clients': clients, 'blogger': bloggers})
 
 
 @csrf_exempt
@@ -105,7 +136,6 @@ def create_client_vpn(request: HttpRequest, data: dict = None):
             return HttpResponse(status=500, content='Поля sb_id, gk_id и tg_id должны быть числом')
 
         return HttpResponse(status=200, content='Пользователь сохранен')
-    return HttpResponse(status=403, content='Эндпоинт поддерживает только запросы методом POST')
 
 
 @csrf_exempt
@@ -137,4 +167,3 @@ def create_blogger_vpn(request: HttpRequest, data: dict = None):
             return HttpResponse(status=500, content='Поля sb_id и tg_id должны быть числом')
 
         return HttpResponse(status=200, content='Пользователь сохранен')
-    return HttpResponse(status=403, content='Эндпоинт поддерживает только запросы методом POST')

@@ -13,5 +13,5 @@ def validate_json_request(view_func):
                                     content='Ошибка в теле json запроса, проверьте его на наличие и целостность данных')
             return view_func(request, data, *args, **kwargs)
         else:
-            ...
+            return HttpResponse(status=403, content='Эндпоинт поддерживает только запросы методом POST')
     return wrapper

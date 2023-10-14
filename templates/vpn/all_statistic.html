@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div style="float: left; width: 50%;">
+        <h2>Клиенты</h2>
+
+        <p>Купило: {{ clients.count }}</p>
+        <table border="1">
+            <tr>
+                <th>Имя клиента</th>
+                <th>Username Telegram клиента</th>
+                <th>Telegram_id</th>
+                <th>Salebot_id</th>
+                <th>UTM-метка</th>
+                <th>Дата регистрации</th>
+
+            </tr>
+            {% for client in clients %}
+                <tr>
+                    <td>{{ client.name }}</td>
+                    <td>{{ client.username }}</td>
+                    <td>{{ client.tg_id }}</td>
+                    <td>{{ client.sb_id }}</td>
+                    <td>{{ client.utm }}</td>
+                    <td>{{ client.registration_date_time }}</td>
+
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+    <div style="float: left; width: 50%;">
+        <h2>Блоггеры</h2>
+        <p>Блоггеры: {{ bloggers.count }}</p>
+        <table border="1">
+            <tr>
+                <th>Имя Блогера</th>
+                <th>Username Telegram блогера</th>
+                <th>Процент скидки</th>
+                <th>UTM-метка</th>
+            </tr>
+            {% for blogger in bloggers %}
+                <tr>
+                    <td>{{ blogger.name }}</td>
+                    <td>{{ blogger.username }}</td>
+                    <td>{{ blogger.discount }}</td>
+                    <td>{{ blogger.utm }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+{% endblock %}

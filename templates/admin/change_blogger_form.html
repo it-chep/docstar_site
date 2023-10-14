@@ -1,0 +1,43 @@
+{% extends "admin/change_form.html" %}
+{% load static %}
+
+{% block content %}
+    {{ block.super }}
+    <div class="field-box">
+        <h1>Ссылка для блогера</h1>
+        <div id="utm-link-container">
+            <a id="utm-link" style="font-size: 25px"></a>
+        </div>
+        <p class="help_utm_link" style="color: red; margin-top: 20px ">НЕОБХОДИМО ЗАПОЛНИТЬ ПОЛЕ UTM-метка</p>
+        <p class="help_utm_link" style="">Чтобы создать новую метку, можно нажать на плюс рядом с полем</p>
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const utmSelect = document.getElementById('id_utm');
+            const utmLink = document.getElementById('utm-link');
+            const utmLinkContainer = document.getElementById('utm-link-container');
+            const helpUtmLink = document.getElementById('help_utm_link');
+
+            utmSelect.addEventListener('change', function () {
+                const selectedOption = utmSelect.options[utmSelect.selectedIndex];
+                const selectedValue = selectedOption.text;
+                if (selectedValue !== "---------") {
+                    const link = 'https://doctor.docstar_vpn?utm_source=' + selectedValue;
+                    utmLink.innerText = `${link}`;
+                    utmLinkContainer.style.display = 'block';
+                    helpUtmLink.style.display = 'none';
+                } else {
+                    utmLinkContainer.style.display = 'none';
+                    helpUtmLink.style.display = 'block';
+                }
+            });
+
+            if (utmSelect.value !== "---------") {
+                utmSelect.dispatchEvent(new Event('change'));
+            }
+        });
+    </script>
+
+{% endblock %}

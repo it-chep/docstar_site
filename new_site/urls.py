@@ -12,6 +12,7 @@ urlpatterns = [
     path('accounts/', include('allauth.urls')),
     path('grappelli/', include('grappelli.urls')),
     path('users/', include('users.urls')),
+    path('vpn/', include('vpn.urls')),
     path('api/v1/doctorlist/', DoctorApiView.as_view(), name='doctor-list'),
     path('', include('docstar_site.urls')),
 ]

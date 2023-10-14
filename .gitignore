@@ -13,6 +13,5 @@ venv/
 docstar_site/docstar/
 docstar_site/user_photos/
 __pycache__/
-**/__init__.py
 *.json
 .idea/

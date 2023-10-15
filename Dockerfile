@@ -1,5 +1,5 @@
 FROM python:3.9
-WORKDIR /home/maxim/PycharmProjects/new_site/new_site
+WORKDIR /app
 COPY requirements.txt .
 RUN apt-get -y update
 RUN apt-get -y install vim nano

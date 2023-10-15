@@ -7,13 +7,13 @@ services:
       DB_NAME: postgres
       DB_USER: postgres
       DB_PASSWORD: re-play
-      DB_HOST: db
+      DB_HOST: postgres
     ports:
       - "8000:8000"
     volumes:
       - .:/new_site
     depends_on:
-      - db
+      - postgres
     networks:
       - app-network
 

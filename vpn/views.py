@@ -68,7 +68,7 @@ def get_statistic_all_vpn(request: HttpRequest):
     if client_utm_param:
         clients = clients.filter(utm=UTM.objects.filter(name=client_utm_param).first())
 
-    # Фильтр по скидке блоггера
+    # Фильтр по скидке блогера
     blogger_discount_param = request.GET.get('blogger_discount')
     if blogger_discount_param != "" and blogger_discount_param is not None:
         try:
@@ -79,7 +79,7 @@ def get_statistic_all_vpn(request: HttpRequest):
     if blogger_discount_param:
         bloggers = bloggers.filter(discount=blogger_discount_param)
 
-    # Фильтр по дате блоггера
+    # Фильтр по дате блогера
     blogger_date_param = request.GET.get('blogger_date')
     if blogger_date_param:
         bloggers = filter_date_from_param(blogger_date_param, bloggers)

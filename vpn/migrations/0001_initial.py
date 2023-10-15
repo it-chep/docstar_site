@@ -51,7 +51,7 @@ class Migration(migrations.Migration):
                 ('sb_id', models.BigIntegerField(unique=True, verbose_name='Salebot_id')),
                 ('gk_id', models.BigIntegerField(unique=True, verbose_name='GetCourse_id')),
                 ('registration_date_time', models.DateTimeField(default=django.utils.timezone.now, verbose_name='Дата регистрации')),
-                ('blogger', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='vpn.blogger', verbose_name='Блоггер')),
+                ('blogger', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='vpn.blogger', verbose_name='Блогер')),
                 ('utm', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='vpn.utm', verbose_name='UTM-метка')),
             ],
             options={

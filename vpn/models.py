@@ -41,7 +41,7 @@ class Client(models.Model):
     gk_id = models.BigIntegerField(verbose_name="GetCourse_id", blank=False, unique=True)
     registration_date_time = models.DateTimeField(verbose_name="Дата регистрации", default=timezone.now)
     utm = models.ForeignKey('UTM', on_delete=models.CASCADE, verbose_name='UTM-метка', null=True, blank=True)
-    blogger = models.ForeignKey('Blogger', on_delete=models.CASCADE, verbose_name='Блоггер', null=True, blank=True)
+    blogger = models.ForeignKey('Blogger', on_delete=models.CASCADE, verbose_name='Блогер', null=True, blank=True)
 
     def __str__(self):
         return self.name

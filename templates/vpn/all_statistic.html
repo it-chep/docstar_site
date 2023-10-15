@@ -35,15 +35,15 @@
         </table>
     </div>
     <div style="float: left; width: 50%;">
-        <h2>Блоггеры</h2>
+        <h2>Блогеры</h2>
         <form method="get">
             {{ blogger_filter_form.as_p }}
             <input type="hidden" name="client_date" value="{{ request.GET.client_date }}">
             <input type="hidden" name="client_utm" value="{{ request.GET.client_utm }}">
-            <button class="filter_vpn" type="submit">Применить фильтр для блоггеров</button>
+            <button class="filter_vpn" type="submit">Применить фильтр для блогеров</button>
             <a href="?">Очистить фильтры</a>
         </form>
-        <h4>Блоггеры: {{ bloggers.count }}</h4>
+        <h4>Блогеры: {{ bloggers.count }}</h4>
         <table border="1">
             <tr>
                 <th>Имя Блогера</th>

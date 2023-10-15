@@ -18,7 +18,7 @@ class ClientFilterForm(forms.Form):
 
 class BloggerFilterForm(forms.Form):
     blogger_discount = forms.IntegerField(
-        required=False, label='Скидка блоггера',
-        widget=forms.TextInput(attrs={'placeholder': 'Введите процентную скидку блоггера (число)'})
+        required=False, label='Скидка блогера',
+        widget=forms.TextInput(attrs={'placeholder': 'Введите процентную скидку блогера (число)'})
     )
-    blogger_date = forms.ChoiceField(choices=DATE_CHOICES, required=False, label='Дата блоггера')
+    blogger_date = forms.ChoiceField(choices=DATE_CHOICES, required=False, label='Дата блогера')

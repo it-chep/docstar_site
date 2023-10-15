@@ -10,23 +10,18 @@ services:
     volumes:
       - .:/new_site
     depends_on:
-      - postgres
-    networks:
-      - app-network
+      - db
 
   db:
     image: postgres:latest
-    container_name: db
     environment:
+      POSTGRES_USER: postgres
+      POSTGRES_DB: postgres
       POSTGRES_PASSWORD: postgres
     ports:
       - "5432:5432"
     volumes:
       - pg_data:/var/lib/postgresql/data
 
-networks:
-  app-network:
-    driver: bridge
-
 volumes:
-  postgres_data:
+  pg_data:

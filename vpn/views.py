@@ -22,7 +22,7 @@ from vpn.filters import filter_date_from_param
 def get_statistic_vpn(request: HttpRequest, data: dict = None):
     """VIEW Только для интеграции с salebot """
 
-    price = settings.VPN_PRICE
+    price = int(settings.VPN_PRICE)
     last_month_start = datetime.date.today() - datetime.timedelta(days=30)
 
     if request.method == "POST":

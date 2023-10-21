@@ -8,45 +8,9 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .serializer import *
+from users.serializer import *
 
-from .models import *
-
-
-def init_email(request):
-    pass
-
-
-# class SignUpView(DataMixin, CreateView):
-#     form_class = CustomUserCreationForm
-#     success_url = reverse_lazy('success')
-#     template_name = 'users/signup.html'
-#
-#     def get_context_data(self, *, object_list=None, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         c_def = self.get_user_context(title="Регистрация")
-#         return dict(list(context.items()) + list(c_def.items()))
-#
-#     def get_params(self, request):
-#         email = self.request.GET.get('email')
-#         return email
-#
-#     def post(self, request, *args, **kwargs):
-#
-#         form = CustomUserCreationForm(request.POST)
-#         # form.fields["email"].initial = SignUpView.get_params(self, request)
-#
-#         if form.is_valid():
-#             user = form.save(commit=False)
-#             user.save()
-#
-#             logout(request)
-#
-#             login(request, user, backend='django.contrib.auth.backends.ModelBackend')
-#
-#             return redirect('success')
-#         else:
-#             return render(request, self.template_name, {'form': form})
+from users.models import *
 
 
 class SignUp(APIView):
@@ -68,7 +32,6 @@ class SignUp(APIView):
             return Response({'status': 200}, status=status.HTTP_200_OK)
 
         else:
-            print('goodbye')
             errors = serializer.errors
             if 'email' in errors:
                 email_errors = errors['email']
@@ -131,7 +94,7 @@ class LogoutView(APIView):
 
 
 class Forgot_pass(APIView):
-
+    # Todo
     def get(self, request):
         pass
 
@@ -139,8 +102,9 @@ class Forgot_pass(APIView):
 def success_signup(request):
     return render(request, 'users/success.html')
 
-class VerificationEmail(APIView):
 
+class VerificationEmail(APIView):
+    # Todo
     def get(self):
         pass
 
@@ -216,13 +180,10 @@ class ChangePassword(APIView):
         serializer.is_valid()
         if serializer.is_valid():
             user = CustomUser.objects.filter(email_verification_token=request.GET.get('token')).get()
-            print(user, user.password, )
             login(request, user)
             return redirect('homepage')
 
         else:
-            print('post error')
-            errors = serializer.errors
             return redirect('homepage')
 
 

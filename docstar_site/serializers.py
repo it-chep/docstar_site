@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Doctor
+from docstar_site.models import Doctor
 
 
 # class DoctorModel:

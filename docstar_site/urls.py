@@ -1,12 +1,10 @@
 from django.urls import include
 from django.views.decorators.cache import cache_page
 
-from .views import *
-from .admin import *
+from docstar_site.views import *
+from docstar_site.admin import *
 
 urlpatterns = [
-    # path('admin/', admin.site.urls),
-
     path('spasibo_book/', spasibo_book, name='spasibo_book'),
 
     path('clinic/', Doctors.as_view(), name='clinic'),
@@ -27,6 +25,4 @@ urlpatterns = [
     path('<slug:slug>/', ShowDoc.as_view(), name='doctor_card'),
     path('<slug:slug>/edit/', AvaUpdate.as_view(), name='edit'),
     path('<slug:slug>/edit/success', success_edit, name='edit_photo'),
-
-    # path('error', page_not_found_view, name='error')
 ]

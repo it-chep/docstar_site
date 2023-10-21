@@ -8,6 +8,7 @@ from django.utils.text import slugify
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.decorators.csrf import csrf_exempt
 from django.db.utils import IntegrityError
+from django.conf import settings
 
 from vpn.utils import validate_vpn_save_data_error
 from vpn.decorators import validate_json_request
@@ -16,11 +17,12 @@ from vpn.models import *
 from vpn.filters import filter_date_from_param
 
 
-# Только для salebot
 @csrf_exempt
 @validate_json_request
 def get_statistic_vpn(request: HttpRequest, data: dict = None):
-    price = 1900
+    """VIEW Только для интеграции с salebot """
+
+    price = settings.VPN_PRICE
     last_month_start = datetime.date.today() - datetime.timedelta(days=30)
 
     if request.method == "POST":
@@ -59,6 +61,7 @@ def get_statistic_all_vpn(request: HttpRequest):
     client_filter_form = ClientFilterForm(request.GET)
     blogger_filter_form = BloggerFilterForm(request.GET)
 
+    # Фильтр по дате покупки для клиента
     client_date_param = request.GET.get('client_date')
     if client_date_param:
         clients = filter_date_from_param(client_date_param, clients)
@@ -75,7 +78,6 @@ def get_statistic_all_vpn(request: HttpRequest):
             blogger_discount_param = int(blogger_discount_param)
         except ValueError:
             return HttpResponse(status=500, content='В поле фильтра скидки пользователя нужно указывать число')
-
     if blogger_discount_param:
         bloggers = bloggers.filter(discount=blogger_discount_param)
 

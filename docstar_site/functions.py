@@ -1,5 +1,5 @@
 from translate import Translator
-from .models import *
+from docstar_site.models import *
 
 
 def get_eng_slug(text, src='ru', dest='en'):
@@ -34,22 +34,21 @@ def subs_to_str(number):
             return number
 
         elif number < 1000000:
-            if str(number//100 % 10) != '0':
-                return str(number//1000) + '.' + str(number//100 % 10) + 'к'
+            if str(number // 100 % 10) != '0':
+                return str(number // 1000) + '.' + str(number // 100 % 10) + 'к'
             else:
-                return str(number//1000) + 'к'
+                return str(number // 1000) + 'к'
 
         elif number >= 1000000:
-            if str(number//100000 % 10) != '0':
-                return str(number//1000000) + '.' + str(number//100000 % 10) + 'м'
+            if str(number // 100000 % 10) != '0':
+                return str(number // 1000000) + '.' + str(number // 100000 % 10) + 'м'
             else:
-                return str(number//1000000) + 'м'
+                return str(number // 1000000) + 'м'
     except Exception as ex:
         return 0
 
 
 def get_params(data):
-
     params = {
         'email': data[1],
         'name': data[5] + '' + data[6],
@@ -65,17 +64,3 @@ def get_params(data):
     }
 
     return params
-
-
-# email = data[i][1]
-# name = data[i][5] + '' + data[i][6]
-# city = validate_foreign(city=data[i][11])
-# inst_url = validate_data(data[i][22])
-# vk_url = validate_data(data[i][23])
-# dzen_url = validate_data(data[i][24])
-# tg_url = validate_data(data[i][25])
-# speciallity = validate_foreign(speciallity=data[i][28])
-# main_theme = validate_data(int(data[i][29]))
-# subs = subs_to_str(data[i][30])
-# additional_speciallity = validate_data(data[i][31])
-# medical_direcion = validate_data(data[i][32])

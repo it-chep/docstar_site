@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Blogger, UTM, Client
+from vpn.models import Blogger, UTM, Client
 
 
 class BloggerAdmin(admin.ModelAdmin):

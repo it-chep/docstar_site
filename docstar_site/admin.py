@@ -9,7 +9,7 @@ from django.utils.html import escape
 from django.urls import reverse
 from django.utils.safestring import mark_safe
 
-from .models import *
+from docstar_site.models import *
 from django.urls import path
 
 
@@ -24,11 +24,8 @@ class DoctorAdmin(admin.ModelAdmin):
 
 class ExportAdmin(admin.ModelAdmin):
     list_display = ('export_id', 'export_time')
-    # prepopulated_fields = {"slug": ("name",)}
-    # user_owned_objects_field = 'email'
 
 
-# admin.site.register(Doctor, ProjectAdmin)
 admin.site.register(Doctor, DoctorAdmin)
 admin.site.register(Lection)
 admin.site.register(City, CityAdmin)

@@ -3,6 +3,7 @@ from django.template.defaultfilters import slugify
 from django.urls import reverse
 from django.contrib.auth.models import User
 from django.conf import settings
+
 User = settings.AUTH_USER_MODEL
 
 
@@ -39,11 +40,6 @@ class Doctor(models.Model):
 
     def get_absolute_edit(self):
         return reverse('edit', kwargs={'slug': self.slug})
-
-    # def save(self, *args, **kwargs):
-    #     if not self.slug:
-    #         self.slug = slugify(self.name)
-    #     return super().save(*args, **kwargs)
 
     class Meta:
         verbose_name = 'Пользователь'

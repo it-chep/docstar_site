@@ -48,4 +48,3 @@ class CustomUser(AbstractUser):
     class Meta:
         verbose_name = 'ПОЛЬЗОВАТЕЛЬ сайта'
         verbose_name_plural = 'ПОЛЬЗОВАТЕЛИ сайта'
-        # ordering = ["name"]

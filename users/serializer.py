@@ -33,22 +33,19 @@ class SignUpSerializer(serializers.Serializer):
 
         send_mail(
             'Подтверждение email',
-            'Привет, Вы только что зарегистрировались на сайте Тренажер Счастья. '
+            'Привет, Вы только что зарегистрировались на сайте DOCSTAR. '
             'Но чтобы получить доступ к закрытым материалам, нам нужно проверить вашу почту. Чтобы пройти проверку,'
             f' нажмите на кнопку    '
-            # f'<a href="http://127.0.0.1:8000/users/verificate_email/get_token/?token={random_string}" '
             f'<a href="https://docstar.readyschool.ru/users/verificate_email/get_token/?token={random_string}" '
             'style="display: inline-block; background-color: #01abaa; color: #fff; padding: 10px; " \
                   "text-decoration: none; border-radius: 5px;">Подтвердить почту</a>',
             'readymama@ya.ru',
             [f'{email}'],
             fail_silently=False,
-            html_message='Привет, Вы только что зарегистрировались на сайте Тренажер Счастья. '
+            html_message='Привет, Вы только что зарегистрировались на сайте DOCSTAR. '
                          'Но чтобы получить доступ к закрытым материалам, нам нужно '
                          'проверить вашу почту. Чтобы пройти проверку,'
                          f' нажмите на кнопку    '
-                         # f'<a href="http://127.0.0.1:8000/users/verificate_email/get_token/'
-                         # f'?token={random_string}" '
                          f'<a href="https://docstar.readyschool.ru/users/verificate_email/get_token/'
                          f'?token={random_string}" '
                          'style="display: inline-block; background-color: #01abaa; color: #fff; padding: 10px; " \
@@ -87,13 +84,9 @@ class ForgotPasswordSerializer(serializers.Serializer):
             random_string = ''.join(random.choices(string.ascii_letters + string.digits, k=15))
 
             user = CustomUser.objects.filter(email=email).get()
-            pk = user.pk
+
             user.email_verification_token = random_string
             user.save()
-
-            # asya = AsyncUsers()
-            # token_delay.delay(pk)
-
             send_mail(
                 'Восстановление пароля',
                 'Привет, вижу, что вы забыли пароль 🙁'
@@ -125,12 +118,9 @@ class ChangePasswordSerializer(serializers.Serializer):
     token = serializers.CharField()
 
     def validate(self, data):
-        # Поменять пароль и вернуть пользователя, чтобы залогинить его
-        # print(password)
         if CustomUser.objects.filter(email_verification_token=data['token']).exists():
             user = CustomUser.objects.filter(email_verification_token=data['token']).get()
             user.set_password(data['password'])
-            # user.password = data['password']
             user.save()
             return user
         else:

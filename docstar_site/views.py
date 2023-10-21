@@ -6,6 +6,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.sites import requests
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
+from django.conf import settings
+from django.http import HttpResponse, Http404
 from django.forms import model_to_dict
 from django.shortcuts import render, get_object_or_404, redirect
 from django.template import RequestContext
@@ -18,61 +20,44 @@ import requests
 from time import sleep
 import threading
 
-# from new_site.urls import handler500
-from .forms import UpdateDoc
-from .models import *
-from .utils import *
-from django.http import HttpResponse, Http404
-# from .serializers import DoctorSerializer
-from .permissions import DoctorPermissionsMixin, MembersPermissionsMixin
-from .Treads import get_export_id
-from .functions import *
-# from apscheduler.schedulers.blocking import BlockingScheduler
+from docstar_site.forms import UpdateDoc
+from docstar_site.models import *
+from docstar_site.utils import *
+from docstar_site.permissions import DoctorPermissionsMixin, MembersPermissionsMixin
+from docstar_site.Treads import get_export_id
+from docstar_site.functions import *
 
 import logging
 
 logger = logging.getLogger(__name__)
-
-# GETCOURSE CONFIG
-secret_key = '5yvK6Jxqvjn0XcLoaZhlEKgWVDi7OcIGoVSkPnV7bikIAtliZe2mekpuhCPlcXz9f6uLrkm67APEfS562u6FzB4SXo6vJy0Oa9qxo9K94M0g5DGRChkjPgZmHdXKYOE5'
-account_name = 'readymama'
-group_id = 1728991
-# GETCOURSE CONFIG
-
-# def Treads():
 thread_1 = threading.Thread(target=get_export_id, daemon=True)
 thread_1.start()
 
 
-# thread_2 = BlockingScheduler()
-# thread_2.start()
-
-@cache_page(60*60*10)
+@cache_page(60 * 60 * 10)
 def page_not_found_view(request, exception):
     return render(request, 'docstar/404.html', status=404, )
 
 
-@cache_page(60*60*10)
+@cache_page(60 * 60 * 10)
 def spasibo_book(request):
-    # uid = {uid} & gkname = {first_name} & gkphone = {phone} & gkemail = {email}
     uid = request.GET.get("uid")
     gkname = request.GET.get("gkname")
     gkphone = request.GET.get("gkphone")
     gkemail = request.GET.get("gkemail")
-    return render(request, 'docstar/docstar_book.html', {'uid': uid,
-                                                         'gkname': gkname,
-                                                         'gkphone': gkphone,
-                                                         'gkemail': gkemail
-                                                         })
+    return render(request,
+                  'docstar/docstar_book.html',
+                  {
+                      'uid': uid,
+                      'gkname': gkname,
+                      'gkphone': gkphone,
+                      'gkemail': gkemail
+                  }
+                  )
 
 
 def e_handler500(request):
     return HttpResponse('<h1">Данной страницы не существует :(</h1>')
-
-
-# @cache_page(60*60*24)
-# def index(request):
-# return render(request, 'docstar/index.html', {'title': 'Главная страница', 'menu': menu})
 
 
 class CitySpeciallity:
@@ -155,8 +140,9 @@ def getcourse_get_api(request):
     try:
         export_id = GetCourseExportID.objects.latest('export_time')
 
+        # Экспрот пользователей по круппе клуб докстар
         response = requests.get(
-            f'https://{account_name}.getcourse.ru/pl/api/account/exports/{export_id}?key={secret_key}')  # Экспрот пользователей по круппе клуб докстар
+            f'https://{settings.GK_ACCOUNT_NAME}.getcourse.ru/pl/api/account/exports/{export_id}?key={settings.GK_KEY}')
         data = response.json()["info"]["items"]
 
         city_list = [k.name for k in City.objects.all()]
@@ -198,7 +184,6 @@ class FilterDocViews(Doctors, CitySpeciallity, ListView):
     template_name = "docstar/doctors.html"
 
     def get_queryset(self):
-        queryset = []
         queryset = Doctor.objects.filter(city__in=self.request.GET.getlist("city"),
                                          speciallity__in=self.request.GET.getlist("speciallity")).select_related(
             'city').select_related('speciallity')
@@ -221,8 +206,9 @@ def Get_gk_email_result(request):
         exp_id = GetCourseExportID.objects.latest('export_time').export_id
         email = request.GET["email"]
 
+        # Экспрот пользователей по круппе клуб докстар
         response = requests.get(
-            f'https://{account_name}.getcourse.ru/pl/api/account/exports/{exp_id}?key={secret_key}')  # Экспрот пользователей по круппе клуб докстар
+            f'https://{settings.GK_ACCOUNT_NAME}.getcourse.ru/pl/api/account/exports/{exp_id}?key={settings.GK_KEY}')
 
         if response is None:
             return render(request, 'docstar/404.html')
@@ -255,10 +241,6 @@ class DoctorUpdateView(DoctorPermissionsMixin, DataMixin, DetailView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         c_def = self.get_user_context(title='Обновление')
-        if self.request.user.is_authenticated:
-            print(self.request.user.email)
-        else:
-            email = '123@yandex.ru'
 
         return dict(list(context.items()) + list(c_def.items()))
 
@@ -291,8 +273,7 @@ class AvaUpdate(UpdateView):
             form = UpdateDoc(self.request.POST or None)
             if form.is_valid():
                 form.save()
-                # validate user + remove old photo
-                # os.remove()
+
                 return redirect('success')
         except Exception as ex:
             logger.error(ex)
@@ -312,7 +293,6 @@ class DoctorApiView(APIView):
             spec_name = Speciallity.objects.get(name=self.request.GET.get('speciallity'))
             slug = get_eng_slug(text=self.request.GET.get('name')).split()
             new_slug = "-".join(slug).lower()
-            print(new_slug)
 
             new_doc = Doctor.objects.create(
                 name=self.request.GET.get('name'),
@@ -334,29 +314,6 @@ class DoctorApiView(APIView):
                 subscribers_inst=self.request.GET.get('subscribers_inst')
             )
 
-            # print(self.request.GET.get('name'),
-            #     new_slug,
-            #     # "slug": "agaverdieva-aida-mamedovna",
-            #     self.request.GET.get('email'),
-            #     self.request.GET.get('inst_url'),
-            #     self.request.GET.get('vk_url'),
-            #     self.request.GET.get('dzen_url'),
-            #     self.request.GET.get('tg_url'),
-        # ----     self.request.GET.get('medical_directions'),
-            #     spec_name,
-            #     city_name,
-            #     self.request.GET.get('additional_speciallity'),
-        #----     self.request.GET.get('main_blog_theme'),
-            #     self.request.GET.get('status_club'),
-            #     "user_photos/zag.png",
-            #     self.request.GET.get('prodoc'),
-            #     self.request.GET.get('subscribers_inst'))
-
-            # new_city=City.objects.create(
-            #     name=self.request.GET.get('city'),
-            #     code=0
-            # )
-            print(f'new_city')
             logger.info(f'Создан новый пользователь, {new_doc}')
 
             return Response({'status': 200})

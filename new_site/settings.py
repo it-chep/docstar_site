@@ -12,12 +12,11 @@ load_dotenv()
 
 SECRET_KEY = os.getenv('SECRET_KEY')
 
-DEBUG = False
+DEBUG = os.getenv('DEBUG')
 
 CSRF_TRUSTED_ORIGINS = ['http://docstar.readyschool.ru', 'http://www.docstar.readyschool.ru',
                         'https://www.docstar.readyschool.ru', 'https://docstar.readyschool.ru', 'http://127.0.0.1', ]
 
-#ALLOWED_HOSTS = ['*']
 ALLOWED_HOSTS = ['docstar.readyschool.ru', 'www.docstar.readyschool.ru',
                   '127.0.0.1', '81.200.144.45', 'api.ipify.org', 'localhost',
                   'localhost127.0.0.1[::1]']
@@ -147,47 +146,16 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 MEDIA_ROOT = os.path.join(BASE_DIR, 'docstar_site/docstar/user_photos')
 MEDIA_URL = 'user_photos/'
 
-# DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
 INTERNAL_IPS = [
     '127.0.0.1',
     '81.200.144.45'
 ]
-# #
-# LOGGING = {
-#     'version': 1,
-#     'disabled_existing_loggers': False,
-#
-#     'formatters': {
-#         'main_format': {
-#             'format': '{asctime} - {levelname} - {module} - {filename} - {message}',
-#             'style': "{"
-#         },
-#         'json_formatter': {
-#           '()': CustomJsonFormatter,
-#         },
-#     },
-#
-#     'handlers': {
-#         'console': {
-#             'class': 'logging.StreamHandler',
-#             'formatter': 'main_format',
-#         },
-#         'file': {
-#             'class': 'logging.FileHandler',
-#             'formatter': 'json_formatter',
-#             'filename': 'information.log'
-#         },
-#     },
-#
-#     'loggers': {
-#         'main': {
-#             'handlers': ['console', 'file'],
-#             'level': 'DEBUG',
-#             'propagate': True,
-#         },
-#     },
-# }
+
+GK_KEY = os.getenv('GK_KEY')
+GK_ACCOUNT_NAME = os.getenv('GK_ACCOUNT_NAME')
+GK_GROUP_ID = os.getenv('GK_GROUP_ID')
+
+VPN_PRICE = os.getenv('VPN_PRICE')
 
 CACHES = {
     'default': {

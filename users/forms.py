@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.models import Group
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm, AuthenticationForm
 
-from .models import CustomUser
+from users.models import CustomUser
 
 
 class CustomUserCreationForm(UserCreationForm):
@@ -16,10 +16,6 @@ class CustomUserCreationForm(UserCreationForm):
         Username = None
         model = CustomUser
         fields = ('email', )
-
-    # def get_email_account(self, response):
-    #     email = response.GET.get("email")
-    #     return email
 
 
 class CustomUserChangeForm(UserChangeForm):

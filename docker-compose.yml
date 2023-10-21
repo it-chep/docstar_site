@@ -14,7 +14,7 @@ services:
       - db
 
   db:
-    image: postgres:latest
+    image: postgres:14
     environment:
       POSTGRES_USER: postgres
       POSTGRES_DB: postgres

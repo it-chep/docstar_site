@@ -12,21 +12,20 @@ class Doctor(models.Model):
     name = models.CharField('ФИО', max_length=100)
     slug = models.SlugField("URL", max_length=225, unique=True, db_index=True)
     email = models.CharField('email', max_length=100, null=True)
-    inst_url = models.CharField('Аккаунт инстаграм', max_length=100)
-    vk_url = models.CharField('Аккаунт VK', max_length=100)
-    dzen_url = models.CharField('Аккаунт Яндекс.Дзен', max_length=100)
-    tg_url = models.CharField('Аккаунт TG', max_length=100)
-    city = models.ForeignKey('City', on_delete=models.PROTECT, null=True)
-    medical_directions = models.CharField('Направление медицины', max_length=100)
+    inst_url = models.CharField('Аккаунт инстаграм', max_length=100, null=True, blank=True)
+    vk_url = models.CharField('Аккаунт VK', max_length=100, null=True, blank=True)
+    dzen_url = models.CharField('Аккаунт Яндекс.Дзен', max_length=100, null=True, blank=True)
+    tg_url = models.CharField('Аккаунт TG', max_length=100, null=True, blank=True)
+    city = models.ForeignKey('City', on_delete=models.PROTECT, null=True, blank=True)
+    medical_directions = models.CharField('Направление медицины', max_length=100, null=True, blank=True)
     speciallity = models.ForeignKey('Speciallity', on_delete=models.PROTECT, null=True)
-    additional_speciallity = models.CharField('Доп специальность', max_length=100)
-    main_blog_theme = models.CharField('Тематика блога', max_length=100)
+    additional_speciallity = models.CharField('Доп специальность', max_length=100, null=True, blank=True)
+    main_blog_theme = models.CharField('Тематика блога', max_length=100, null=True, blank=True)
     status_club = models.BooleanField('Подписка на клуб', null=True)
     avatar = models.ImageField("Личное фото", upload_to="user_photos/", null=True, default='user_photos/zag.png')
     doctor = models.ForeignKey(User, on_delete=models.PROTECT, blank=True, null=True)
-    members = models.ManyToManyField(User, related_name='members', blank=True)
-    prodoctorov = models.CharField("ПРОДОКТОРОВ", null=True, max_length=255, unique=True)
-    subscribers_inst = models.CharField("Подписчики инста", null=True,  max_length=255,)
+    prodoctorov = models.CharField("ПРОДОКТОРОВ", null=True, max_length=255, unique=True, blank=True)
+    subscribers_inst = models.CharField("Подписчики инста", null=True,  max_length=255, blank=True)
 
     def __str__(self):
         return self.name
@@ -87,7 +86,7 @@ class Speciallity(models.Model):
 class City(models.Model):
     """Users City"""
     name = models.CharField("Название города", max_length=100, db_index=True)
-    code = models.CharField("Код города", max_length=100)
+    code = models.CharField("Код города", max_length=100, null=True, blank=True)
 
     def __str__(self):
         return self.name

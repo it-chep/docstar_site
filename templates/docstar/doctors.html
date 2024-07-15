@@ -1,98 +1,100 @@
 {% extends 'base.html' %}
-{% load cache %}
+{#{% load cache %}#}
 {% load static %}
 {% block title %}
-    {{title}}
+    {{ title }}
 {% endblock %}
 
 {% block nav_bar %}
-
 {% endblock %}
 
 {% block content %}
-<div class="conteiner">
-{#    <div class="logo_dcs">#}
-{#        <img class="logo_dcs_photo" src="{% static "img/logo_dcs.png" %}">#}
-{#    </div>#}
-    <h1>Участники DOCSTAR - международного клуба
-        врачей-блогеров</h1>
-    <h2>На данном сайте вы можете найти коллегу по любой специальности со всей России</h2>
-    <div class="filter_container">
-    <form action="{% url 'doctors__filter' %}" method="get">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <div class="filter_speciallity_container">
-        <h3>Специальности</h3>
-{#        <h1>{ }}</h1>#}
-        <select name="speciallity" class="choise_spec">
-{#        {% if %}#}
+    <div class="container doctors_list_container">
+        <div class="doctors_wrapper">
 
-        <option value="000">Выберите специальность</option>
-{#        {% endif %}#}
-            {% for speciallity in view.get_speciallity %}
-            <option name="speciallity" value="{{ speciallity.id }}">
-                <span class="speciallity_name">{{ speciallity.name }}</span>
-            </option>
-            {% endfor %}
-        </select>
-    </div>
+            {% include "includes/doctor_filter.html" %}
 
+            <div class="doctors_container" data-component="list">
 
-    <div class="filter_city_container">
-        <h3>Города</h3>
-        <select name="city" class="choise_city">
-        <option value="000">Выберите город</option>
-            {% for city in view.get_citys %}
-            <option name="city" value="{{ city.id }}">
-                <span class="city_name">{{ city.name }}</span>
-            </option>
-            {% endfor %}
-        </select>
-    </div>
-{#    <h2>12345</h2>#}
-    <div class="filter_btn">
-        <button class="new_button" type="submit">Применить фильтр</button>
-    </div>
-    </form>
-    <a class="clear_btn"  href="{% url 'homepage' %}">
-        <div class="n_c_button">Отменить</div>
-    </a>
-    </div>
-
-    <div class="doctors_container" data-component="list">
-        <div class="all_doctors">
-            {% for doctor in doctors %}
-            <div class="user_card" >
-
-                <div class="user_avatar">
-                {% if doctor.avatar is not NULL %}
-                    <img class="avatar" src="{{ doctor.avatar_url | default_if_none:"#"}}">
-                {# {% else %}#}
-                {#<img class="avatar" src="{{user.non_avatar}}">#}
-                {% endif %}
-                </div>
-                <div class="doc_info">
-                    <div class="user_name">
-                        <a>{{ doctor.name }}</a>
+                <h1 class="doctors_list_header">Участники DOCSTAR - международного клуба врачей-блогеров</h1>
+                
+                <div class="active_filters_wrapper">
+                    <div class="active_filter active_city_filter">
+                        <p class="active_filter_text">Екатеринбург</p>
+                        <img class="active_filter_delete_btn" src="{% static 'img/homepage/circle_delete_button.svg' %}">
                     </div>
-
-                    <div class="user_speciallity">
-                        <a>Специальность: {{ doctor.speciallity }}</a>
+                    <div class="active_filter active_speciality_filter">
+                        <p class="active_filter_text">Уролог</p>
+                        <img class="active_filter_delete_btn" src="{% static 'img/homepage/circle_delete_button.svg' %}">
                     </div>
+                </div>    
+            
+                <div class="all_doctors">
+                    {% for doctor in doctors %}
+                        <div class="user_card">
 
-                    <div class="user_city">
-                        <a>Город: {{ doctor.city }}</a>
-                    </div>
+                            <div class="user_avatar">
+                                {% if doctor.avatar is not NULL %}
+                                    <img class="avatar" src="{{ doctor.avatar_url | default_if_none:"#" }}">
+                                {% endif %}
+                            </div>
+                            <div class="doc_info">
+                                <div class="user_name doctor_name">
+                                    <p>{{ doctor.name }}</p>
+                                </div>
+
+                                <div class="user_additional_info">
+                                    <p>{{ doctor.speciallity }}, г. {{ doctor.city }}</p>
+                                </div>
+                            </div>
+                            <a class="user_info_btn_container" href="{{ doctor.get_absolute_url }}">
+                                <div class="user_info_btn">
+                                    <div class="user_info_btn_text">Подробнее</div>
+                                </div>
+                            </a>
+                        </div>
+                    {% endfor %}
                 </div>
-                <a href="{{ doctor.get_absolute_url }}">
-                <div class="user_info_btn">
-                    <div class="user_info_btn_text" >Подробнее</div>
-                </div>
-                </a>
             </div>
-            {% endfor %}
         </div>
     </div>
-</div>
 
 {% endblock %}
+
+{##}
+{#<div class="filter_container">#}
+{#            <form action="{% url 'doctors__filter' %}" method="get">#}
+{#                {% csrf_token %}#}
+{#                {{ form.as_p }}#}
+{#                <div class="filter_speciallity_container">#}
+{#                    <h3>Специальности</h3>#}
+{#                    <select name="speciallity" class="choise_spec">#}
+{#                        <option value="000">Выберите специальность</option>#}
+{#                        {% for speciallity in view.get_speciallity %}#}
+{#                            <option name="speciallity" value="{{ speciallity.id }}">#}
+{#                                <span class="speciallity_name">{{ speciallity.name }}</span>#}
+{#                            </option>#}
+{#                        {% endfor %}#}
+{#                    </select>#}
+{#                </div>#}
+{##}
+{##}
+{#                <div class="filter_city_container">#}
+{#                    <h3>Города</h3>#}
+{#                    <select name="city" class="choise_city">#}
+{#                        <option value="000">Выберите город</option>#}
+{#                        {% for city in view.get_citys %}#}
+{#                            <option name="city" value="{{ city.id }}">#}
+{#                                <span class="city_name">{{ city.name }}</span>#}
+{#                            </option>#}
+{#                        {% endfor %}#}
+{#                    </select>#}
+{#                </div>#}
+{#                <div class="filter_btn">#}
+{#                    <button class="new_button" type="submit">Применить фильтр</button>#}
+{#                </div>#}
+{#            </form>#}
+{#            <a class="clear_btn" href="{% url 'homepage' %}">#}
+{#                <div class="n_c_button">Отменить</div>#}
+{#            </a>#}
+{#        </div>#}

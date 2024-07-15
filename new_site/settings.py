@@ -10,7 +10,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 load_dotenv()
 
-SECRET_KEY = os.getenv('SECRET_KEY')
+SECRET_KEY = "django-insecure-0m((y=tonuykiyg-d3zyt#5(c!1xx6+n7*+@+f3+@_admlfups"
 
 DEBUG = os.getenv('DEBUG')
 
@@ -96,7 +96,7 @@ DATABASES = {
         'NAME': os.getenv('DB_NAME'),
         'USER': os.getenv('DB_USER'),
         'PASSWORD': os.getenv('DB_PASSWORD'),
-        'HOST': os.getenv('DB_HOST'),
+        'HOST': "localhost",
         'PORT': os.getenv('DB_PORT'),
     }
 }
@@ -151,15 +151,18 @@ INTERNAL_IPS = [
     '81.200.144.45'
 ]
 
+ADMIN_TITLE = GRAPPELLI_ADMIN_TITLE = 'Medblogers base'
+
+
 GK_KEY = os.getenv('GK_KEY')
 GK_ACCOUNT_NAME = os.getenv('GK_ACCOUNT_NAME')
 GK_GROUP_ID = os.getenv('GK_GROUP_ID')
 
 VPN_PRICE = os.getenv('VPN_PRICE')
 
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
-        'LOCATION': os.path.join(BASE_DIR, 'docstar_cache'),
-    }
-}
+# CACHES = {
+#     'default': {
+#         'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+#         'LOCATION': os.path.join(BASE_DIR, 'docstar_cache'),
+#     }
+# }

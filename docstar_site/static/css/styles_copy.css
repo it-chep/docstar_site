@@ -297,7 +297,7 @@ img{
 .user_info_btn{
     width: 100%;
     height: 10%;
-    border: 2px solid #01abaa;
+    border: 2px solid #2F9BFF;
     border-radius: 5px;
     position: absolute;
     bottom: 0;
@@ -312,14 +312,14 @@ img{
     width: 100%;
     height: 45%;
     margin-top: 5%;
-    color: #01abaa;
+    color: #2F9BFF;
     font-family: "HelveticaNeueCyr", "Helvetica Neue", Arial, sans-serif;
     text-align: center;
 }
 
 .user_info_btn:hover {
 	color: #fff;
-	background: #01abaa;
+	background: #2F9BFF;
 	tansition: all .3s linear;
 	-webkit-transition: all .3s linear;
 	-moz-transition: all .3s linear;

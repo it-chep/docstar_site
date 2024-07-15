@@ -1,17 +1,26 @@
 version: '3'
 
 services:
-  web:
-    build: .
-    environment:
-      DB_PASSWORD: postgres
-    ports:
-      - "8000:8000"
-    volumes:
-      - user_photos:/app/docstar_site/docstar/user_photos/user_photos
-      - .:/new_site
-    depends_on:
-      - db
+#  web:
+#    build: .
+#    environment:
+#      - DB_PASSWORD=postgres
+#      - C_FORCE_ROOT='true'
+#      - PYTHONUNBUFFERED=1
+#      - LOCAL_PYTEST=1
+#      - PROJECT_NAME=${PROJECT_NAME}
+#      - POSTGRES_USER=${DB_USER}
+#      - POSTGRES_PASSWORD=${DB_PASSWORD}
+#      - ENVIRONMENT_TYPE=docker
+#    ports:
+#      - "8000:8000"
+#    expose:
+#      - 8000
+#    volumes:
+#      - user_photos:/app/docstar_site/docstar/user_photos/user_photos
+#      - .:/new_site
+#    depends_on:
+#      - db
 
   db:
     image: postgres:14

@@ -20,7 +20,7 @@ import requests
 from time import sleep
 import threading
 
-from docstar_site.forms import UpdateDoc
+from docstar_site.forms import UpdateDoc, DoctorSearchForm
 from docstar_site.models import *
 from docstar_site.utils import *
 from docstar_site.permissions import DoctorPermissionsMixin, MembersPermissionsMixin
@@ -69,18 +69,46 @@ class CitySpeciallity:
         return Speciallity.objects.all()
 
 
-class Doctors(CitySpeciallity, DataMixin, ListView):
+class Doctors(DataMixin, ListView):
     model = Doctor
     template_name = "docstar/doctors.html"
     context_object_name = 'doctors'
+    form_class = DoctorSearchForm
 
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super().get_context_data(**kwargs)
-        c_def = self.get_user_context(title="Доктора")
-        return dict(list(context.items()) + list(c_def.items()))
+    def get(self, request, *args, **kwargs):
+        form = DoctorSearchForm(self.request.GET or None)
+        self.object_list = self.get_queryset()
+        context = self.get_context_data(form=form, object_list=self.object_list)
+        return self.render_to_response(context)
 
     def get_queryset(self):
-        return Doctor.objects.all().select_related('city').select_related('speciallity')
+        queryset = super().get_queryset()
+        form = DoctorSearchForm(self.request.GET or None)
+        if form.is_valid():
+            city = form.cleaned_data.get('city')
+            specialty = form.cleaned_data.get('specialty')
+            if city:
+                queryset = queryset.filter(city=city)
+            if specialty:
+                queryset = queryset.filter(specialty=specialty)
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form'] = self.form_class(self.request.GET or None)
+        return context
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            # Get the filtered queryset based on the form input.
+            queryset = self.get_queryset()
+            # Update the context with the form and queryset.
+            context = self.get_context_data(object_list=queryset, form=form)
+            return self.render_to_response(context)
+        else:
+            # If the form is not valid, render the same page with form errors.
+            return self.render_to_response(self.get_context_data(form=form))
 
 
 class ShowDoc(DataMixin, DetailView):

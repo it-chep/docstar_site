@@ -43,7 +43,7 @@ html, body {
 .hello {
     font-family: "HelveticaNeueCyr", "Helvetica Neue", Arial, sans-serif;
     font-size: 45px;
-    color: #01abaa;
+    color: #2F9BFF;
     font-weight: 400;
     text-align: center;
     padding: 20px 0 10px 0;
@@ -113,7 +113,7 @@ html, body {
     width: 250px;
     height: 64px;
     color: white;
-    background-color: #01abaa;
+    background-color: #2F9BFF;
     left: 400px;
     top: 684px;
     border-radius: 15px;
@@ -164,7 +164,7 @@ html, body {
     text-align: center;
     z-index: 4;
     transform: rotate(2deg);
-    background-color: #01abaa;
+    background-color: #2F9BFF;
     border-radius: 7px;
     /*position: absolute;*/
 }
@@ -198,7 +198,7 @@ html, body {
 }
 
 .date {
-    color: #01abaa;
+    color: #2F9BFF;
     font-family: 'Nunito', Arial, sans-serif;
     font-size: 25px;
     font-weight: 600;
@@ -237,7 +237,7 @@ html, body {
 }
 
 .name_anonce a {
-    color: #01abaa;
+    color: #2F9BFF;
     width: 185px;
 }
 
@@ -279,7 +279,7 @@ footer {
 
 .nav_bar {
     width: 100%;
-    background: #01abaa;
+    background: #2F9BFF;
     background: linear-gradient(to right, #00c7c6, #006e6d);
     height: 100px;
     /*margin-top: -100px;*/
@@ -403,7 +403,7 @@ footer {
 }
 
 .new_button {
-    background: #01abaa; /* Синий цвет фона */
+    background: #2F9BFF; /* Синий цвет фона */
     color: #fff; /* Белый цвет текста */
     border: none; /* Убираем рамку */
     padding: 1rem 1.5rem; /* Поля вокруг текста */
@@ -419,7 +419,7 @@ footer {
 h3 {
     font-family: "HelveticaNeueCyr", "Helvetica Neue", Arial, sans-serif;
     font-size: 20px;
-    color: #01abaa;
+    color: #2F9BFF;
     font-weight: 200;
     padding: 0 0 5px 0;
 }
@@ -470,7 +470,7 @@ h3 {
 }
 
 span {
-    color: #01abaa;
+    color: #2F9BFF;
     /*margin: 0 auto;*/
     text-align: center;
     font-family: "HelveticaNeueCyr", "Helvetica Neue", Arial, sans-serif;
@@ -480,7 +480,7 @@ span {
 .clear_btn {
     width: 170px;
     height: 48px;
-    border: 2px solid #01abaa;
+    border: 2px solid #2F9BFF;
     position: absolute;
     bottom: 0;
     background: #ffffff; /* Убираем рамку */
@@ -494,7 +494,7 @@ span {
     width: 170px;
     height: 45%;
     margin-top: 12px;
-    color: #01abaa;
+    color: #2F9BFF;
     /*margin: 0 auto;*/
     text-align: center;
     font-family: "HelveticaNeueCyr", "Helvetica Neue", Arial, sans-serif;
@@ -550,7 +550,7 @@ label {
 
 .autorize_button {
     border-radius: 25px;
-    border: 2px solid #01abaa;
+    border: 2px solid #2F9BFF;
     text-align: center;
     background-color: #101010;
     height: 58px;
@@ -575,12 +575,12 @@ label {
 .autorize_btnTrue {
     top: 7px;
     position: relative;
-    background-color: #01abaa;
+    background-color: #2F9BFF;
     text-decoration: none;
     border-radius: 25px;
     width: 350px;
     height: 50px;
-    border: 2px solid #01abaa;
+    border: 2px solid #2F9BFF;
     /*text-align: center;*/
 }
 
@@ -609,7 +609,7 @@ label {
     font-size: 25px;
     text-align: center;
     margin: 0 auto;
-    width: 300px;
+    width: 350px;
 }
 
 .exit_form_container {
@@ -717,14 +717,14 @@ img {
     width: 100%;
     height: 45%;
     margin-top: 5%;
-    color: #01abaa;
+    color: #2F9BFF;
     font-family: "HelveticaNeueCyr", "Helvetica Neue", Arial, sans-serif;
     text-align: center;
 }
 
 .user_info_btn:hover {
     color: #fff;
-    background: #01abaa;
+    background: #2F9BFF;
     tansition: all .3s linear;
     -webkit-transition: all .3s linear;
     -moz-transition: all .3s linear;
@@ -1127,7 +1127,7 @@ h2 {
     .user_info_btn {
         width: 100%;
         height: 10%;
-        border: 2px solid #01abaa;
+        border: 2px solid #2F9BFF;
         border-radius: 5px;
         position: absolute;
         bottom: 0;
@@ -1150,7 +1150,7 @@ h2 {
     }
 
     .user_info_btn:hover {
-        color: #01abaa;
+        color: #2F9BFF;
         background: #FFFFFF;
         tansition: all .3s linear;
         -webkit-transition: all .3s linear;
@@ -1158,7 +1158,7 @@ h2 {
     }
 
     .user_info_btn:hover div {
-        color: #01abaa;
+        color: #2F9BFF;
     }
 
 
@@ -1406,6 +1406,8 @@ h2 {
 
     .gk_form_container.index {
         width: 350px;
+        text-align: center;
+
     }
 
 
@@ -1514,6 +1516,7 @@ h2 {
     margin: 0 auto;
     width: 350px;
     height: 450px;
+    text-align: center;
     /*cursor: pointer;*/
 }
 
@@ -1560,7 +1563,7 @@ h2 {
 /*edit_form*/
 
 .new_photo_form {
-    width: 600px;
+    width: 350px;
     margin: 0 auto;
     text-align: center;
     top: 25px;
@@ -1568,10 +1571,8 @@ h2 {
 
 .edit_submit_btn {
     width: 200px;
-    left: 200px;
+    left: 75px;
     top: 120px;
-    /*text-align: center;*/
-    margin: 0 auto;
 }
 
 .text_edit_photo {
@@ -1589,8 +1590,7 @@ h2 {
 .ps_edit {
     position: absolute;
     top: 200px;
-    margin-left: auto;
-    margin-right: auto;
+    left: 0;
     font-size: 15px;
 }
 
@@ -1719,38 +1719,6 @@ input {
         display: block;
     }
 
-    .edit_submit_btn {
-        width: 300px;
-        left: 150px;
-        top: 300px;
-        /*text-align: center;*/
-        margin: 0 auto;
-    }
-
-    .text_edit_photo {
-
-        font-size: 40px;
-    }
-
-    .edit_input {
-        font-size: 25px;
-        text-align: center;
-        margin-top: 75px;
-        width: 500px;
-    }
-
-    .ps_edit {
-        position: absolute;
-        top: 500px;
-        margin-left: auto;
-        margin-right: auto;
-        font-size: 25px;
-    }
-
-     .index{
-        height: 1000px;
-    }
-
 }
 
 .top_img {
@@ -1767,4 +1735,25 @@ header img {
     width: 50px;
     top: 0;
     margin: 0 auto;
+}
+
+.doctors_list_header {
+    color: white;
+}
+
+.doctors_list_container {
+    background-color: #0E0F0F;
+}
+
+.doctor_name {
+    color: white;
+}
+
+.user_additional_info {
+    color: #717171;
+    text-align: left;
+}
+
+.user_card {
+    background-color: #1A1A1A;
 }

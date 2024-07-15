@@ -38,10 +38,10 @@ h1 {
     width: 100%;
     padding-bottom: 20px;
 }
-.input-group{
+
+.input-group {
     width: 300px;
     margin: 0 auto;
-    height: 80px;
     padding-top: 10px;
 }
 
@@ -50,8 +50,6 @@ form {
     font-family: Monster-Medium, sans-serif;
     margin-top: 50px;
 }
-
-
 
 
 input:focus {
@@ -81,9 +79,9 @@ input:focus {
 }
 
 .btn-blue {
-    width: 200px;
-    height: 75px;
-    font-size: 25px;
+    width: 150px;
+    height: 30px;
+    font-size: 20px;
     margin-top: 30px;
     background-color: #01abaa;
     /*border-color: #01abaa;*/
@@ -109,9 +107,9 @@ input:focus {
     /*transform: rotate(360deg);*/
 }
 
-.register{
+.register {
     margin: 20px auto;
-    width: 300px;
+    width: 250px;
 }
 
 .error-message {
@@ -202,8 +200,4 @@ p {
     text-align: center;
     padding-top: 15px;
     font-family: Monster-Medium, sans-serif;
-}
-
-label{
-    font-size: 30px;
 }

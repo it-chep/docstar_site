@@ -5,18 +5,15 @@
     font-family: "HelveticaNeueCyr", "Helvetica Neue", Arial, sans-serif;
 }
 
-/*.logo_dcs {*/
-/*    display: none;*/
-
-/*}*/
-
-/*.logo_dcs img {*/
-/*    display: none;*/
-/*}*/
-
 html, body {
     margin: 0;
     padding: 0;
+    height: 100%;
+    background: #0C0C0C;
+}
+
+a {
+    text-decoration: none;
 }
 
 @font-face {
@@ -43,7 +40,7 @@ html, body {
 .hello {
     font-family: "HelveticaNeueCyr", "Helvetica Neue", Arial, sans-serif;
     font-size: 45px;
-    color: #01abaa;
+    color: #2F9BFF;
     font-weight: 400;
     text-align: center;
     padding: 20px 0 10px 0;
@@ -113,7 +110,7 @@ html, body {
     width: 250px;
     height: 64px;
     color: white;
-    background-color: #01abaa;
+    background-color: #2F9BFF;
     left: 400px;
     top: 684px;
     border-radius: 15px;
@@ -164,7 +161,7 @@ html, body {
     text-align: center;
     z-index: 4;
     transform: rotate(2deg);
-    background-color: #01abaa;
+    background-color: #2F9BFF;
     border-radius: 7px;
     /*position: absolute;*/
 }
@@ -198,7 +195,7 @@ html, body {
 }
 
 .date {
-    color: #01abaa;
+    color: #2F9BFF;
     font-family: 'Nunito', Arial, sans-serif;
     font-size: 25px;
     font-weight: 600;
@@ -237,7 +234,7 @@ html, body {
 }
 
 .name_anonce a {
-    color: #01abaa;
+    color: #2F9BFF;
     width: 185px;
 }
 
@@ -279,8 +276,6 @@ footer {
 
 .nav_bar {
     width: 100%;
-    background: #01abaa;
-    background: linear-gradient(to right, #00c7c6, #006e6d);
     height: 100px;
     /*margin-top: -100px;*/
     /*position: fixed;*/
@@ -293,6 +288,12 @@ footer {
 .nav_bar_container {
     width: 1200px;
     margin: 0 auto;
+    background: #161616;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    flex-direction: row;
 }
 
 .header__burger-btn {
@@ -340,19 +341,14 @@ footer {
 }
 
 .nav_bar_container a {
-    border-color: transparent;
+    border: 1px solid transparent;
     color: white;
     text-decoration: none;
     font-family: "HelveticaNeueCyr", "Helvetica Neue", Arial, sans-serif;
-    display: inline-block;
     margin: 20px;
-    padding: 20px 20px;
-    font-size: 15px;
+    padding: 20px 25px;
+    font-size: 18px;
     font-weight: 400;
-    tansition: all .3s linear;
-    -webkit-transition: all .3s linear;
-    -moz-transition: all .3s linear;
-    text-transform: uppercase;
     cursor: pointer;
 }
 
@@ -361,11 +357,7 @@ footer {
     padding: 20px 25px;
     font-size: 18px;
     border-radius: 25px;
-    tansition: all .3s linear;
-    -webkit-transition: all .3s linear;
-    -moz-transition: all .3s linear;
     cursor: pointer;
-
 }
 
 .login_doc {
@@ -403,7 +395,7 @@ footer {
 }
 
 .new_button {
-    background: #01abaa; /* Синий цвет фона */
+    background: #2F9BFF; /* Синий цвет фона */
     color: #fff; /* Белый цвет текста */
     border: none; /* Убираем рамку */
     padding: 1rem 1.5rem; /* Поля вокруг текста */
@@ -413,13 +405,12 @@ footer {
     border-radius: 25px; /* Закруглить кнопку */
     position: absolute;
     cursor: pointer;
-
 }
 
 h3 {
     font-family: "HelveticaNeueCyr", "Helvetica Neue", Arial, sans-serif;
     font-size: 20px;
-    color: #01abaa;
+    color: #2F9BFF;
     font-weight: 200;
     padding: 0 0 5px 0;
 }
@@ -444,14 +435,10 @@ h3 {
     top: 50px;
 }
 
-.conteiner {
-    /*width: 1200px;*/
+.container {
+    height: auto;
     margin: 0 auto;
-    /*height: 2000px;*/
-}
-
-.conteiner {
-    /*margin-top: 100px;*/
+    padding: 20px;
 }
 
 .filter_container {
@@ -470,7 +457,7 @@ h3 {
 }
 
 span {
-    color: #01abaa;
+    color: #2F9BFF;
     /*margin: 0 auto;*/
     text-align: center;
     font-family: "HelveticaNeueCyr", "Helvetica Neue", Arial, sans-serif;
@@ -480,7 +467,7 @@ span {
 .clear_btn {
     width: 170px;
     height: 48px;
-    border: 2px solid #01abaa;
+    border: 2px solid #2F9BFF;
     position: absolute;
     bottom: 0;
     background: #ffffff; /* Убираем рамку */
@@ -494,7 +481,7 @@ span {
     width: 170px;
     height: 45%;
     margin-top: 12px;
-    color: #01abaa;
+    color: #2F9BFF;
     /*margin: 0 auto;*/
     text-align: center;
     font-family: "HelveticaNeueCyr", "Helvetica Neue", Arial, sans-serif;
@@ -550,7 +537,7 @@ label {
 
 .autorize_button {
     border-radius: 25px;
-    border: 2px solid #01abaa;
+    border: 2px solid #2F9BFF;
     text-align: center;
     background-color: #101010;
     height: 58px;
@@ -575,12 +562,12 @@ label {
 .autorize_btnTrue {
     top: 7px;
     position: relative;
-    background-color: #01abaa;
+    background-color: #2F9BFF;
     text-decoration: none;
     border-radius: 25px;
     width: 350px;
     height: 50px;
-    border: 2px solid #01abaa;
+    border: 2px solid #2F9BFF;
     /*text-align: center;*/
 }
 
@@ -623,117 +610,20 @@ label {
 
 .all_doctors {
     text-align: center;
-    /*max-h: 1200px;*/
     height: 100%;
-    display: block;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    justify-content: center;
+    padding: 0;
+    margin: 0;
 }
 
 .doctors_container {
     padding-left: 1.875rem;
-    padding-right: 1.875rem;
     width: 1200px;
-    /*background-color: red;*/
-    height: 500px;
-    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
 }
-
-img {
-    width: 100%;
-    height: 100%;
-    position: relative;
-    border-radius: 25px;
-    image-orientation: revert;
-    object-fit: cover;
-}
-
-.user_card {
-    width: 250px;
-    height: 450px;
-    outline: none;
-    padding: 0;
-    display: inline-block;
-    position: relative;
-    margin: 10px;
-}
-
-.user_avatar {
-    width: 250px;
-    height: 250px;
-    float: left;
-    margin: 0 0 10px;
-    image-orientation: revert;
-    object-fit: cover;
-}
-
-.doc_info {
-    padding: 10px;
-}
-
-.user_name {
-    font-family: "HelveticaNeueCyr", "Helvetica Neue", Arial, sans-serif;
-    font-weight: 900;
-    font-size: 18px;
-    margin-top: -2%;
-    width: 250px;
-    height: 50px;
-    float: left;
-    text-align: left;
-}
-
-.user_speciallity {
-    font-family: "HelveticaNeueCyr", "Helvetica Neue", Arial, sans-serif;
-    font-size: 15px;
-    width: 100%;
-    height: 10%;
-    text-align: left;
-    position: absolute;
-    bottom: 20%;
-}
-
-.user_city {
-    font-family: "HelveticaNeueCyr", "Helvetica Neue", Arial, sans-serif;
-    font-size: 15px;
-    width: 100%;
-    position: absolute;
-    bottom: 15%;
-    text-align: left;
-}
-
-.user_info_btn {
-    width: 100%;
-    height: 10%;
-    border: 2px solid #01abaa;
-    border-radius: 5px;
-    position: absolute;
-    bottom: 0;
-    background: #ffffff;
-    tansition: all .3s linear;
-    -webkit-transition: all .3s linear;
-    -moz-transition: all .3s linear;
-    text-transform: uppercase;
-}
-
-.user_info_btn div {
-    width: 100%;
-    height: 45%;
-    margin-top: 5%;
-    color: #01abaa;
-    font-family: "HelveticaNeueCyr", "Helvetica Neue", Arial, sans-serif;
-    text-align: center;
-}
-
-.user_info_btn:hover {
-    color: #fff;
-    background: #01abaa;
-    tansition: all .3s linear;
-    -webkit-transition: all .3s linear;
-    -moz-transition: all .3s linear;
-}
-
-.user_info_btn:hover div {
-    color: white;
-}
-
 
 /*doctor_card*/
 
@@ -1127,7 +1017,7 @@ h2 {
     .user_info_btn {
         width: 100%;
         height: 10%;
-        border: 2px solid #01abaa;
+        border: 2px solid #2F9BFF;
         border-radius: 5px;
         position: absolute;
         bottom: 0;
@@ -1150,7 +1040,7 @@ h2 {
     }
 
     .user_info_btn:hover {
-        color: #01abaa;
+        color: #2F9BFF;
         background: #FFFFFF;
         tansition: all .3s linear;
         -webkit-transition: all .3s linear;
@@ -1158,7 +1048,7 @@ h2 {
     }
 
     .user_info_btn:hover div {
-        color: #01abaa;
+        color: #2F9BFF;
     }
 
 
@@ -1406,7 +1296,7 @@ h2 {
 
     .gk_form_container.index {
         width: 350px;
-            text-align: center;
+        text-align: center;
 
     }
 
@@ -1734,5 +1624,133 @@ header img {
     height: 50px;
     width: 50px;
     top: 0;
+    margin: 0 auto;
+}
+
+.doctors_list_header {
+    color: white;
+    text-align: left;
+}
+
+.doctors_wrapper {
+    display: flex;
+    flex-direction: row;
+    color: white;
+}
+
+.doctor_name {
+    color: white;
+}
+
+.user_additional_info {
+    color: #717171;
+    text-align: left;
+}
+
+.user_card {
+    width: 270px;
+    background-color: #1A1A1A;
+    height: 347px;
+    padding: 10px;
+    display: flex;
+    position: relative;
+    margin: 10px;
+    flex-direction: column;
+    align-items: flex-start;
+    border-radius: 20px;
+}
+
+.user_avatar {
+    padding: 0 0 20px 0;
+}
+
+.doc_info {
+    height: 96px;
+    padding: 10px;
+    margin: 0 0 0 10px;
+}
+
+.user_name {
+    font-family: "HelveticaNeueCyr", "Helvetica Neue", Arial, sans-serif;
+    font-weight: 900;
+    font-size: 18px;
+    height: 50px;
+    text-align: left;
+}
+
+.user_speciallity {
+    font-family: "HelveticaNeueCyr", "Helvetica Neue", Arial, sans-serif;
+    font-size: 15px;
+    width: 100%;
+    height: 10%;
+    text-align: left;
+    position: absolute;
+    bottom: 20%;
+}
+
+.user_city {
+    font-family: "HelveticaNeueCyr", "Helvetica Neue", Arial, sans-serif;
+    font-size: 15px;
+    width: 100%;
+    position: absolute;
+    bottom: 15%;
+    text-align: left;
+}
+
+.user_info_btn {
+    width: 139px;
+    height: 44px;
+    padding: 10px;
+    margin: 0 0 0 10px;
+    display: flex;
+    border-radius: 5px;
+    background: radial-gradient(72.92% 327.46% at 50% 50%, #2F9BFF 0%, #156DBD 100%);
+    -webkit-transition: all .3s linear;
+    -moz-transition: all .3s linear;
+    align-items: center;
+    justify-content: center;
+}
+
+.user_info_btn .user_info_btn_text {
+    color: #ffffff;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.user_info_btn:hover .user_info_btn_text {
+    color: #2F9BFF;
+    tansition: all .3s linear;
+    -webkit-transition: all .3s linear;
+    -moz-transition: all .3s linear;
+}
+
+.user_info_btn:hover {
+    background: #fff;
+    tansition: all .3s linear;
+    -webkit-transition: all .3s linear;
+    -moz-transition: all .3s linear;
+}
+
+.user_info_btn:hover div {
+    color: white;
+}
+
+.avatar {
+    border-radius: 16px;
+    width: 100%;
+    height: 100%;
+    position: relative;
+    image-orientation: revert;
+    object-fit: cover;
+}
+
+.user_info_btn_container {
+    margin-top: 25px;
+}
+
+
+.main_container {
+    width: 1200px;
     margin: 0 auto;
 }

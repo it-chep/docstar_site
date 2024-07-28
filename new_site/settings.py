@@ -15,9 +15,9 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG = os.getenv('DEBUG') == 'True'
 
 CSRF_TRUSTED_ORIGINS = [
-    'http://docstar.readyschool.ru',
-    'http://www.docstar.readyschool.ru',
-    'https://www.docstar.readyschool.ru',
+    'http://doctors.readyschool.ru',
+    'http://www.doctors.readyschool.ru',
+    'https://www.doctors.readyschool.ru',
     'https://docstar.readyschool.ru',
     'http://127.0.0.1',
 ]
@@ -25,8 +25,8 @@ CSRF_TRUSTED_ORIGINS = [
 ADMIN_TITLE = GRAPPELLI_ADMIN_TITLE = 'MEDBLOGERS BASE'
 
 ALLOWED_HOSTS = [
-    'docstar.readyschool.ru',
-    'www.docstar.readyschool.ru',
+    'doctors.readyschool.ru',
+    'www.doctors.readyschool.ru',
     '127.0.0.1',
     '81.200.144.45',
     'api.ipify.org',

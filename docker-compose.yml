@@ -4,7 +4,16 @@ services:
   web:
     build: .
     environment:
-      DB_PASSWORD: postgres
+      - C_FORCE_ROOT='true'
+      - PYTHONUNBUFFERED=1
+      - LOCAL_PYTEST=1
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_NAME}
+      - DB_PORT=${DB_PORT}
+      - DB_HOST=${DB_HOST}
+      - DEBUG=${DEBUG}
+      - ENVIRONMENT_TYPE=docker
     ports:
       - "8000:8000"
     volumes:
@@ -16,9 +25,9 @@ services:
   db:
     image: postgres:14
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_DB: postgres
-      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
     ports:
       - "5432:5432"
     volumes:

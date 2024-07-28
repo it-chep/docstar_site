@@ -12,14 +12,28 @@ load_dotenv()
 
 SECRET_KEY = os.getenv('SECRET_KEY')
 
-DEBUG = os.getenv('DEBUG')
+DEBUG = os.getenv('DEBUG') == 'True'
 
-CSRF_TRUSTED_ORIGINS = ['http://docstar.readyschool.ru', 'http://www.docstar.readyschool.ru',
-                        'https://www.docstar.readyschool.ru', 'https://docstar.readyschool.ru', 'http://127.0.0.1', ]
+CSRF_TRUSTED_ORIGINS = [
+    'http://docstar.readyschool.ru',
+    'http://www.docstar.readyschool.ru',
+    'https://www.docstar.readyschool.ru',
+    'https://docstar.readyschool.ru',
+    'http://127.0.0.1',
+]
 
-ALLOWED_HOSTS = ['docstar.readyschool.ru', 'www.docstar.readyschool.ru',
-                  '127.0.0.1', '81.200.144.45', 'api.ipify.org', 'localhost',
-                  'localhost127.0.0.1[::1]']
+ADMIN_TITLE = GRAPPELLI_ADMIN_TITLE = 'MEDBLOGERS BASE'
+
+ALLOWED_HOSTS = [
+    'docstar.readyschool.ru',
+    'www.docstar.readyschool.ru',
+    '127.0.0.1',
+    '81.200.144.45',
+    'api.ipify.org',
+    'localhost',
+    'localhost127.0.0.1[::1]',
+    '0.0.0.0'
+]
 
 SERVER_EMAIL = os.getenv('SERVER_EMAIL')
 ADMINS = [(os.getenv('ADMIN_NAME'), SERVER_EMAIL)]
@@ -138,13 +152,16 @@ SITE_ID = 1
 
 TIME_INPUT_FORMATS = ['%H:%M']
 
+# STATIC
 STATIC_URL = 'static/'
-# STATICFILES_DIRS = [
-#     BASE_DIR / 'static'
-# ]
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-MEDIA_ROOT = os.path.join(BASE_DIR, 'docstar_site/docstar/user_photos')
+STATICFILES_DIRS = [
+    BASE_DIR / 'static',
+]
+STATIC_ROOT = 'staticfiles'
+
+# MEDIA
 MEDIA_URL = 'user_photos/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'docstar_site/docstar/user_photos')
 
 INTERNAL_IPS = [
     '127.0.0.1',

@@ -18,7 +18,7 @@ CSRF_TRUSTED_ORIGINS = [
     'http://doctors.readyschool.ru',
     'http://www.doctors.readyschool.ru',
     'https://www.doctors.readyschool.ru',
-    'https://docstar.readyschool.ru',
+    'https://doctors.readyschool.ru',
     'http://127.0.0.1',
 ]
 

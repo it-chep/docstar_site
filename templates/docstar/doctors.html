@@ -5,53 +5,52 @@
     {{ title }}
 {% endblock %}
 
+{% block extralinks %}
+    <link type="text/css" rel="stylesheet" href="{% static 'css/main_page.css' %}">
+    <script src="{% static "js/main_page.js" %}"></script>
+{% endblock %}
+
 {% block nav_bar %}
 {% endblock %}
 
 {% block content %}
+    {% include "docstar/modals/search_doctors_modal.html" %}
+
     <div class="container doctors_list_container">
         <div class="doctors_wrapper">
 
             {% include "includes/doctor_filter.html" %}
-
             <div class="doctors_container" data-component="list">
 
-                <h1 class="doctors_list_header">Участники DOCSTAR - международного клуба врачей-блогеров</h1>
-                
+                <h1 class="doctors_list_header">Участники MEDBLOGERS</h1>
+
                 <div class="active_filters_wrapper">
-                    <div class="active_filter active_city_filter">
-                        <p class="active_filter_text">Екатеринбург</p>
-                        <img class="active_filter_delete_btn" src="{% static 'img/homepage/circle_delete_button.svg' %}">
-                    </div>
-                    <div class="active_filter active_speciality_filter">
-                        <p class="active_filter_text">Уролог</p>
-                        <img class="active_filter_delete_btn" src="{% static 'img/homepage/circle_delete_button.svg' %}">
-                    </div>
-                </div>    
-            
+                </div>
+
                 <div class="all_doctors">
                     {% for doctor in doctors %}
-                        <div class="user_card">
+                        <div class="user_card_wrapper">
+                            <div class="user_card">
+                                <div class="user_avatar">
+                                    {% if doctor.avatar is not NULL %}
+                                        <img class="avatar" src="{{ doctor.avatar_url | default_if_none:"#" }}">
+                                    {% endif %}
+                                </div>
+                                <div class="doc_info">
+                                    <div class="user_name doctor_name">
+                                        <p>{{ doctor.name }}</p>
+                                    </div>
 
-                            <div class="user_avatar">
-                                {% if doctor.avatar is not NULL %}
-                                    <img class="avatar" src="{{ doctor.avatar_url | default_if_none:"#" }}">
-                                {% endif %}
+                                    <div class="user_additional_info">
+                                        <p>{{ doctor.speciallity }}, г. {{ doctor.city }}</p>
+                                    </div>
+                                </div>
+                                <a class="user_info_btn_container" href="{{ doctor.get_absolute_url }}">
+                                    <div class="user_info_btn">
+                                        <div class="user_info_btn_text">Подробнее</div>
+                                    </div>
+                                </a>
                             </div>
-                            <div class="doc_info">
-                                <div class="user_name doctor_name">
-                                    <p>{{ doctor.name }}</p>
-                                </div>
-
-                                <div class="user_additional_info">
-                                    <p>{{ doctor.speciallity }}, г. {{ doctor.city }}</p>
-                                </div>
-                            </div>
-                            <a class="user_info_btn_container" href="{{ doctor.get_absolute_url }}">
-                                <div class="user_info_btn">
-                                    <div class="user_info_btn_text">Подробнее</div>
-                                </div>
-                            </a>
                         </div>
                     {% endfor %}
                 </div>
@@ -60,41 +59,3 @@
     </div>
 
 {% endblock %}
-
-{##}
-{#<div class="filter_container">#}
-{#            <form action="{% url 'doctors__filter' %}" method="get">#}
-{#                {% csrf_token %}#}
-{#                {{ form.as_p }}#}
-{#                <div class="filter_speciallity_container">#}
-{#                    <h3>Специальности</h3>#}
-{#                    <select name="speciallity" class="choise_spec">#}
-{#                        <option value="000">Выберите специальность</option>#}
-{#                        {% for speciallity in view.get_speciallity %}#}
-{#                            <option name="speciallity" value="{{ speciallity.id }}">#}
-{#                                <span class="speciallity_name">{{ speciallity.name }}</span>#}
-{#                            </option>#}
-{#                        {% endfor %}#}
-{#                    </select>#}
-{#                </div>#}
-{##}
-{##}
-{#                <div class="filter_city_container">#}
-{#                    <h3>Города</h3>#}
-{#                    <select name="city" class="choise_city">#}
-{#                        <option value="000">Выберите город</option>#}
-{#                        {% for city in view.get_citys %}#}
-{#                            <option name="city" value="{{ city.id }}">#}
-{#                                <span class="city_name">{{ city.name }}</span>#}
-{#                            </option>#}
-{#                        {% endfor %}#}
-{#                    </select>#}
-{#                </div>#}
-{#                <div class="filter_btn">#}
-{#                    <button class="new_button" type="submit">Применить фильтр</button>#}
-{#                </div>#}
-{#            </form>#}
-{#            <a class="clear_btn" href="{% url 'homepage' %}">#}
-{#                <div class="n_c_button">Отменить</div>#}
-{#            </a>#}
-{#        </div>#}

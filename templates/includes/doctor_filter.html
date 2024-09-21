@@ -6,84 +6,55 @@
 {% endblock %}
 
 <div class="filters_wrapper">
-    <div class="filter-section">
-        <div class="filter-header" id="city-filter-header">
-            <img class="filter_open_close_arrow" src="{% static "img/homepage/arrow.svg" %}">
-            <div class="filter-title">Город</div>
-        </div>
-        <div id="city-filter" class="filter-content">
-            <div class="search-container">
-                <input type="text" placeholder="Найти свой город..." class="search-input">
+    <div class="filters-inline-wrapper">
+        <div class="filter-section">
+            <div class="filter-header" id="city-filter-header">
+                <img class="filter_open_close_arrow" src="{% static "img/homepage/arrow.svg" %}">
+                <div class="filter-title">Город</div>
             </div>
-            <div class="filter-list" id="city-list">
-                <label for="checkbox-ekb" class="checkbox-label">
-                    <input type="checkbox" id="checkbox-ekb" class="checkbox">
-                    <span class="checkbox-view"><img class="checkbox-icon" src="{% static 'img/homepage/check_mark.svg' %}"></span>
-                    <p class="checkbox-text">Екатеринбург</p>
-                </label>
-                <label for="checkbox-msk" class="checkbox-label">
-                    <input type="checkbox" id="checkbox-msk" class="checkbox">
-                    <span class="checkbox-view"><img class="checkbox-icon" src="{% static 'img/homepage/check_mark.svg' %}"></span>
-                    <p class="checkbox-text">Москва</p>
-                </label>
-                <label for="checkbox-orb" class="checkbox-label">
-                    <input type="checkbox" id="checkbox-orb" class="checkbox">
-                    <span class="checkbox-view"><img class="checkbox-icon" src="{% static 'img/homepage/check_mark.svg' %}"></span>
-                    <p class="checkbox-text">Оренбург</p>
-                </label>
-                <label for="checkbox-vldv" class="checkbox-label">
-                    <input type="checkbox" id="checkbox-vldv" class="checkbox">
-                    <span class="checkbox-view"><img class="checkbox-icon" src="{% static 'img/homepage/check_mark.svg' %}"></span>
-                    <p class="checkbox-text">Владивосток</p>
-                </label>
-                <label for="checkbox-spb" class="checkbox-label">
-                    <input type="checkbox" id="checkbox-spb" class="checkbox">
-                    <span class="checkbox-view"><img class="checkbox-icon" src="{% static 'img/homepage/check_mark.svg' %}"></span>
-                    <p class="checkbox-text">Санкт-Петербург</p>
-                </label>
+            <div id="city-filter" class="filter-content">
+                <div class="search-container">
+                    <img src="/static/img/lupa.svg">
+                    <input type="text" placeholder="Найти свой город..." class="search-input">
+                </div>
+            
+                <div class="filter-list" id="city-list">
+                    {% for city in cities %}
+                        <label for="city-{{ city.id }}" class="checkbox-label city">
+                            <input type="checkbox" id="city-{{ city.id }}" class="checkbox">
+                            <span class="checkbox-view">
+                                <img class="checkbox-icon" src="{% static 'img/homepage/check_mark.svg' %}">
+                            </span>
+                            <p class="checkbox-text">{{ city.name }}</p>
+                        </label>
+                    {% endfor %}
+                </div>
             </div>
-            <div class="show-all">показать все</div>
         </div>
-    </div>
 
-    <div class="filter-section">
-        <div class="filter-header" id="speciality-filter-header">
-            <img class="filter_open_close_arrow" src="{% static "img/homepage/arrow.svg" %}">
-            <div class="filter-title">Специальность</div>
-        </div>
-        
-        <div id="speciality-filter" class="filter-content">
-            <div class="search-container">
-                <input type="text" placeholder="Найти специальность..." class="search-input">
+        <div class="filter-section">
+            <div class="filter-header" id="speciality-filter-header">
+                <img class="filter_open_close_arrow" src="{% static "img/homepage/arrow.svg" %}">
+                <div class="filter-title">Специальность</div>
             </div>
-            <div class="filter-list" id="speciality-list">
-                <label for="checkbox-urolog" class="checkbox-label">
-                    <input type="checkbox" id="checkbox-urolog" class="checkbox">
-                    <span class="checkbox-view"><img class="checkbox-icon" src="{% static 'img/homepage/check_mark.svg' %}"></span>
-                    <p class="checkbox-text">Уролог</p>
-                </label>
-                <label for="checkbox-oftalmolog" class="checkbox-label">
-                    <input type="checkbox" id="checkbox-oftalmolog" class="checkbox">
-                    <span class="checkbox-view"><img class="checkbox-icon" src="{% static 'img/homepage/check_mark.svg' %}"></span>
-                    <p class="checkbox-text">Офтальмолог</p>
-                </label>
-                <label for="checkbox-sexolog" class="checkbox-label">
-                    <input type="checkbox" id="checkbox-sexolog" class="checkbox">
-                    <span class="checkbox-view"><img class="checkbox-icon" src="{% static 'img/homepage/check_mark.svg' %}"></span>
-                    <p class="checkbox-text">Сексолог</p>
-                </label>
-                <label for="checkbox-gastro" class="checkbox-label">
-                    <input type="checkbox" id="checkbox-gastro" class="checkbox">
-                    <span class="checkbox-view"><img class="checkbox-icon" src="{% static 'img/homepage/check_mark.svg' %}"></span>
-                    <p class="checkbox-text">Гастроэнтеролог</p>
-                </label>
-                <label for="checkbox-cosme" class="checkbox-label">
-                    <input type="checkbox" id="checkbox-cosme" class="checkbox">
-                    <span class="checkbox-view"><img class="checkbox-icon" src="{% static 'img/homepage/check_mark.svg' %}"></span>
-                    <p class="checkbox-text">Косметолог</p>
-                </label>
+
+            <div id="speciality-filter" class="filter-content">
+                <div class="search-container">
+                    <img src="/static/img/lupa.svg">
+                    <input type="text" placeholder="Найти специальность..." class="search-input">
+                </div>
+                <div class="filter-list" id="speciality-list">
+                    {% for speciality in specialities %}
+                        <label for="speciality-{{ speciality.id }}" class="checkbox-label speciality">
+                            <input type="checkbox" id="speciality-{{ speciality.id }}" class="checkbox">
+                            <span class="checkbox-view">
+                                <img class="checkbox-icon" src="{% static 'img/homepage/check_mark.svg' %}">
+                            </span>
+                            <p class="checkbox-text">{{ speciality.name }}</p>
+                        </label>
+                    {% endfor %}
+                </div>
             </div>
-            <div class="show-all">показать все</div>
         </div>
     </div>
 </div>

@@ -1,7 +1,13 @@
+.filters-inline-wrapper {
+    height: auto;
+    border-radius: 20px;
+    background: #161616;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
 .filter-section {
-    margin: 20px;
-    padding: 20px;
-    background-color: #0F0F0F;
+    padding: 10px 20px 10px 28px;
     border-radius: 8px;
 }
 
@@ -12,7 +18,7 @@
 }
 
 .filter_open_close_arrow {
-    margin-right: 20px;
+    margin-right: 10px;
     transition: transform 0.3s ease;
     transform: rotate(-90deg);
 }
@@ -23,14 +29,16 @@
 
 .filter-title {
     font-size: 18px;
-    font-weight: bold;
+    font-weight: normal;
     cursor: pointer;
+    color: white;
 }
 
 .filter-content {
     max-height: 0;
     overflow: hidden;
     transition: max-height 0.3s ease;
+    color: white;
 }
 
 .filter-content.show {
@@ -52,6 +60,8 @@
     list-style: none;
     padding: 0;
     margin: 0;
+    overflow-y: scroll;
+    max-height: 200px;
 }
 
 .filter-list li {
@@ -83,7 +93,8 @@
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    padding: 10px;
+    padding-top: 30px;
+    padding-bottom: 20px;
 }
 
 .active_filter {
@@ -93,20 +104,18 @@
     align-items: center;
     margin-right: 15px;
     margin-top: 15px;
-}
-
-.active_city_filter {
     background: #2F9BFF;
 }
 
 .active_filter_text {
-    padding: 5px 16px 5px 24px;
+    padding: 5px 0 5px 15px;
+    color: white;
 }
 
 .active_filter_delete_btn {
-     padding: 5px 15px 5px 15px;
+    padding: 5px 15px 5px 15px;
 }
 
-.active_speciality_filter {
+.active_filter:hover {
     background: #FF3737;
 }

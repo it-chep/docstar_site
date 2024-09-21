@@ -30,6 +30,21 @@ document.addEventListener("DOMContentLoaded", function () {
     initializeFilterClickAction();
     sortList("city-list");
     sortList("speciality-list");
+
+    $('.checkbox-label.speciality, .checkbox-label.city').click(function (event) {
+        const className = $(this).hasClass('speciality') ? 'speciality' : 'city';
+        handleFilterClick.call(this, event, className);
+    });
+
+    $(document).on('click', '.active_filter_delete_btn', function () {
+        const text = $(this).siblings('.active_filter_text').text();
+        $(this).parent('.active_filter').remove();
+        $(`.checkbox-label`).each(function () {
+            if ($(this).find('.checkbox-text').text() === text) {
+                $(this).find('input[type="checkbox"]').prop('checked', false);
+            }
+        });
+    });
 });
 
 function sortList(listId) {
@@ -46,3 +61,22 @@ function sortList(listId) {
     }
 }
 
+function handleFilterClick(event, className) {
+    event.preventDefault();
+
+    const checkbox = $(this).find('input[type="checkbox"]');
+    const labelText = $(this).find('.checkbox-text').text();
+
+    checkbox.prop('checked', !checkbox.prop('checked'));
+
+    if (checkbox.prop('checked')) {
+        $('.active_filters_wrapper').append(`
+                <div class="active_filter" data-${className}="${labelText}">
+                    <p class="active_filter_text">${labelText}</p>
+                    <img class="active_filter_delete_btn" src="${window.location.origin}/static/img/homepage/cancel_logo.svg">
+                </div>
+            `);
+    } else {
+        $(`.active_filters_wrapper .active_filter[data-${className}="${labelText}"]`).remove();
+    }
+}

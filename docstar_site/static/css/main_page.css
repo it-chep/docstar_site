@@ -1,0 +1,223 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "HelveticaNeueCyr", "Helvetica Neue", Arial, sans-serif;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    background-color: #0E0F0F;
+}
+
+.container {
+    width: 1200px;
+    margin: 0 auto;
+}
+
+.doctors_list_header {
+    color: white;
+}
+
+.doctors_list_container {
+    background-color: #0E0F0F;
+}
+
+.doctors_container {
+    padding-left: 20px;
+    padding-right: 25px;
+    width: 1200px;
+    margin: 0 auto;
+}
+
+.doctors_wrapper {
+    display: flex;
+    flex-direction: row;
+}
+
+.all_doctors {
+    column-gap: 20px;
+    row-gap: 20px;
+    text-align: center;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: left;
+}
+
+.user_card_wrapper {
+    width: 278px;
+    height: 349px;
+    padding: 10px 10px 30px 10px;
+    border-radius: 20px;
+    background: #1E1E1E;
+}
+
+.user_card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: nowrap;
+}
+
+.user_avatar {
+    width: 100%;
+    margin: 0 0 10px;
+    image-orientation: revert;
+    object-fit: cover;
+}
+
+.doc_info {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 10px;
+    width: 100%;
+    height: 100px;
+}
+
+.avatar {
+    object-position: 10% 10%;
+    object-fit: cover;
+    position: relative;
+    width: 100%;
+    height: 160px;
+    border-radius: 14px;
+}
+
+.user_name {
+    font-family: "HelveticaNeueCyr", "Helvetica Neue", Arial, sans-serif;
+    font-weight: 900;
+    font-size: 20px;
+    margin-top: -2%;
+    width: 100%;
+    height: 50px;
+    float: left;
+    text-align: left;
+}
+
+.doctor_name {
+    color: white;
+}
+
+.user_additional_info {
+    font-size: 14px;
+    color: #717171;
+    text-align: left;
+}
+
+a {
+    text-decoration: none;
+    color: white;
+}
+
+.user_info_btn {
+    cursor: pointer;
+    width: 150px;
+    padding: 8px 20px;
+    border-radius: 100px;
+    border: 2px solid #2E99FC;
+    background: #01284B;
+    transition: background-color 0.5s ease;
+}
+
+.user_info_btn:hover {
+    background: #2E99FC
+}
+
+.user_info_btn:hover div {
+
+}
+
+.user_info_btn_container {
+    padding-left: 10px;
+    margin-top: 10px;
+}
+
+.header-container {
+    width: 1200px;
+    margin: 50px auto 40px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 42px;
+    justify-content: center;
+}
+
+.logo img {
+    width: 268px;
+    height: 75px;
+}
+
+.search-doctors-container {
+    display: flex;
+    z-index: 1001;
+    width: 600px;
+    padding: 10px 25px;
+    align-items: center;
+    gap: 10px;
+    border-radius: 61px;
+    border: 2px solid #606060;
+}
+
+.search-doctors-container input {
+    color: white;
+    background-color: transparent;
+    width: 100%;
+    font-size: 16px;
+    border: none;
+    outline: none;
+    box-shadow: none;
+}
+
+.search-doctors-container input::placeholder {
+    font-size: 16px;
+}
+
+.search-doctors-container img {
+    width: 25px;
+    height: 25px;
+}
+
+.login-container {
+    padding-right: 30px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
+    flex-direction: row;
+    color: #606060;
+    width: 268px;
+}
+
+.login-container span {
+    color: #606060;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.search-doctors-container:hover {
+    border: 2px solid #2E99FC;
+}
+
+.search-doctors-container input:focus {
+    border: none;
+}
+
+.search-doctors-container:focus-within {
+    border: 2px solid #2E99FC;
+}
+
+.search-doctors-container input::placeholder {
+    color: grey;
+}
+
+.search-doctors-container input:focus::placeholder {
+    color: white;
+}
+
+.search-doctors-container input.placeholder-white::placeholder {
+    color: white;
+}

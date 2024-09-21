@@ -41,8 +41,8 @@ class Doctor(models.Model):
         return reverse('edit', kwargs={'slug': self.slug})
 
     class Meta:
-        verbose_name = 'Пользователь'
-        verbose_name_plural = 'Пользователи'
+        verbose_name = 'Врач'
+        verbose_name_plural = 'Врачи'
         ordering = ["name"]
 
 

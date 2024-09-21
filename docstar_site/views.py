@@ -96,6 +96,8 @@ class Doctors(DataMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['form'] = self.form_class(self.request.GET or None)
+        context['cities'] = City.objects.all()
+        context['specialities'] = Speciallity.objects.all()
         return context
 
     def post(self, request, *args, **kwargs):

@@ -56,7 +56,8 @@ INSTALLED_APPS = [
 
     'allauth',
     'allauth.account',
-    'guardian'
+    'guardian',
+    'tickets'
 ]
 
 MIDDLEWARE = [
@@ -171,6 +172,7 @@ INTERNAL_IPS = [
 GK_KEY = os.getenv('GK_KEY')
 GK_ACCOUNT_NAME = os.getenv('GK_ACCOUNT_NAME')
 GK_GROUP_ID = os.getenv('GK_GROUP_ID')
+GETCOURCE_TICKETS_TOKEN = os.getenv('GETCOURCE_TICKETS_TOKEN', None)
 
 VPN_PRICE = os.getenv('VPN_PRICE')
 

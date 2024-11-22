@@ -14,6 +14,7 @@ urlpatterns = [
     path('users/', include('users.urls')),
     path('vpn/', include('vpn.urls')),
     path('api/v1/doctorlist/', DoctorApiView.as_view(), name='doctor-list'),
+    path('tickets/', include('tickets.urls')),
     path('', include('docstar_site.urls')),
 ]
 

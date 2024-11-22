@@ -17,8 +17,9 @@ class TicketsApiView(APIView):
 
     def _authenticate_get_request(self, request) -> bool:
         client_ip = request.META.get('REMOTE_ADDR', '0.0.0.0')
-        print(f"GET request from IP: {client_ip}")
-        return True
+        if client_ip in settings.AVAILABLE_GET_TICKETS_IPS:
+            return True
+        return False
 
     def _get_available_event(self, event_id: int) -> Event:
         return Event.objects.filter(id=event_id).annotate(

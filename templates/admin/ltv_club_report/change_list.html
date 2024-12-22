@@ -1,0 +1,16 @@
+{% extends "admin/change_list.html" %}
+{% load admin_urls %}
+
+{% block object-tools-items %}
+    {{ block.super }}
+    <li>
+        <a href="{% url 'admin:get_ltv_club_report' %}" class="grp-add-link grp-state-focus">
+            Создать отчет за все время
+        </a>
+    </li>
+    <li>
+        <a href="{% url 'admin:get_ltv_last_year_club_report' %}" class="grp-add-link grp-state-focus">
+            Создать отчет за прошлый год
+        </a>
+    </li>
+{% endblock %}

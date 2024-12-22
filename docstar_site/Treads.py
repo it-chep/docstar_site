@@ -5,7 +5,7 @@ from time import sleep
 from django.conf import settings
 
 
-def get_export_id():
+def get_users_export_id():
     try:
         sleep(60)
         while True:

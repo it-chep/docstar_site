@@ -50,14 +50,15 @@ INSTALLED_APPS = [
     'rest_framework',
 
     'debug_toolbar',
-    'users.apps.UsersConfig',
-    'docstar_site.apps.DocstarSiteConfig',
-    'vpn.apps.VpnConfig',
+    'users',
+    'docstar_site',
+    'vpn',
+    'infrastructure',
 
     'allauth',
     'allauth.account',
     'guardian',
-    'tickets'
+    'tickets',
 ]
 
 MIDDLEWARE = [

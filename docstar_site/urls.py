@@ -1,15 +1,10 @@
-from django.urls import include
-from django.views.decorators.cache import cache_page
-
 from docstar_site.views import *
-from docstar_site.admin import *
-from docstar_site.cdek import process_request as cdek_view
+from django.urls import path
 
 urlpatterns = [
     path('spasibo_book/', spasibo_book, name='spasibo_book'),
 
     path('clinic/', Doctors.as_view(), name='clinic'),
-    path('cdek/', cdek_view, name='cdek_view'),
     path('prelogin/', get_gk_email, name='chek_getcourse'),
     path('prelogin/check_club/', Get_gk_email_result, name='chek_getcourse_result'),
 

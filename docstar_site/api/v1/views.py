@@ -42,7 +42,7 @@ class FilterDoctorApiView(BaseDoctorApiView, views.APIView):
         city_list = request.GET.get('city')
         speciallity_list = request.GET.get('speciality')
 
-        if not city_list and speciallity_list:
+        if not city_list and not speciallity_list:
             doctors = Doctor.objects.all().select_related('city', 'speciallity')
             doctors_list = self.prepare_doctors_data(doctors)
             return JsonResponse({'data': doctors_list}, status=200)

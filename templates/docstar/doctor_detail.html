@@ -62,7 +62,7 @@
                     {% if doctor.medical_directions %}
                         <div class="additional_block">
                             <p class="direct">
-                                <span>Направление:</span> 
+                                <span>Направление:</span>
                                 {{ doctor.medical_directions }}
                             </p>
                         </div>
@@ -100,6 +100,15 @@
                             </a>
                         </div>
                     {% endif %}
+
+                    {% if doctor.youtube_url %}
+                        <div class="youtube">
+                            <a href="{{ doctor.youtube_url }}">
+                                <img src="{% static "img/logos/Youtube_logo.png" %}">
+                            </a>
+                        </div>
+                    {% endif %}
+                
                 </div>
                 {% if doctor.prodoctorov %}
                     <a class="prodoc_btn_wrapper" href="{{ doctor.prodoctorov }}">

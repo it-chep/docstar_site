@@ -55,10 +55,6 @@ INSTALLED_APPS = [
     'docstar_site',
     'vpn',
     'infrastructure',
-
-    'allauth',
-    'allauth.account',
-    'guardian',
     'tickets',
 ]
 
@@ -103,7 +99,6 @@ WSGI_APPLICATION = 'new_site.wsgi.application'
 
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
-    'guardian.backends.ObjectPermissionBackend',
 )
 
 DATABASES = {
@@ -144,8 +139,7 @@ USE_TZ = True
 
 # User
 AUTH_USER_MODEL = 'users.CustomUser'
-ACCOUNT_AUTHENTICATION_METHOD = 'email'
-ACCOUNT_EMAIL_REQUIRED = True
+
 
 # Login\logout
 LOGIN_REDIRECT_URL = 'homepage'

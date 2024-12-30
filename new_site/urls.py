@@ -6,11 +6,8 @@ from django.views.static import serve
 
 from django.views.generic import TemplateView
 
-from docstar_site.views import DoctorApiView
-
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('accounts/', include('allauth.urls')),
     path(r'grappelli/', include('grappelli.urls')),
     path('users/', include('users.urls')),
     path('vpn/', include('vpn.urls')),

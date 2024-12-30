@@ -15,6 +15,7 @@ urlpatterns = [
     path('users/', include('users.urls')),
     path('vpn/', include('vpn.urls')),
     path('api/v1/', include('docstar_site.api.v1.urls')),
+    path('tickets/', include('tickets.urls')),
     path('', include('docstar_site.urls')),
 ]
 

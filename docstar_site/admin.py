@@ -9,6 +9,7 @@ class CityAdmin(admin.ModelAdmin):
 
 class DoctorAdmin(admin.ModelAdmin):
     list_display = ('name', 'email', 'status_club', 'city', 'speciallity')
+    search_fields = ("email", "name",)
     prepopulated_fields = {"slug": ("name",)}
 
 

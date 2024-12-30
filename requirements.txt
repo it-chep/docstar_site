@@ -16,6 +16,7 @@ django-grappelli==3.0.4
 django-guardian==2.4.0
 django-mmc==1.6.5
 djangorestframework==3.14.0
+et_xmlfile==2.0.0
 Faker==17.0.0
 h11==0.9.0
 h2==3.2.0
@@ -26,7 +27,9 @@ httpx==0.13.3
 hyperframe==5.2.0
 idna==2.10
 libretranslatepy==2.1.1
+lxml==5.2.2
 oauthlib==3.2.2
+openpyxl==3.1.5
 Pillow==9.4.0
 psycopg2==2.9.5
 psycopg2-binary==2.9.5

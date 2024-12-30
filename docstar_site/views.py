@@ -24,13 +24,13 @@ from docstar_site.forms import UpdateDoc, DoctorSearchForm
 from docstar_site.models import *
 from docstar_site.utils import *
 from docstar_site.permissions import DoctorPermissionsMixin, MembersPermissionsMixin
-from docstar_site.Treads import get_export_id
+from docstar_site.Treads import get_users_export_id
 from docstar_site.functions import *
 
 import logging
 
 logger = logging.getLogger(__name__)
-thread_1 = threading.Thread(target=get_export_id, daemon=True)
+thread_1 = threading.Thread(target=get_users_export_id, daemon=True)
 thread_1.start()
 
 

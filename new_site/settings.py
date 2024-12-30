@@ -164,6 +164,8 @@ INTERNAL_IPS = [
     '81.200.144.45'
 ]
 
+LIMIT_DOCTORS_ON_PAGE = 30
+
 ADMIN_TITLE = GRAPPELLI_ADMIN_TITLE = 'Medblogers base'
 
 GK_KEY = os.getenv('GK_KEY')

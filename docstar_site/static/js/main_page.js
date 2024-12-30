@@ -1,6 +1,7 @@
 $(document).ready(function () {
+    let currentPage = 1;
 
-    loadDoctors();
+    loadDoctors(currentPage);
 
     $(document).on('click', 'a.mini_doctor_link', function (event) {
         event.preventDefault();
@@ -12,12 +13,18 @@ $(document).ready(function () {
 
 });
 
-function loadDoctors() {
+function loadDoctors(page) {
     const $doctorListContainer = $('.all_doctors');
+    const filterParams = getFilterQueryParams()
+    if (filterParams.length !== 0) {
+        filterDoctors(filterParams, page)
+        return
+    }
 
     $.ajax({
-        url: '/api/v1/doctor-list',
+        url: '/api/v1/doctor-list/',
         method: 'GET',
+        data: {page: page},
         success: function (response) {
             $doctorListContainer.empty();
 
@@ -47,6 +54,7 @@ function loadDoctors() {
                         `;
                     $doctorListContainer.append(doctorCard);
                 });
+                renderPagination(response.page, response.pages);
             } else {
                 $doctorListContainer.append('<p>Доктора не найдены.</p>');
             }

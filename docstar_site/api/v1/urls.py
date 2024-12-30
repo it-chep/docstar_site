@@ -8,7 +8,7 @@ from .views import (
 
 urlpatterns = [
     path(
-        'doctor-list',
+        'doctor-list/',
         DoctorListApiView.as_view(),
         name='doctor-list'
     ),

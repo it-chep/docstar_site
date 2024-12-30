@@ -97,6 +97,26 @@ function sortList(listId) {
     }
 }
 
+function getFilterQueryParams() {
+
+    const filters = {};
+
+    $('.active_filters_wrapper .active_filter').each(function () {
+        const filterData = $(this).data();
+
+        for (const [key, value] of Object.entries(filterData)) {
+            if (!filters[key]) {
+                filters[key] = [];
+            }
+            filters[key].push(value);
+        }
+    });
+
+    return Object.entries(filters)
+        .map(([key, values]) => `${key}=${encodeURIComponent(values.join(','))}`)
+        .join('&')
+}
+
 function handleFilterClick(event, className) {
     event.preventDefault();
 
@@ -115,32 +135,15 @@ function handleFilterClick(event, className) {
         $(`.active_filters_wrapper .active_filter[data-${className}="${labelText}"]`).remove();
     }
 
-    const filters = {};
-
-    $('.active_filters_wrapper .active_filter').each(function () {
-        const filterData = $(this).data();
-
-        for (const [key, value] of Object.entries(filterData)) {
-            if (!filters[key]) {
-                filters[key] = [];
-            }
-            filters[key].push(value);
-        }
-    });
-
-    const queryParams = Object.entries(filters)
-        .map(([key, values]) => `${key}=${encodeURIComponent(values.join(','))}`)
-        .join('&');
-
-    filterDoctors(queryParams);
+    filterDoctors(getFilterQueryParams(), 1);
 }
 
-function filterDoctors(filters) {
+function filterDoctors(filters, page = 1) {
+
     const $doctorListContainer = $('.all_doctors');
     $.ajax({
-        url: '/api/v1/filter-doctor/',
+        url: `/api/v1/filter-doctor/?${filters}&page=${page}`,
         method: 'GET',
-        data: filters,
         success: function (response) {
             $doctorListContainer.empty();
 
@@ -170,6 +173,7 @@ function filterDoctors(filters) {
                     `;
                     $doctorListContainer.append(doctorCard);
                 });
+                renderPagination(response.page, response.pages);
             } else {
                 $doctorListContainer.append('<p>Доктора не найдены.</p>');
             }

@@ -112,6 +112,43 @@ a {
 
 }
 
+.pagination_container {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    display: flex;
+    position: relative;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: nowrap;
+}
+
+.pagination_button {
+    color: #717171;
+    cursor: pointer;
+    padding: 21px;
+}
+
+.pagination_button:hover {
+    color: #2E99FC;
+}
+
+
+.material-icons {
+    color: #717171;
+    padding: 12px;
+    padding-top: 14px;
+}
+
+.material-icons:hover {
+    cursor: pointer;
+    color: #2E99FC;
+}
+
+.pagination_button.active {
+    color: #2E99FC;
+}
+
 .user_info_btn_container {
     padding-left: 10px;
     margin-top: 10px;

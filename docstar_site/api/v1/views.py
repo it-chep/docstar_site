@@ -24,7 +24,7 @@ class BaseDoctorApiView:
     def get_pages_and_doctors_with_offset(self, current_page: int, doctors):
         offset = current_page * settings.LIMIT_DOCTORS_ON_PAGE
 
-        pages = int(len(doctors) / settings.LIMIT_DOCTORS_ON_PAGE)
+        pages = max(int(len(doctors) / settings.LIMIT_DOCTORS_ON_PAGE), 1)
 
         if current_page == 1:
             doctors = doctors[:self.limit]

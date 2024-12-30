@@ -3,6 +3,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    {% include "analize_counters/yandex_counter.html" %}
 
     <title>
         {% block head_title %}
@@ -12,7 +13,8 @@
     <link rel="shortcut icon" href="{% static "img/dcs.png" %}" type="image/png">
     <link type="text/css" rel="stylesheet" href="{% static 'css/custom_inputs/custom_inputs.css' %}">
     <link type="text/css" rel="stylesheet" href="{% static 'css/modals/main_modals.css' %}">
-    <script defer src="{% static 'js/main.js' %}"></script>
+    <link type="text/css" rel="stylesheet" href="{% static 'css/main.css' %}">
+    <script defer src="{% static 'js/main_main.js' %}"></script>
     <script src="{% static "js/jquery-3.6.0.min.js" %}"></script>
 
     {% block extralinks %}
@@ -26,11 +28,13 @@
     </div>
     <div class="header-container">
         <div class="logo">
-            <img src="{% static "img/medblogers_logo.png" %}">
+            <a href="{% url "homepage" %}">
+                <img src="{% static "img/medblogers_logo.png" %}">
+            </a>
         </div>
         <div class="search-doctors-container">
             <img src="{% static "img/lupa.svg" %}">
-            <input type="text" placeholder="Найдем для вас врача...">
+            <input class="search-doctors-input" type="text" placeholder="Найдем для вас врача...">
         </div>
         <div class="login-container">
             <img src="{% static "img/human.svg" %}">

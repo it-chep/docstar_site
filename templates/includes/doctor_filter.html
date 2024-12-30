@@ -15,7 +15,7 @@
             <div id="city-filter" class="filter-content">
                 <div class="search-container">
                     <img src="/static/img/lupa.svg">
-                    <input type="text" placeholder="Найти свой город..." class="search-input">
+                    <input type="text" id="citySearchInput" placeholder="Найти свой город..." class="search-input">
                 </div>
             
                 <div class="filter-list" id="city-list">
@@ -41,7 +41,7 @@
             <div id="speciality-filter" class="filter-content">
                 <div class="search-container">
                     <img src="/static/img/lupa.svg">
-                    <input type="text" placeholder="Найти специальность..." class="search-input">
+                    <input type="text" id="specialitySearchInput" placeholder="Найти специальность..." class="search-input">
                 </div>
                 <div class="filter-list" id="speciality-list">
                     {% for speciality in specialities %}

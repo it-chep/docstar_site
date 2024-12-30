@@ -26,8 +26,41 @@ function initializeFilterClickAction() {
     });
 }
 
-document.addEventListener("DOMContentLoaded", function () {
+function showFiltersBySearchText(object, searchText) {
+    const labelText = object.find('.checkbox-text').text().toLowerCase();
+
+    if (labelText.includes(searchText)) {
+        object.show();
+    } else {
+        object.hide();
+    }
+}
+
+function initializeSearchFiltersInput() {
+    const citySearchInput = $('#citySearchInput')
+    const cityList = $('#city-list .checkbox-label')
+
+    const specialitySearchInput = $('#specialitySearchInput')
+    const specialityList = $('#speciality-list .checkbox-label');
+
+    citySearchInput.on('input', function (event) {
+        const searchText = $(this).val().toLowerCase();
+        cityList.each(function () {
+            showFiltersBySearchText($(this), searchText)
+        });
+    })
+
+    specialitySearchInput.on('input', function () {
+        const searchText = $(this).val().toLowerCase();
+        specialityList.each(function () {
+            showFiltersBySearchText($(this), searchText)
+        });
+    });
+}
+
+$(document).ready(function () {
     initializeFilterClickAction();
+    initializeSearchFiltersInput();
     sortList("city-list");
     sortList("speciality-list");
 
@@ -36,7 +69,7 @@ document.addEventListener("DOMContentLoaded", function () {
         handleFilterClick.call(this, event, className);
     });
 
-    $(document).on('click', '.active_filter_delete_btn', function () {
+    $(document).on('click', '.active_filter_delete_btn', function (event) {
         const text = $(this).siblings('.active_filter_text').text();
         $(this).parent('.active_filter').remove();
         $(`.checkbox-label`).each(function () {
@@ -44,6 +77,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 $(this).find('input[type="checkbox"]').prop('checked', false);
             }
         });
+
+        const className = $(this).hasClass('speciality') ? 'speciality' : 'city';
+        handleFilterClick.call(this, event, className);
     });
 });
 
@@ -68,7 +104,6 @@ function handleFilterClick(event, className) {
     const labelText = $(this).find('.checkbox-text').text();
 
     checkbox.prop('checked', !checkbox.prop('checked'));
-
     if (checkbox.prop('checked')) {
         $('.active_filters_wrapper').append(`
                 <div class="active_filter" data-${className}="${labelText}">
@@ -79,4 +114,69 @@ function handleFilterClick(event, className) {
     } else {
         $(`.active_filters_wrapper .active_filter[data-${className}="${labelText}"]`).remove();
     }
+
+    const filters = {};
+
+    $('.active_filters_wrapper .active_filter').each(function () {
+        const filterData = $(this).data();
+
+        for (const [key, value] of Object.entries(filterData)) {
+            if (!filters[key]) {
+                filters[key] = [];
+            }
+            filters[key].push(value);
+        }
+    });
+
+    const queryParams = Object.entries(filters)
+        .map(([key, values]) => `${key}=${encodeURIComponent(values.join(','))}`)
+        .join('&');
+
+    filterDoctors(queryParams);
+}
+
+function filterDoctors(filters) {
+    const $doctorListContainer = $('.all_doctors');
+    $.ajax({
+        url: '/api/v1/filter-doctor/',
+        method: 'GET',
+        data: filters,
+        success: function (response) {
+            $doctorListContainer.empty();
+
+            if (response.data && response.data.length > 0) {
+                response.data.forEach(doctor => {
+                    const doctorCard = `
+                        <div class="user_card_wrapper">
+                            <div class="user_card">
+                                <div class="user_avatar">
+                                    ${doctor.avatar_url ? `<img class="avatar" src="${doctor.avatar_url}" />` : ''}
+                                </div>
+                                <div class="doc_info">
+                                    <div class="user_name doctor_name">
+                                        <p>${doctor.name}</p>
+                                    </div>
+                                    <div class="user_additional_info">
+                                        <p>${doctor.speciality}, г. ${doctor.city}</p>
+                                    </div>
+                                </div>
+                                <a class="user_info_btn_container" href="${doctor.doctor_url}">
+                                    <div class="user_info_btn">
+                                        <div class="user_info_btn_text">Подробнее</div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    `;
+                    $doctorListContainer.append(doctorCard);
+                });
+            } else {
+                $doctorListContainer.append('<p>Доктора не найдены.</p>');
+            }
+        },
+        error: function (xhr, status, error) {
+            console.error('Ошибка при фильтрации врачей:', error);
+            $doctorListContainer.empty().append('<p>Произошла ошибка при загрузке данных.</p>');
+        }
+    });
 }

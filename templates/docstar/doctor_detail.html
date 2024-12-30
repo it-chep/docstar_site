@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    {{ title }}
+{% endblock %}
+
+{% block extralinks %}
+    <link type="text/css" rel="stylesheet" href="{% static 'css/search_header.css' %}">
+    <link type="text/css" rel="stylesheet" href="{% static 'css/doctor_detail.css' %}">
+    <script src="{% static "js/main.js" %}"></script>
+{% endblock %}
+
+{% block content %}
+    {% include "docstar/modals/search_doctors_modal.html" %}
+
+    <div class="doctor_detail_card_container">
+        <div class="doctor_detail_card">
+            <div class="container_ava">
+                <div class="doc_avatar">
+                    <img class="avatar" src="{{ doctor.avatar_url | default_if_none:"#" }}">
+                </div>
+            </div>
+            <div class="doctor_info">
+                <div class="main_block">
+                    <div class="doctor_name">
+                        <h1>{{ doctor.name }}</h1>
+                    </div>
+
+                    <div class="doctor_city_wrapper">
+                        <div class="doctor_city">
+                            <p>{{ doctor.city }}</p>
+                        </div>
+                    </div>
+
+                    <div class="doctor_speciallity_wrapper">
+                        <div class="doctor_speciallity">
+                            <p>{{ doctor.speciallity }}</p>
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="additional_information">
+                    {% if doctor.additional_speciallity %}
+                        <div class="additional_block">
+                            <p class="additional_specialities">
+                                <span>Доп.специальность:</span>
+                                {{ doctor.additional_speciallity }}
+                            </p>
+                        </div>
+                    {% endif %}
+
+                    {% if doctor.main_blog_theme %}
+                        <div class="additional_block">
+                            <p class="theme">
+                                <span>Тематика блога:</span>
+                                {{ doctor.main_blog_theme }}
+                            </p>
+                        </div>
+                    {% endif %}
+                    {% if doctor.medical_directions %}
+                        <div class="additional_block">
+                            <p class="direct">
+                                <span>Направление:</span> 
+                                {{ doctor.medical_directions }}
+                            </p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="doctor_actions">
+                <div class="society_block">
+                    <div class="instagram">
+                        <a href="{{ doctor.inst_url }}">
+                            <img src="{% static "img/logos/Instagram_icon.png" %}">
+                        </a>
+                    </div>
+
+                    {% if doctor.vk_url %}
+                        <div class="vk">
+                            <a href="{{ doctor.vk_url }}">
+                                <img src="{% static "img/logos/vk_logo.png" %}">
+                            </a>
+                        </div>
+                    {% endif %}
+
+                    {% if doctor.dzen_url %}
+                        <div class="dzen">
+                            <a href="{{ doctor.dzen_url }}">
+                                <img src="{% static "img/logos/dzen_logo.png" %}">
+                            </a>
+                        </div>
+                    {% endif %}
+
+                    {% if doctor.tg_url %}
+                        <div class="telegram">
+                            <a href="{{ doctor.tg_url }}">
+                                <img src="{% static "img/logos/telegram_logo.png" %}">
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+                {% if doctor.prodoctorov %}
+                    <a class="prodoc_btn_wrapper" href="{{ doctor.prodoctorov }}">
+                        <div class="prodoc_btn">
+                            <p class="prodoc_btn_text">Записаться на прием</p>
+                        </div>
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

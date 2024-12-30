@@ -7,6 +7,7 @@
 
 {% block extralinks %}
     <link type="text/css" rel="stylesheet" href="{% static 'css/main_page.css' %}">
+    <link type="text/css" rel="stylesheet" href="{% static 'css/search_header.css' %}">
     <script src="{% static "js/main_page.js" %}"></script>
 {% endblock %}
 
@@ -28,31 +29,6 @@
                 </div>
 
                 <div class="all_doctors">
-                    {% for doctor in doctors %}
-                        <div class="user_card_wrapper">
-                            <div class="user_card">
-                                <div class="user_avatar">
-                                    {% if doctor.avatar is not NULL %}
-                                        <img class="avatar" src="{{ doctor.avatar_url | default_if_none:"#" }}">
-                                    {% endif %}
-                                </div>
-                                <div class="doc_info">
-                                    <div class="user_name doctor_name">
-                                        <p>{{ doctor.name }}</p>
-                                    </div>
-
-                                    <div class="user_additional_info">
-                                        <p>{{ doctor.speciallity }}, г. {{ doctor.city }}</p>
-                                    </div>
-                                </div>
-                                <a class="user_info_btn_container" href="{{ doctor.get_absolute_url }}">
-                                    <div class="user_info_btn">
-                                        <div class="user_info_btn_text">Подробнее</div>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-                    {% endfor %}
                 </div>
             </div>
         </div>

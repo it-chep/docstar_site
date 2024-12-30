@@ -2,26 +2,6 @@
 
 <div class="modal search_doctors_modal">
     <div class="modal-content">
-        {% for doctor in doctors %}
-            <a href="{{ doctor.get_absolute_url }}" class="mini_doctor_link">
-                <div class="mini_user_card">
-                    <div class="mini_user_avatar">
-                        {% if doctor.avatar is not NULL %}
-                            <img class="mini_avatar" src="{{ doctor.avatar_url | default_if_none:"#" }}">
-                        {% endif %}
-                    </div>
-                    <div class="mini_doctor_info">
-                        <div class="mini_doctor_name">
-                            <p>{{ doctor.name }}</p>
-                        </div>
-
-                        <div class="mini_additional_info">
-                            <p>{{ doctor.speciallity }}, г. {{ doctor.city }}</p>
-                        </div>
-                    </div>
-                </div>
-            </a>
-        {% endfor %}
     </div>
 </div>
 

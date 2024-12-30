@@ -14,7 +14,7 @@ urlpatterns = [
     path(r'grappelli/', include('grappelli.urls')),
     path('users/', include('users.urls')),
     path('vpn/', include('vpn.urls')),
-    path('api/v1/doctorlist/', DoctorApiView.as_view(), name='doctor-list'),
+    path('api/v1/', include('docstar_site.api.v1.urls')),
     path('', include('docstar_site.urls')),
 ]
 

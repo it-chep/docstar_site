@@ -47,7 +47,6 @@ INSTALLED_APPS = [
     'vpn.apps.VpnConfig',
 
     'allauth',
-    'guardian'
 ]
 
 MIDDLEWARE = [

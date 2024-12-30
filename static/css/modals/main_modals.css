@@ -34,7 +34,7 @@
     border-radius: 30px;
     background: #1E1E1E;
     color: white;
-    height: 480px;
+    max-height: 480px;
     overflow-y: scroll;
 }
 

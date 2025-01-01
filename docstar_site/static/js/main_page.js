@@ -47,6 +47,10 @@ $(document).ready(function () {
 });
 
 function loadDoctors(page) {
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+    });
     const $doctorListContainer = $('.all_doctors');
     const filterParams = getFilterQueryParams()
     if (filterParams.length !== 0) {

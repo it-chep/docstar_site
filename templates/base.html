@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     {% include "analize_counters/yandex_counter.html" %}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>
         {% block head_title %}
@@ -14,7 +15,12 @@
     <link type="text/css" rel="stylesheet" href="{% static 'css/custom_inputs/custom_inputs.css' %}">
     <link type="text/css" rel="stylesheet" href="{% static 'css/modals/main_modals.css' %}">
     <link type="text/css" rel="stylesheet" href="{% static 'css/main.css' %}">
+
+    <link type="text/css" rel="stylesheet" href="{% static "css/mobile/modals/mobile_main_modals.css" %}">
+    <link type="text/css" rel="stylesheet" href="{% static 'css/mobile/mobile_main.css' %}">
+
     <script defer src="{% static 'js/main_main.js' %}"></script>
+    <script defer src="{% static 'js/search_doctors_modal.js' %}"></script>
     <script src="{% static "js/jquery-3.6.0.min.js" %}"></script>
 
     {% block extralinks %}

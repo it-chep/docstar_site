@@ -93,3 +93,7 @@
 .mini_doctor_info {
     text-align: left;
 }
+
+.search_doctors_modal {
+    position: fixed;
+}

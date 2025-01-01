@@ -85,6 +85,7 @@ class Doctors(DataMixin, ListView):
         context = super().get_context_data(**kwargs)
         context['cities'] = City.objects.all()
         context['specialities'] = Speciallity.objects.all()
+        context["title"] = "Врачи MEDBLOGERS"
         return context
 
 
@@ -93,7 +94,14 @@ class ShowDoc(DataMixin, DetailView):
     template_name = 'docstar/doctor_detail.html'
 
     def get_context_data(self, *, object_list=None, **kwargs):
-        return super().get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
+        context["title"] = f"{self.object.name}"
+        return context
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        context = self.get_context_data()
+        return self.render_to_response(context)
 
 
 class Lections(DataMixin, ListView):

@@ -1,0 +1,34 @@
+@media (max-width: 768px) {
+
+    .header-container {
+        width: 768px;
+    }
+
+    .logo {
+        display: none;
+    }
+
+    .login-container {
+        display: none;
+    }
+
+    .search-doctors-container {
+        width: 723px;
+    }
+
+    .search-doctors-container input {
+        height: 45px;
+        font-size: 24px;
+    }
+
+    .search-doctors-container input::placeholder {
+        font-size: 24px;
+    }
+
+    .search-doctors-container img {
+        width: 30px;
+        height: 45px;
+        margin-top: -5px;
+    }
+
+}

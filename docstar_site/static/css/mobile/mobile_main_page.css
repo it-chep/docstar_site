@@ -1,0 +1,86 @@
+@media (max-width: 768px) {
+    .doctors_list_header {
+        font-size: 44px;
+    }
+
+    .doctors_container {
+        width: 768px;
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+    .doctors_wrapper {
+        flex-direction: column;
+    }
+
+    .all_doctors {
+        justify-content: space-between;
+    }
+
+    .user_card_wrapper {
+        width: 350px;
+        height: 420px;
+        padding: 10px;
+    }
+
+    .settings_icon_wrapper {
+        display: block;
+
+        margin-top: 15px;
+        margin-right: 15px;
+        .material-icons {
+            font-size: 44px;
+            color: white;
+            background: #606060;
+            border-radius: 16px;
+        }
+    }
+
+    .user_card {
+        height: 100%;
+    }
+
+    .user_avatar {
+        margin: 0;
+    }
+
+    .doc_info {
+        height: 200px;
+    }
+
+    .user_name {
+        font-size: 29px;
+        margin: 0;
+        height: auto;
+        white-space: normal;
+        word-wrap: break-word;
+        overflow: visible;
+    }
+
+    .user_additional_info {
+        font-size: 24px;
+    }
+
+    .user_info_btn {
+        width: 100%;
+        padding: 14px 20px;
+    }
+
+    .user_info_btn_text {
+        font-size: 24px;
+    }
+
+    .pagination_button {
+        font-size: 24px;
+    }
+
+    .navigation_btn .material-icons {
+        font-size: 28px;
+    }
+
+    .user_info_btn_container {
+        width: 100%;
+        margin-top: unset;
+        padding-right: 10px;
+    }
+}

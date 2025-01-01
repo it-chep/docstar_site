@@ -20,11 +20,11 @@
 .filter_open_close_arrow {
     margin-right: 10px;
     transition: transform 0.3s ease;
-    transform: rotate(-90deg);
+    transform: rotate(0deg);
 }
 
 .filter_open_close_arrow.open {
-    transform: rotate(0deg);
+    transform: rotate(90deg);
 }
 
 .filter-title {
@@ -107,6 +107,11 @@
     background: #2F9BFF;
 }
 
+.search_filter_indicator .material-icons {
+    color: #2F9BFF;
+    padding: 5px 0 0;
+}
+
 .active_filter_text {
     padding: 5px 0 5px 15px;
     color: white;
@@ -114,6 +119,11 @@
 
 .active_filter_delete_btn {
     padding: 5px 15px 5px 15px;
+}
+
+.material-icons.cancel {
+    color: white;
+    padding: 5px 0 0;
 }
 
 .active_filter:hover {

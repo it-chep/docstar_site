@@ -11,6 +11,39 @@ $(document).ready(function () {
         });
     });
 
+    const $filterWrapper = $('.filters_wrapper')
+
+    const $closeMobileFilterButton = $(`<div class="close_mobile_filter_btn">
+        <span class="material-icons">
+        close
+        </span>
+    </div>`)
+
+    $closeMobileFilterButton.on('click', function () {
+        $filterWrapper.hide()
+    });
+
+    $('.settings_icon_wrapper').on('click', function () {
+        $filterWrapper.show()
+        if (!$filterWrapper.find('.mobile_filter_header').length) {
+            $filterWrapper.prepend(`
+                <div class="mobile_filter_header">
+                    <h1 class="mobile_filter_header_title">Фильтры</h1>
+                </div>
+            `);
+            $filterWrapper.find('.mobile_filter_header').append($closeMobileFilterButton);
+
+            const cityFilterHeader = document.getElementById('city-filter-header')
+            cityFilterHeader.querySelector('.filter_open_close_arrow').classList.toggle('open')
+            toggleFilter('city-filter', cityFilterHeader);
+
+            const specialityFilterHeader = document.getElementById('speciality-filter-header')
+            specialityFilterHeader.querySelector('.filter_open_close_arrow').classList.toggle('open')
+            toggleFilter('speciality-filter', specialityFilterHeader);
+        }
+    });
+
+
 });
 
 function loadDoctors(page) {
@@ -56,12 +89,12 @@ function loadDoctors(page) {
                 });
                 renderPagination(response.page, response.pages);
             } else {
-                $doctorListContainer.append('<p>Доктора не найдены.</p>');
+                $doctorListContainer.append('<p class="white_text">Доктора не найдены.</p>');
             }
         },
         error: function (xhr, status, error) {
             console.error('Ошибка при загрузке списка докторов:', error);
-            $doctorListContainer.append('<p>Произошла ошибка при загрузке данных.</p>');
+            $doctorListContainer.append('<p class="white_text">Произошла ошибка при загрузке данных.</p>');
         }
     });
 }

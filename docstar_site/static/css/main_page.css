@@ -13,6 +13,10 @@
     margin: 0 auto;
 }
 
+.settings_icon_wrapper {
+    display: none;
+}
+
 .doctors_wrapper {
     display: flex;
     flex-direction: row;

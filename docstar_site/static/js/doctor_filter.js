@@ -128,7 +128,11 @@ function handleFilterClick(event, className) {
         $('.active_filters_wrapper').append(`
                 <div class="active_filter" data-${className}="${labelText}">
                     <p class="active_filter_text">${labelText}</p>
-                    <img class="active_filter_delete_btn" src="${window.location.origin}/static/img/homepage/cancel_logo.svg">
+                    <div class="active_filter_delete_btn">
+                        <span class="material-icons cancel">
+                        cancel
+                        </span>
+                    </div>
                 </div>
             `);
     } else {
@@ -175,12 +179,12 @@ function filterDoctors(filters, page = 1) {
                 });
                 renderPagination(response.page, response.pages);
             } else {
-                $doctorListContainer.append('<p>Доктора не найдены.</p>');
+                $doctorListContainer.append('<p class="white_text">Доктора не найдены.</p>');
             }
         },
         error: function (xhr, status, error) {
             console.error('Ошибка при фильтрации врачей:', error);
-            $doctorListContainer.empty().append('<p>Произошла ошибка при загрузке данных.</p>');
+            $doctorListContainer.empty().append('<p class="white_text">Произошла ошибка при загрузке данных.</p>');
         }
     });
 }

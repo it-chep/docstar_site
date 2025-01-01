@@ -73,8 +73,8 @@
 }
 
 .user_name {
-    font-family: "HelveticaNeueCyr", "Helvetica Neue", Arial, sans-serif;
-    font-weight: 900;
+    font-weight: 600;
+    font-style: normal;
     font-size: 20px;
     margin-top: -2%;
     width: 100%;

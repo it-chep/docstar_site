@@ -1,17 +1,3 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: "HelveticaNeueCyr", "Helvetica Neue", Arial, sans-serif;
-}
-
-html, body {
-    margin: 0;
-    padding: 0;
-    background-color: #0E0F0F;
-}
-
-/* fallback */
 @font-face {
     font-family: 'Material Icons';
     font-style: normal;
@@ -34,6 +20,77 @@ html, body {
     -webkit-font-feature-settings: 'liga';
     -webkit-font-smoothing: antialiased;
 }
+
+/* Proxima Nova Black */
+@font-face {
+    font-family: 'Proxima Nova';
+    src: url('../fonts/Proxima Nova/proximanova_black.otf') format('opentype'),
+    url('../fonts/Proxima Nova/proximanova_black.ttf') format('truetype');
+    font-weight: 900;
+    font-style: normal;
+}
+
+/* Proxima Nova Black Italic */
+@font-face {
+    font-family: 'Proxima Nova';
+    src: url('../fonts/Proxima Nova/proximanova_blackit.otf') format('opentype');
+    font-weight: 900;
+    font-style: italic;
+}
+
+/* Proxima Nova Bold */
+@font-face {
+    font-family: 'Proxima Nova';
+    src: url('../fonts/Proxima Nova/proximanova_bold.otf') format('opentype');
+    font-weight: bold;
+    font-style: normal;
+}
+
+/* Proxima Nova Bold Italic */
+@font-face {
+    font-family: 'Proxima Nova';
+    src: url('../fonts/Proxima Nova/proximanova_boldit.otf') format('opentype');
+    font-weight: bold;
+    font-style: italic;
+}
+
+/* Proxima Nova Extra Bold */
+@font-face {
+    font-family: 'Proxima Nova';
+    src: url('../fonts/Proxima Nova/proximanova_extrabold.otf') format('opentype');
+    font-weight: 800;
+    font-style: normal;
+}
+
+/* Proxima Nova Light */
+@font-face {
+    font-family: 'Proxima Nova';
+    src: url('../fonts/Proxima Nova/proximanova_light.otf') format('opentype');
+    font-weight: 300;
+    font-style: normal;
+}
+
+/* Proxima Nova Regular */
+@font-face {
+    font-family: 'Proxima Nova';
+    src: url('../fonts/Proxima Nova/proximanova_regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Proxima Nova', sans-serif;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    background-color: #0E0F0F;
+}
+
 
 .container {
     width: 1200px;

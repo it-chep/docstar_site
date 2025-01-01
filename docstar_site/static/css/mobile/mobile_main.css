@@ -1,5 +1,5 @@
-@media (max-width: 480px) {
+@media (max-width: 420px) {
     .container {
-        width: 480px;
+        width: 420px;
     }
 }

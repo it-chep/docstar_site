@@ -1,19 +1,23 @@
-@media (max-width: 480px) {
+@media (max-width: 420px) {
     .search_doctors_modal .modal-content {
-        width: 445px;
-        max-height: 445px;
+        width: 385px;
+        max-height: 385px;
     }
 
     .mini_user_avatar {
-        width: 110px;
-        height: 110px;
+        width: 140px;
+        height: 100px;
+    }
+
+    .mini_user_card {
+        max-height: 160px;
     }
 
     .mini_doctor_name {
-        font-size: 24px;
+        font-size: 20px;
     }
 
     .mini_additional_info {
-        font-size: 18px;
+        font-size: 16px;
     }
 }

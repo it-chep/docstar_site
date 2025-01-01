@@ -8,7 +8,12 @@
 {% block extralinks %}
     <link type="text/css" rel="stylesheet" href="{% static 'css/search_header.css' %}">
     <link type="text/css" rel="stylesheet" href="{% static 'css/doctor_detail.css' %}">
+
+    <link type="text/css" rel="stylesheet" href="{% static 'css/mobile/mobile_search_header.css' %}">
+    <link type="text/css" rel="stylesheet" href="{% static 'css/mobile/mobile_doctor_detail.css' %}">
+    
     <script src="{% static "js/main.js" %}"></script>
+    <script src="{% static "js/doctor_detail.js" %}"></script>
 {% endblock %}
 
 {% block content %}
@@ -27,19 +32,20 @@
                         <h1>{{ doctor.name }}</h1>
                     </div>
 
-                    <div class="doctor_city_wrapper">
-                        <div class="doctor_city">
-                            <p>{{ doctor.city }}</p>
-                        </div>
-                    </div>
-
-                    <div class="doctor_speciallity_wrapper">
-                        <div class="doctor_speciallity">
-                            <p>{{ doctor.speciallity }}</p>
+                    <div class="doctor_city_speciallity_wrapper">
+                        <div class="doctor_city_wrapper">
+                            <div class="doctor_city">
+                                <p>{{ doctor.city }}</p>
+                            </div>
                         </div>
 
-                    </div>
+                        <div class="doctor_speciallity_wrapper">
+                            <div class="doctor_speciallity">
+                                <p>{{ doctor.speciallity }}</p>
+                            </div>
 
+                        </div>
+                    </div>
                 </div>
                 <div class="additional_information">
                     {% if doctor.additional_speciallity %}
@@ -78,7 +84,7 @@
                             </a>
                         </div>
                     {% endif %}
-                
+
                     {% if doctor.vk_url %}
                         <div class="vk">
                             <a href="{{ doctor.vk_url }}">

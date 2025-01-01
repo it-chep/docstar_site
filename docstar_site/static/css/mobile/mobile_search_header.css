@@ -1,7 +1,7 @@
-@media (max-width: 768px) {
+@media (max-width: 480px) {
 
     .header-container {
-        width: 768px;
+        width: 480px;
     }
 
     .logo {
@@ -13,16 +13,16 @@
     }
 
     .search-doctors-container {
-        width: 723px;
+        width: 445px;
     }
 
     .search-doctors-container input {
         height: 45px;
-        font-size: 24px;
+        font-size: 18px;
     }
 
     .search-doctors-container input::placeholder {
-        font-size: 24px;
+        font-size: 18px;
     }
 
     .search-doctors-container img {

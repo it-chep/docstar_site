@@ -41,9 +41,11 @@
         color: white;
     }
 
-    .doctor_city_wrapper {
+    .doctor_city_speciallity_wrapper {
         margin-top: 10px;
+    }
 
+    .doctor_city_wrapper {
         .doctor_city {
             color: #717171;
         }

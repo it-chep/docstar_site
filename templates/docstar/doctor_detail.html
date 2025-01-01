@@ -71,12 +71,14 @@
             </div>
             <div class="doctor_actions">
                 <div class="society_block">
-                    <div class="instagram">
-                        <a href="{{ doctor.inst_url }}">
-                            <img src="{% static "img/logos/Instagram_icon.png" %}">
-                        </a>
-                    </div>
-
+                    {% if doctor.inst_url %}
+                        <div class="instagram">
+                            <a href="{{ doctor.inst_url }}">
+                                <img src="{% static "img/logos/Instagram_icon.png" %}">
+                            </a>
+                        </div>
+                    {% endif %}
+                
                     {% if doctor.vk_url %}
                         <div class="vk">
                             <a href="{{ doctor.vk_url }}">

@@ -30,8 +30,6 @@ from docstar_site.functions import *
 import logging
 
 logger = logging.getLogger(__name__)
-thread_1 = threading.Thread(target=get_users_export_id, daemon=True)
-thread_1.start()
 
 
 @cache_page(60 * 60 * 10)

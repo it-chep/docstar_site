@@ -23,5 +23,9 @@ class Command(BaseCommand):
                 doctor.prodoctorov = None
             if doctor.subscribers_inst:
                 doctor.subscribers_inst = None
+            if doctor.medical_directions == "---":
+                doctor.medical_directions = None
+            if doctor.main_blog_theme == "---":
+                doctor.main_blog_theme = None
 
             doctor.save()

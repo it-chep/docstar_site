@@ -163,7 +163,7 @@ STATIC_ROOT = 'staticfiles'
 
 # MEDIA
 MEDIA_ROOT = os.path.join(BASE_DIR, 'docstar_site/docstar/user_photos')
-MEDIA_URL = 'user_photos/'
+MEDIA_URL = 'media/'
 
 INTERNAL_IPS = [
     '127.0.0.1',

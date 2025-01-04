@@ -19,9 +19,9 @@ class Command(BaseCommand):
                 doctor.dzen_url = None
             if doctor.tg_url == "---":
                 doctor.tg_url = None
-            if doctor.prodoctorov:
+            if doctor.prodoctorov == "---":
                 doctor.prodoctorov = None
-            if doctor.subscribers_inst:
+            if doctor.subscribers_inst == "---":
                 doctor.subscribers_inst = None
             if doctor.medical_directions == "---":
                 doctor.medical_directions = None

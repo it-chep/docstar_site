@@ -20,6 +20,10 @@ CSRF_TRUSTED_ORIGINS = [
     'http://www.doctors.readyschool.ru',
     'https://www.doctors.readyschool.ru',
     'https://doctors.readyschool.ru',
+    'http://testbase.readyschool.ru',
+    'https://testbase.readyschool.ru',
+    'http://www.testbase.readyschool.ru',
+    'https://www.testbase.readyschool.ru',
     'http://127.0.0.1',
 ]
 
@@ -28,12 +32,15 @@ ADMIN_TITLE = GRAPPELLI_ADMIN_TITLE = 'MEDBLOGERS BASE'
 ALLOWED_HOSTS = [
     'doctors.readyschool.ru',
     'www.doctors.readyschool.ru',
+    'testbase.readyschool.ru',
+    'www.testbase.readyschool.ru',
     '127.0.0.1',
     '81.200.144.45',
     'api.ipify.org',
     'localhost',
-    'localhost127.0.0.1[::1]',
-    '0.0.0.0'
+    '[::1]',
+    '0.0.0.0',
+    '188.225.56.163',
 ]
 
 SERVER_EMAIL = os.getenv('SERVER_EMAIL')
@@ -127,7 +134,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-LANGUAGE_CODE = 'Ru-ru'
+LANGUAGE_CODE = 'ru-RU'
 
 TIME_ZONE = 'Europe/Moscow'
 
@@ -139,7 +146,6 @@ USE_TZ = True
 
 # User
 AUTH_USER_MODEL = 'users.CustomUser'
-
 
 # Login\logout
 LOGIN_REDIRECT_URL = 'homepage'
@@ -161,12 +167,11 @@ MEDIA_URL = 'user_photos/'
 
 INTERNAL_IPS = [
     '127.0.0.1',
+    '188.225.56.163',
     '81.200.144.45'
 ]
 
 LIMIT_DOCTORS_ON_PAGE = 30
-
-ADMIN_TITLE = GRAPPELLI_ADMIN_TITLE = 'Medblogers base'
 
 GK_KEY = os.getenv('GK_KEY')
 GK_ACCOUNT_NAME = os.getenv('GK_ACCOUNT_NAME')
@@ -175,6 +180,25 @@ GETCOURCE_TICKETS_TOKEN = os.getenv('GETCOURCE_TICKETS_TOKEN', None)
 AVAILABLE_GET_TICKETS_IPS = os.getenv("TILDA_AVAILABLE_IPS", [])
 
 VPN_PRICE = os.getenv('VPN_PRICE')
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'django_debug.log'),
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
+}
 
 # CACHES = {
 #     'default': {

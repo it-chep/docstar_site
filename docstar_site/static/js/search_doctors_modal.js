@@ -17,8 +17,8 @@ $(document).ready(function () {
     })
 
     $searchDoctorContainer.find('input').on('blur', function () {
-        if (!event.relatedTarget || !event.relatedTarget.classList.contains('mini_doctor_link')) {
-            $('.search_doctors_modal').hide()
+        if (!event.relatedTarget || !$(event.relatedTarget).closest('.mini_doctor_link').length) {
+            $('.search_doctors_modal').hide();
         }
     })
 

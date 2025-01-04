@@ -20,10 +20,10 @@ CSRF_TRUSTED_ORIGINS = [
     'http://www.doctors.readyschool.ru',
     'https://www.doctors.readyschool.ru',
     'https://doctors.readyschool.ru',
-    'http://testbase.readyschool.ru',
-    'https://testbase.readyschool.ru',
-    'http://www.testbase.readyschool.ru',
-    'https://www.testbase.readyschool.ru',
+    'http://testblogers.readyschool.ru',
+    'https://testblogers.readyschool.ru',
+    'http://www.testblogers.readyschool.ru',
+    'https://www.testblogers.readyschool.ru',
     'http://127.0.0.1',
 ]
 
@@ -32,8 +32,8 @@ ADMIN_TITLE = GRAPPELLI_ADMIN_TITLE = 'MEDBLOGERS BASE'
 ALLOWED_HOSTS = [
     'doctors.readyschool.ru',
     'www.doctors.readyschool.ru',
-    'testbase.readyschool.ru',
-    'www.testbase.readyschool.ru',
+    'testblogers.readyschool.ru',
+    'www.testblogers.readyschool.ru',
     '127.0.0.1',
     '81.200.144.45',
     'api.ipify.org',

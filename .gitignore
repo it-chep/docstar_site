@@ -18,3 +18,4 @@ __pycache__/
 myenv/
 .env2
 staticfiles
+dumps/

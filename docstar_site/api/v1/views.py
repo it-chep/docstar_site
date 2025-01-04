@@ -22,13 +22,14 @@ class BaseDoctorApiView:
         return doctors_list
 
     def get_pages_and_doctors_with_offset(self, current_page: int, doctors):
-        offset = current_page * settings.LIMIT_DOCTORS_ON_PAGE
 
         pages = max(int(len(doctors) / settings.LIMIT_DOCTORS_ON_PAGE), 1)
 
         if current_page == 1:
             doctors = doctors[:self.limit]
         else:
+            current_page -= 1
+            offset = current_page * settings.LIMIT_DOCTORS_ON_PAGE
             doctors = doctors[offset:offset + self.limit]
 
         return pages, doctors
@@ -88,7 +89,7 @@ class DoctorListApiView(BaseDoctorApiView, views.APIView):
     def get(self, request, *args, **kwargs):
         current_page = int(request.GET.get('page', 1))
 
-        doctors = Doctor.objects.all().select_related('city', 'speciallity')
+        doctors = Doctor.objects.all().order_by('name').select_related('city', 'speciallity')
         pages, doctors = self.get_pages_and_doctors_with_offset(current_page, doctors)
         doctors_list = self.prepare_doctors_data(doctors)
 

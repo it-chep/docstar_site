@@ -94,6 +94,10 @@
     text-align: left;
 }
 
+.mini_doctor_link {
+    pointer-events: auto;
+}
+
 .search_doctors_modal {
     position: fixed;
 }

@@ -3,14 +3,6 @@ $(document).ready(function () {
 
     loadDoctors(currentPage);
 
-    $(document).on('click', 'a.mini_doctor_link', function (event) {
-        event.preventDefault();
-        const href = $(this).attr('href');
-        $('.search_doctors_modal').fadeOut(300, function () {
-            window.location.href = href;
-        });
-    });
-
     const $filterWrapper = $('.filters_wrapper')
 
     const $closeMobileFilterButton = $(`<div class="close_mobile_filter_btn">

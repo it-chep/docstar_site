@@ -16,12 +16,6 @@ $(document).ready(function () {
         $('.search_doctors_modal').show()
     })
 
-    $searchDoctorInput.on('blur', function (event) {
-        if (!event.relatedTarget || !$(event.relatedTarget).closest('.mini_doctor_link').length) {
-            $('.search_doctors_modal').hide();
-        }
-    })
-
     $searchDoctorInput.on('input', function () {
         const query = $(this).val().trim();
 

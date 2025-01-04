@@ -16,7 +16,7 @@ $(document).ready(function () {
         $('.search_doctors_modal').show()
     })
 
-    $searchDoctorContainer.find('input').on('blur', function () {
+    $searchDoctorInput.on('blur', function (event) {
         if (!event.relatedTarget || !$(event.relatedTarget).closest('.mini_doctor_link').length) {
             $('.search_doctors_modal').hide();
         }

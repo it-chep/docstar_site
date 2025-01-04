@@ -2,6 +2,7 @@ $(document).ready(function () {
     const $searchDoctorContainer = $('.search-doctors-container')
     const $searchDoctorInput = $('.search-doctors-input')
     const $modalContent = $('.modal-content');
+    const $searchDoctorsModal = $('.search_doctors_modal');
 
     $searchDoctorContainer.hover(
         function () {
@@ -15,6 +16,16 @@ $(document).ready(function () {
     $searchDoctorContainer.find('input').on('focus', function () {
         $('.search_doctors_modal').show()
     })
+
+    $(document).on('click', function (event) {
+        if (
+            !$searchDoctorContainer.is(event.target) &&
+            !$searchDoctorContainer.has(event.target).length &&
+            !$searchDoctorsModal.has(event.target).length
+        ) {
+            $searchDoctorsModal.hide();
+        }
+    });
 
     $searchDoctorInput.on('input', function () {
         const query = $(this).val().trim();

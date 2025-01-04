@@ -56,6 +56,15 @@ $(document).ready(function () {
                                 </div>
                             </a>
                         `;
+
+                        $(document).on('click', '.mini_doctor_link', function (event) {
+                            event.preventDefault();
+                            const href = $(this).attr('href');
+                            $('.search_doctors_modal').fadeOut(300, function () {
+                                window.location.href = href;
+                            });
+                        });
+
                         $modalContent.append(doctorCard);
                     });
                 } else {

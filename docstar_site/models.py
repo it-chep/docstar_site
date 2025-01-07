@@ -38,6 +38,7 @@ class Doctor(models.Model):
     subscribers_inst = models.CharField(verbose_name="Подписчики инста", null=True, max_length=255, blank=True)
 
     is_active = models.BooleanField(verbose_name='Показывать доктора', default=True)
+    date_created = models.DateTimeField(auto_now_add=True, null=True, blank=True)
 
     def __str__(self):
         return self.name

@@ -184,3 +184,7 @@ html, body {
     font-size: 20px;
     padding: 10px;
 }
+
+.mobile_burger .material-icons:hover {
+    color: white;
+}

@@ -3,6 +3,10 @@
         font-size: 30px;
     }
 
+    .doctors_list_header_description {
+        letter-spacing: 1.3px;
+    }
+
     .doctors_container {
         width: 420px;
         padding-left: 20px;

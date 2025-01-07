@@ -3,6 +3,8 @@
     .header-container {
         width: 420px;
         flex-direction: column;
+        margin: 20px auto 20px;
+        gap: 20px;
     }
 
     .logo {
@@ -14,7 +16,7 @@
     }
 
     .search-doctors-container {
-        width: 385px;
+        width: 300px;
     }
 
     .search-doctors-container input {
@@ -30,6 +32,10 @@
         width: 30px;
         height: 45px;
         margin-top: -5px;
+    }
+
+    .mobile_burger {
+        display: block;
     }
 
 }
@@ -38,6 +44,8 @@
 
     .header-container {
         width: 350px;
+        margin: 20px auto 20px;
+        gap: 20px;
         flex-direction: column;
     }
 
@@ -46,11 +54,11 @@
     }
 
     .search-doctors-container {
-        width: 330px;
+        width: 250px;
     }
 
     .search-doctors-container input {
-        height: 40px;
+        height: 35px;
         font-size: 16px;
     }
 
@@ -59,9 +67,20 @@
     }
 
     .search-doctors-container img {
-        width: 30px;
-        height: 45px;
+        width: 20px;
+        height: 25px;
         margin-top: -5px;
     }
 
+    .mobile_burger span {
+        color: white;
+        font-size: 30px;
+        padding: 13px;
+        border-radius: 50px;
+        background: #2E99FC;
+    }
+    
+    .mobile_burger {
+        display: block;
+    }
 }

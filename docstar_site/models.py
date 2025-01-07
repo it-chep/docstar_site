@@ -19,17 +19,25 @@ class Doctor(models.Model):
     tg_url = models.CharField(verbose_name='Аккаунт TG', max_length=100, null=True, blank=True)
     youtube_url = models.CharField(verbose_name='Аккаунт YOUTUBE', max_length=100, null=True, blank=True)
 
-    city = models.ForeignKey('City', on_delete=models.PROTECT, null=True, blank=True)
-    medical_directions = models.CharField(verbose_name='Направление медицины', max_length=100, null=True, blank=True)
-    speciallity = models.ForeignKey('Speciallity', on_delete=models.PROTECT, null=True)
-    additional_speciallity = models.CharField('Доп специальность', max_length=100, null=True, blank=True)
-    main_blog_theme = models.CharField(verbose_name='Тематика блога', max_length=100, null=True, blank=True)
+    city = models.ForeignKey('City', on_delete=models.PROTECT, null=True, blank=True, verbose_name="Город")
+    medical_directions = models.CharField(verbose_name='Направление медицины', max_length=255, null=True, blank=True)
+    speciallity = models.ForeignKey('Speciallity', on_delete=models.PROTECT, null=True, verbose_name="Специальность")
+    additional_speciallity = models.CharField('Доп специальность', max_length=255, null=True, blank=True)
+    main_blog_theme = models.TextField(verbose_name='Тематика блога', null=True, blank=True)
+
     status_club = models.BooleanField(verbose_name='Подписка на клуб', null=True)
-    avatar = models.ImageField(verbose_name="Личное фото", upload_to="user_photos/", null=True, default='user_photos/zag.png')
+    avatar = models.ImageField(
+        verbose_name="Личное фото",
+        upload_to="user_photos/",
+        null=True,
+        default='user_photos/zag.png'
+    )
     doctor = models.ForeignKey(User, on_delete=models.PROTECT, blank=True, null=True)
 
     prodoctorov = models.CharField(verbose_name="ПРОДОКТОРОВ", null=True, max_length=255, unique=True, blank=True)
-    subscribers_inst = models.CharField(verbose_name="Подписчики инста", null=True,  max_length=255, blank=True)
+    subscribers_inst = models.CharField(verbose_name="Подписчики инста", null=True, max_length=255, blank=True)
+
+    is_active = models.BooleanField(verbose_name='Показывать доктора', default=True)
 
     def __str__(self):
         return self.name
@@ -118,7 +126,6 @@ class Knowledge(models.Model):
 
 
 class GetCourseExportID(models.Model):
-
     export_id = models.CharField(verbose_name="Export_id", max_length=40, unique=True)
     export_time = models.DateTimeField(verbose_name="Время экспорта", auto_now=True)
 
@@ -128,4 +135,3 @@ class GetCourseExportID(models.Model):
     class Meta:
         verbose_name = 'Айдишник'
         verbose_name_plural = 'Айдишники'
-

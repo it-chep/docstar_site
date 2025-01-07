@@ -1,3 +1,5 @@
+import math
+
 from rest_framework import views
 from docstar_site.models import Doctor
 from django.http import JsonResponse
@@ -23,7 +25,7 @@ class BaseDoctorApiView:
 
     def get_pages_and_doctors_with_offset(self, current_page: int, doctors):
 
-        pages = max(int(len(doctors) / settings.LIMIT_DOCTORS_ON_PAGE), 1)
+        pages = max(math.ceil(len(doctors) / settings.LIMIT_DOCTORS_ON_PAGE), 1)
 
         if current_page == 1:
             doctors = doctors[:self.limit]
@@ -43,8 +45,9 @@ class SearchDoctorApiView(BaseDoctorApiView, views.APIView):
             return JsonResponse({'data': []}, status=200)
 
         doctors = Doctor.objects.filter(
-            name__icontains=query
-        )[:self.limit].select_related('city', 'speciallity')
+            name__icontains=query,
+            is_active=True,
+        ).order_by('name')[:self.limit].select_related('city', 'speciallity')
 
         doctors_list = self.prepare_doctors_data(doctors)
 
@@ -59,7 +62,7 @@ class FilterDoctorApiView(BaseDoctorApiView, views.APIView):
         current_page = int(request.GET.get('page', 1))
 
         if not city_list and not speciallity_list:
-            doctors = Doctor.objects.all().select_related('city', 'speciallity')
+            doctors = Doctor.objects.filter(is_active=True).order_by('name').select_related('city', 'speciallity')
             pages, doctors = self.get_pages_and_doctors_with_offset(current_page, doctors)
             doctors_list = self.prepare_doctors_data(doctors)
             return JsonResponse({'data': doctors_list, 'pages': pages, 'page': current_page}, status=200)
@@ -74,8 +77,9 @@ class FilterDoctorApiView(BaseDoctorApiView, views.APIView):
 
         q_args = city_query & speciallity_query
         doctors = Doctor.objects.filter(
-            q_args
-        ).select_related('city', 'speciallity')
+            q_args,
+            is_active=True,
+        ).order_by('name').select_related('city', 'speciallity')
 
         pages, doctors = self.get_pages_and_doctors_with_offset(current_page, doctors)
 
@@ -89,7 +93,7 @@ class DoctorListApiView(BaseDoctorApiView, views.APIView):
     def get(self, request, *args, **kwargs):
         current_page = int(request.GET.get('page', 1))
 
-        doctors = Doctor.objects.all().order_by('name').select_related('city', 'speciallity')
+        doctors = Doctor.objects.filter(is_active=True).order_by('name').select_related('city', 'speciallity')
         pages, doctors = self.get_pages_and_doctors_with_offset(current_page, doctors)
         doctors_list = self.prepare_doctors_data(doctors)
 

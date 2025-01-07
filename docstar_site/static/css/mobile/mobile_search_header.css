@@ -5,7 +5,7 @@
     }
 
     .logo {
-        display: none;
+        display: block;
     }
 
     .login-container {
@@ -23,6 +23,38 @@
 
     .search-doctors-container input::placeholder {
         font-size: 18px;
+    }
+
+    .search-doctors-container img {
+        width: 30px;
+        height: 45px;
+        margin-top: -5px;
+    }
+
+}
+
+@media (max-width: 350px) {
+
+    .header-container {
+        width: 350px;
+        flex-direction: column;
+    }
+
+    .login-container {
+        display: none;
+    }
+
+    .search-doctors-container {
+        width: 330px;
+    }
+
+    .search-doctors-container input {
+        height: 40px;
+        font-size: 16px;
+    }
+
+    .search-doctors-container input::placeholder {
+        font-size: 16px;
     }
 
     .search-doctors-container img {

@@ -1,26 +1,26 @@
 version: '3'
 
 services:
-  web:
-    build: .
-    environment:
-      - C_FORCE_ROOT='true'
-      - PYTHONUNBUFFERED=1
-      - LOCAL_PYTEST=1
-      - DB_USER=${DB_USER}
-      - DB_PASSWORD=${DB_PASSWORD}
-      - DB_NAME=${DB_NAME}
-      - DB_PORT=${DB_PORT}
-      - DB_HOST=${DB_HOST}
-      - DEBUG=${DEBUG}
-      - ENVIRONMENT_TYPE=docker
-    ports:
-      - "8000:8000"
-    volumes:
-      - user_photos:/app/docstar_site/docstar/user_photos/user_photos
-      - .:/new_site
-    depends_on:
-      - db
+#  web:
+#    build: .
+#    environment:
+#      - C_FORCE_ROOT='true'
+#      - PYTHONUNBUFFERED=1
+#      - LOCAL_PYTEST=1
+#      - DB_USER=${DB_USER}
+#      - DB_PASSWORD=${DB_PASSWORD}
+#      - DB_NAME=${DB_NAME}
+#      - DB_PORT=${DB_PORT}
+#      - DB_HOST=${DB_HOST}
+#      - DEBUG=${DEBUG}
+#      - ENVIRONMENT_TYPE=docker
+#    ports:
+#      - "8000:8000"
+#    volumes:
+#      - user_photos:/app/docstar_site/docstar/user_photos/user_photos
+#      - .:/new_site
+#    depends_on:
+#      - db
 
   db:
     image: postgres:14
@@ -32,6 +32,8 @@ services:
       - "5432:5432"
     volumes:
       - pg_data:/var/lib/postgresql/data
+      - ./${DUMP_DIR}:/tmp/dumps
+      - ./${DUMP_DIR}/${DB_DUMP}:/docker-entrypoint-initdb.d/02dump.sql
 
 volumes:
   pg_data:

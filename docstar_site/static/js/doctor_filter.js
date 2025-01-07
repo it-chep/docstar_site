@@ -180,6 +180,7 @@ function filterDoctors(filters, page = 1) {
                 renderPagination(response.page, response.pages);
             } else {
                 $doctorListContainer.append('<p class="white_text">Доктора не найдены.</p>');
+                renderPagination(0, 0);
             }
         },
         error: function (xhr, status, error) {

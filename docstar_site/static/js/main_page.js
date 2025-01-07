@@ -1,6 +1,6 @@
 $(document).ready(function () {
-    let currentPage = 1;
 
+    let currentPage = getStartPage();
     loadDoctors(currentPage);
 
     const $filterWrapper = $('.filters_wrapper')
@@ -93,4 +93,14 @@ function loadDoctors(page) {
             $doctorListContainer.append('<p class="white_text">Произошла ошибка при загрузке данных.</p>');
         }
     });
+}
+
+function getStartPage() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const pageParam = urlParams.get('page');
+    let currentPage = 1;
+    if (pageParam) {
+        currentPage = parseInt(pageParam, 10);
+    }
+    return currentPage
 }

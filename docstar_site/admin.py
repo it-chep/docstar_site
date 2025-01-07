@@ -9,11 +9,11 @@ class CityAdmin(admin.ModelAdmin):
 
 
 class DoctorAdmin(admin.ModelAdmin):
-    list_display = ("id", 'name', 'email', 'city', 'speciallity')
+    list_display = ("id", 'name', 'email', 'city', 'speciallity', 'is_active')
     search_fields = ("email", "name",)
     prepopulated_fields = {"slug": ("name",)}
 
-    list_filter = ('city', 'speciallity')
+    list_filter = ('city', 'speciallity', 'is_active')
     raw_id_fields = ('city', 'speciallity')
 
 

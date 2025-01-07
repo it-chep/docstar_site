@@ -51,12 +51,12 @@
     align-items: center;
     gap: 10px;
     flex-direction: row;
-    color: #606060;
+    color: white;
     width: 268px;
 }
 
 .login-container span {
-    color: #606060;
+    color: white;
     font-style: normal;
     font-weight: 400;
     line-height: normal;

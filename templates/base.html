@@ -18,9 +18,9 @@
     <link type="text/css" rel="stylesheet" href="{% static "css/mobile/modals/mobile_main_modals.css" %}">
     <link type="text/css" rel="stylesheet" href="{% static 'css/mobile/mobile_main.css' %}">
 
-    <script defer src="{% static 'js/main_main.js' %}"></script>
-    <script defer src="{% static 'js/search_doctors_modal.js' %}"></script>
     <script src="{% static "js/jquery-3.6.0.min.js" %}"></script>
+    <script src="{% static 'js/main_main.js' %}"></script>
+    <script defer src="{% static 'js/search_doctors_modal.js' %}"></script>
 
     {% block extralinks %}
     {% endblock %}
@@ -32,19 +32,21 @@
 
     </div>
     <div class="header-container">
-        <div class="logo">
-            <a href="{% url "homepage" %}">
-                <img src="{% static "img/medblogers_logo.png" %}">
-            </a>
+        <div class="logo-wrapper">
+            <div class="logo">
+                <a href="{% url "homepage" %}">
+                    <img src="{% static "img/medblogers_logo.png" %}">
+                </a>
+            </div>
         </div>
         <div class="search-doctors-wrapper">
             <div class="search-doctors-container">
                 <img src="{% static "img/lupa.svg" %}">
                 <input class="search-doctors-input" type="text" placeholder="Найдем для вас врача...">
             </div>
-            <div class="mobile_burger">
+            <div class="settings_icon_wrapper">
                 <span class="material-icons">
-                sort
+                tune
                 </span>
             </div>
         </div>
@@ -58,15 +60,6 @@
     {% endblock %}
 
 </div>
-<footer>
-    <div class="footer_container">
-        <div class="footer_content">
-            <a href="https://medblogers.ru/">Что за клуб ?</a>
-            <a href="https://t.me/maxim_jordan">Связаться с техподдержкой</a>
-            <a href="https://t.me/Club_Docstar_bot?start=question">Задать вопрос</a>
-        </div>
-    </div>
-</footer>
 </body>
 
 </html>

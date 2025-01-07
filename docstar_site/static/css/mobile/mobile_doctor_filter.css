@@ -20,17 +20,7 @@
         background: #0E0F0F;
     }
 
-    .mobile_filter_header {
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: center;
-        margin-top: 20px;
-        margin-bottom: 20px;
-    }
-
     .mobile_filter_header_title {
-        color: white;
         font-size: 30px;
     }
 
@@ -103,17 +93,7 @@
         background: #0E0F0F;
     }
 
-    .mobile_filter_header {
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: center;
-        margin-top: 20px;
-        margin-bottom: 20px;
-    }
-
     .mobile_filter_header_title {
-        color: white;
         font-size: 26px;
     }
 

@@ -2,6 +2,7 @@
 
     .header-container {
         width: 420px;
+        flex-direction: column;
     }
 
     .logo {

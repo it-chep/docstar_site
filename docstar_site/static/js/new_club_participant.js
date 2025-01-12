@@ -47,7 +47,7 @@ function initSelect2Fields() {
         width: '100%',
         theme: 'dark',
         language: 'ru',
-        placeholder: 'Начните вводить город',
+        placeholder: 'Нажмите чтобы открыть поиск города',
         ajax: {
             url: '/api/v1/select2/cities/',
             dataType: 'json',
@@ -76,7 +76,7 @@ function initSelect2Fields() {
         width: '100%',
         theme: 'dark',
         language: 'ru',
-        placeholder: 'Начните вводить специальность',
+        placeholder: 'Нажмите чтобы открыть поиск специальности',
         ajax: {
             url: '/api/v1/select2/specialities/',
             dataType: 'json',
@@ -101,6 +101,7 @@ function initSelect2Fields() {
         minimumInputLength: 1,
     });
     $(document).on('select2:open', function (e) {
+        $('.select2-search__field').attr('placeholder', 'Введите текст для поиска...');
         setTimeout(() => {
             const searchField = document.querySelector('.select2-search__field');
             if (searchField) {

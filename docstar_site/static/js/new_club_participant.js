@@ -100,6 +100,14 @@ function initSelect2Fields() {
         },
         minimumInputLength: 1,
     });
+    $(document).on('select2:open', function (e) {
+        setTimeout(() => {
+            const searchField = document.querySelector('.select2-search__field');
+            if (searchField) {
+                searchField.focus();
+            }
+        }, 0);
+    });
 }
 
 function initDatePickerField() {

@@ -1,31 +1,32 @@
-@media (max-width: 460px) {
+/*IPHONE 15 PRO MAX*/
+@media (max-width: 430px) {
     .main_img_container {
-        width: 440px;
+        width: 410px;
     }
 
     .main_img_container img {
-        width: 440px;
+        width: 410px;
     }
 
     .form_wrapper {
-        width: 460px;
+        width: 430px;
     }
 
     .form_container form {
-        width: 440px;
+        width: 410px;
     }
 
     .form-group {
-        width: 440px;
+        width: 410px;
     }
 
     .input-wrapper {
         height: 50px;
-        width: 440px;
+        width: 410px;
     }
 
     .main_title_description {
-        width: 440px;
+        width: 410px;
     }
 }
 
@@ -57,6 +58,38 @@
 
     .main_title_description {
         width: 400px;
+    }
+}
+
+/*IPHONE 15 PRO*/
+@media (max-width: 390px) {
+    .main_img_container {
+        width: 370px;
+    }
+
+    .main_img_container img {
+        width: 370px;
+    }
+
+    .form_wrapper {
+        width: 370px;
+    }
+
+    .form_container form {
+        width: 370px;
+    }
+
+    .form-group {
+        width: 370px;
+    }
+
+    .input-wrapper {
+        height: 50px;
+        width: 370px;
+    }
+
+    .main_title_description {
+        width: 370px;
     }
 }
 

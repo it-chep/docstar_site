@@ -25,7 +25,6 @@ $(document).ready(function () {
     });
 
     initSelect2Fields();
-    initDatePickerField()
 });
 
 function displayErrors(errors) {

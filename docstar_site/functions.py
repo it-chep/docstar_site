@@ -4,6 +4,8 @@ from docstar_site.models import *
 
 def get_eng_slug(text, src='ru', dest='en'):
     try:
+        text = text.lower()
+        text = "-".join(text.split(" "))
         translator = Translator(from_lang=src, to_lang=dest)
         translation = translator.translate(text)
         return translation

@@ -181,6 +181,10 @@ AVAILABLE_GET_TICKETS_IPS = os.getenv("TILDA_AVAILABLE_IPS", [])
 
 VPN_PRICE = os.getenv('VPN_PRICE')
 
+ADMIN_CHAT_ID = os.getenv('ADMIN_CHAT_ID')
+SALEBOT_API_URL = f"https://chatter.salebot.pro/api/{os.environ.get('SALEBOT_API_KEY')}/callback"
+GOOGLE_SHEET_URL = os.getenv('GOOGLE_SHEET_URL')
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,

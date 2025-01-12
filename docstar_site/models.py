@@ -34,8 +34,11 @@ class Doctor(models.Model):
     )
     doctor = models.ForeignKey(User, on_delete=models.PROTECT, blank=True, null=True)
 
-    prodoctorov = models.CharField(verbose_name="ПРОДОКТОРОВ", null=True, max_length=255, unique=True, blank=True)
+    prodoctorov = models.CharField(verbose_name="ПРОДОКТОРОВ", null=True, max_length=255, unique=False, blank=True)
     subscribers_inst = models.CharField(verbose_name="Подписчики инста", null=True, max_length=255, blank=True)
+
+    age = models.IntegerField(verbose_name="Возраст", null=True, blank=True)
+    birth_date = models.DateField(verbose_name="Дата рождения", null=True, blank=True)
 
     is_active = models.BooleanField(verbose_name='Показывать доктора', default=True)
     date_created = models.DateTimeField(auto_now_add=True, null=True, blank=True)

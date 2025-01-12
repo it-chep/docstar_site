@@ -1,10 +1,15 @@
 import math
+import requests
 
-from rest_framework import views
-from docstar_site.models import Doctor
 from django.http import JsonResponse
 from django.db.models import Q
 from django.conf import settings
+from django.urls import reverse
+from rest_framework import views, status
+
+from docstar_site.models import Doctor
+from docstar_site.forms import CreateDoctorForm
+from docstar_site.utils import get_site_url
 
 
 class BaseDoctorApiView:
@@ -42,7 +47,7 @@ class SearchDoctorApiView(BaseDoctorApiView, views.APIView):
     def get(self, request, *args, **kwargs):
         query = request.GET.get('query')
         if not query:
-            return JsonResponse({'data': []}, status=200)
+            return JsonResponse({'data': []}, status=status.HTTP_200_OK)
 
         doctors = Doctor.objects.filter(
             name__icontains=query,
@@ -51,7 +56,7 @@ class SearchDoctorApiView(BaseDoctorApiView, views.APIView):
 
         doctors_list = self.prepare_doctors_data(doctors)
 
-        return JsonResponse({'data': doctors_list}, status=200)
+        return JsonResponse({'data': doctors_list}, status=status.HTTP_200_OK)
 
 
 class FilterDoctorApiView(BaseDoctorApiView, views.APIView):
@@ -65,7 +70,7 @@ class FilterDoctorApiView(BaseDoctorApiView, views.APIView):
             doctors = Doctor.objects.filter(is_active=True).order_by('name').select_related('city', 'speciallity')
             pages, doctors = self.get_pages_and_doctors_with_offset(current_page, doctors)
             doctors_list = self.prepare_doctors_data(doctors)
-            return JsonResponse({'data': doctors_list, 'pages': pages, 'page': current_page}, status=200)
+            return JsonResponse({'data': doctors_list, 'pages': pages, 'page': current_page}, status=status.HTTP_200_OK)
 
         city_query = Q()
         speciallity_query = Q()
@@ -85,7 +90,7 @@ class FilterDoctorApiView(BaseDoctorApiView, views.APIView):
 
         doctors_list = self.prepare_doctors_data(doctors)
 
-        return JsonResponse({'data': doctors_list, 'pages': pages, 'page': current_page}, status=200)
+        return JsonResponse({'data': doctors_list, 'pages': pages, 'page': current_page}, status=status.HTTP_200_OK)
 
 
 class DoctorListApiView(BaseDoctorApiView, views.APIView):
@@ -97,4 +102,74 @@ class DoctorListApiView(BaseDoctorApiView, views.APIView):
         pages, doctors = self.get_pages_and_doctors_with_offset(current_page, doctors)
         doctors_list = self.prepare_doctors_data(doctors)
 
-        return JsonResponse({'data': doctors_list, 'pages': pages, 'page': current_page}, status=200)
+        return JsonResponse({'data': doctors_list, 'pages': pages, 'page': current_page}, status=status.HTTP_200_OK)
+
+
+class CreateNewDoctorApiView(views.APIView):
+    form_class = CreateDoctorForm
+
+    def post(self, request, *args, **kwargs):
+        data = request.data
+        form = self.form_class(data)
+        try:
+            if form.is_valid():
+                doctor = form.save()
+                self.send_data_to_google_script(doctor)
+                self.notificator_bot(doctor)
+                return JsonResponse(
+                    {
+                        "redirect_url": "Доктор успешно создан!",
+                        "endpoint": reverse('doctor_card', kwargs={'slug': doctor.slug}),
+                    },
+                    status=status.HTTP_201_CREATED
+                )
+            else:
+                return JsonResponse(
+                    {"errors": form.errors},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+        except Exception as ex:
+            return JsonResponse(
+                {"alert": "Произошла ошибка, пожалуйста обратитесь в техподдержку"},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+
+    @staticmethod
+    def send_data_to_google_script(doctor):
+        data = {
+            "name": doctor.name,
+            "age": doctor.age,
+            "birthday": doctor.birth_date.strftime("%d.%m.%Y"),
+            "inst_url": doctor.inst_url,
+            "vk_url": doctor.vk_url,
+            "dzen_url": doctor.dzen_url,
+            "tg_url": doctor.tg_url,
+            "subscribers": doctor.subscribers_inst,
+            "city": doctor.city.name,
+            "medical_direction": doctor.medical_directions,
+            "speciallity": doctor.speciallity.name,
+            "additional_speciallity": doctor.additional_speciallity,
+            "main_theme": doctor.main_blog_theme,
+        }
+
+        try:
+            response = requests.post(settings.GOOGLE_SHEET_URL, data=data)
+            response.raise_for_status()
+        except requests.exceptions.RequestException as e:
+            raise Exception(e)
+
+    @staticmethod
+    def notificator_bot(doctor):
+        data = {
+            "url": get_site_url() + reverse('doctor_card', kwargs={'slug': doctor.slug}),
+            "name": doctor.name,
+            "inst_url": doctor.inst_url,
+            "tg_url": doctor.tg_url,
+            "message": "doctor_on_site_notification",
+            "client_id": settings.ADMIN_CHAT_ID
+        }
+        try:
+            response = requests.post(settings.SALEBOT_API_URL, data=data)
+            response.raise_for_status()
+        except requests.exceptions.RequestException as e:
+            raise Exception(e)

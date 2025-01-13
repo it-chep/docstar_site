@@ -1,98 +1,45 @@
 {% extends 'base.html' %}
-{% load cache %}
+{#{% load cache %}#}
 {% load static %}
 {% block title %}
-    {{title}}
+    {{ title }}
+{% endblock %}
+
+{% block extralinks %}
+    <link type="text/css" rel="stylesheet" href="{% static 'css/main_page.css' %}">
+    <link type="text/css" rel="stylesheet" href="{% static 'css/search_header.css' %}">
+
+    <link type="text/css" rel="stylesheet" href="{% static 'css/mobile/mobile_main_page.css' %}">
+    <link type="text/css" rel="stylesheet" href="{% static 'css/mobile/mobile_search_header.css' %}">
+
+    <script src="{% static "js/pagination.js" %}"></script>
+    <script src="{% static "js/main_page.js" %}"></script>
 {% endblock %}
 
 {% block nav_bar %}
-
 {% endblock %}
 
 {% block content %}
-<div class="conteiner">
-{#    <div class="logo_dcs">#}
-{#        <img class="logo_dcs_photo" src="{% static "img/logo_dcs.png" %}">#}
-{#    </div>#}
-    <h1>Участники международного клуба
-        врачей-блогеров</h1>
-    <h2>На данном сайте вы можете найти коллегу по любой специальности со всей России</h2>
-    <div class="filter_container">
-    <form action="{% url 'doctors__filter' %}" method="get">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <div class="filter_speciallity_container">
-        <h3>Специальности</h3>
-{#        <h1>{ }}</h1>#}
-        <select name="speciallity" class="choise_spec">
-{#        {% if %}#}
+    {% include "docstar/modals/search_doctors_modal.html" %}
 
-        <option value="000">Выберите специальность</option>
-{#        {% endif %}#}
-            {% for speciallity in view.get_speciallity %}
-            <option name="speciallity" value="{{ speciallity.id }}">
-                <span class="speciallity_name">{{ speciallity.name }}</span>
-            </option>
-            {% endfor %}
-        </select>
-    </div>
+    <div class="container doctors_list_container">
+        <div class="doctors_wrapper">
 
-
-    <div class="filter_city_container">
-        <h3>Города</h3>
-        <select name="city" class="choise_city">
-        <option value="000">Выберите город</option>
-            {% for city in view.get_citys %}
-            <option name="city" value="{{ city.id }}">
-                <span class="city_name">{{ city.name }}</span>
-            </option>
-            {% endfor %}
-        </select>
-    </div>
-{#    <h2>12345</h2>#}
-    <div class="filter_btn">
-        <button class="new_button" type="submit">Применить фильтр</button>
-    </div>
-    </form>
-    <a class="clear_btn"  href="{% url 'homepage' %}">
-        <div class="n_c_button">Отменить</div>
-    </a>
-    </div>
-
-    <div class="doctors_container" data-component="list">
-        <div class="all_doctors">
-            {% for doctor in doctors %}
-            <div class="user_card" >
-
-                <div class="user_avatar">
-                {% if doctor.avatar is not NULL %}
-                    <img class="avatar" src="{{ doctor.avatar_url | default_if_none:"#"}}">
-                {# {% else %}#}
-                {#<img class="avatar" src="{{user.non_avatar}}">#}
-                {% endif %}
+            {% include "includes/doctor_filter.html" %}
+            <div class="doctors_container" data-component="list">
+                <div class="main-title">
+                    <h1 class="doctors_list_header">Участники MEDBLOGERS</h1>
+                    <p class="doctors_list_header_description white_text">Международного клуба врачей-блогеров</p>
                 </div>
-                <div class="doc_info">
-                    <div class="user_name">
-                        <a>{{ doctor.name }}</a>
-                    </div>
-
-                    <div class="user_speciallity">
-                        <a>Специальность: {{ doctor.speciallity }}</a>
-                    </div>
-
-                    <div class="user_city">
-                        <a>Город: {{ doctor.city }}</a>
-                    </div>
+                <div class="active_filters_wrapper">
                 </div>
-                <a href="{{ doctor.get_absolute_url }}">
-                <div class="user_info_btn">
-                    <div class="user_info_btn_text" >Подробнее</div>
+
+                <div class="all_doctors">
                 </div>
-                </a>
+
+                <div class="pagination_container">
+                </div>
             </div>
-            {% endfor %}
         </div>
     </div>
-</div>
-
 {% endblock %}

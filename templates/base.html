@@ -1,72 +1,65 @@
 {% load static %}
-{#{% load docstar_site_tags %}#}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    {% include "analize_counters/yandex_counter.html" %}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>
         {% block head_title %}
-            {{ title }}
         {% endblock %}
     </title>
-    <link rel="shortcut icon" href="../static/img/dcs.png" type="image/png">
-    <link type="text/css" rel="stylesheet" href="{% static 'css/styles.css' %}">
-    <script defer src="{% static '/js/main.js' %}"></script>
-    <link type="text/css" rel="stylesheet" href="{% static '/css/users_style.css' %}">
+    <link rel="shortcut icon" href="{% static "img/dcs.png" %}" type="image/png">
+    <link type="text/css" rel="stylesheet" href="{% static 'css/custom_inputs/custom_inputs.css' %}">
+    <link type="text/css" rel="stylesheet" href="{% static 'css/modals/main_modals.css' %}">
+    <link type="text/css" rel="stylesheet" href="{% static 'css/main.css' %}">
+
+    <link type="text/css" rel="stylesheet" href="{% static "css/mobile/modals/mobile_main_modals.css" %}">
+    <link type="text/css" rel="stylesheet" href="{% static 'css/mobile/mobile_main.css' %}">
+
+    <script src="{% static "js/jquery-3.6.0.min.js" %}"></script>
+    <script src="{% static 'js/main_main.js' %}"></script>
+    <script defer src="{% static 'js/search_doctors_modal.js' %}"></script>
 
     {% block extralinks %}
     {% endblock %}
 
 </head>
 <body>
-<div class="nav_bar open">
-    <header class="header">
+<div class="main_container">
+    <div class="nav_bar">
 
-        <button class="header__burger-btn" id="burger">
-            <span></span><span></span><span></span>
-        </button>
-        <nav class="menu">
-            <div class="menu_list">
-                <div class="menu_item"><a href="{% url 'homepage' %}" class="menu_link">Найти врачей</a></div>
-                <div class="menu_item"><a href="https://doctor.readyschool.ru/docstar" class="menu_link">Что за
-                    клуб?</a></div>
-                <div class="menu_item"><a href="https://instagram.com/docstar_clinic" class="menu_link">DOCSTAR
-                    CLINIC</a></div>
-                <div class="menu_item"><a href="https://readyschool.ru/teach/control/stream/view/id/473870825"
-                                          class="menu_link">Лекции и База знаний</a></div>
-                <div class="menu_item"><a href="https://t.me/Club_Docstar_bot?start=question"
-                                          class="menu_link">Задать вопрос</a></div>
+    </div>
+    <div class="header-container">
+        <div class="logo-wrapper">
+            <div class="logo">
+                <a href="{% url "homepage" %}">
+                    <img src="{% static "img/medblogers_logo.png" %}">
+                </a>
             </div>
-        </nav>
-    </header>
-
-    <div class="nav_bar_container">
-        <a href="{% url 'homepage' %}" class="g">
-            <div class="bar_item">Найти врачей</div>
-        </a>
-        <a href="https://doctor.readyschool.ru/docstar" class="g">
-            <div class="bar_item">Что за клуб?</div>
-        </a>
-        <a href="https://instagram.com/docstar_clinic" class="g">
-            <div class="bar_item">CLINIC</div>
-        </a>
-        <a href="https://readyschool.ru/teach/control/stream/view/id/473870825" class="g">
-            <div class="bar_item">Лекции и База знаний</div>
-        </a>
-        <a href="https://t.me/Club_Docstar_bot?start=question" class="g">
-            <div class="bar_item">Задать вопрос</div>
-        </a>
+        </div>
+        <div class="search-doctors-wrapper">
+            <div class="search-doctors-container">
+                <img src="{% static "img/lupa.svg" %}">
+                <input class="search-doctors-input" type="text" placeholder="Найдем для вас врача...">
+            </div>
+            <div class="settings_icon_wrapper">
+                <span class="material-icons">
+                tune
+                </span>
+            </div>
+        </div>
+        <div class="login-container">
+            {#            <img src="{% static "img/human.svg" %}">#}
+            {#            <span>Вход/регистрация</span>#}
+        </div>
     </div>
 
-    <div class="login_doc"><a href="{% url 'chek_getcourse' %}">Я участник клуба</a></div>
+    {% block content %}
+    {% endblock %}
 
 </div>
-
-{% block content %}
-{% endblock %}
-
-
 </body>
 
 </html>

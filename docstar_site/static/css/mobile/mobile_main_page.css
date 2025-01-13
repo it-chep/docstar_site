@@ -1,0 +1,190 @@
+@media (max-width: 420px) {
+    .doctors_list_header {
+        font-size: 30px;
+    }
+
+    .doctors_list_header_description {
+        letter-spacing: 1.3px;
+    }
+
+    .doctors_container {
+        width: 420px;
+        padding-left: 20px;
+        padding-right: 20px;
+        text-align: center;
+    }
+
+    .avatar {
+        height: 220px;
+    }
+
+    .doctors_wrapper {
+        flex-direction: column;
+    }
+
+    .all_doctors {
+        justify-content: space-between;
+    }
+
+    .user_card_wrapper {
+        width: 100%;
+        padding: 10px;
+    }
+
+    .settings_icon_wrapper {
+        display: block;
+
+        .material-icons {
+            font-size: 30px;
+            color: white;
+            background: #606060;
+            border-radius: 16px;
+        }
+    }
+
+    .user_card {
+        height: 100%;
+    }
+
+    .user_avatar {
+        margin: 0;
+    }
+
+    .doc_info {
+        height: 140px;
+        justify-content: space-evenly;
+    }
+
+    .user_name {
+        font-size: 26px;
+        margin: 0;
+        height: auto;
+        white-space: normal;
+        word-wrap: break-word;
+        overflow: visible;
+    }
+
+    .user_additional_info {
+        font-size: 18px;
+    }
+
+    .user_info_btn {
+        width: 100%;
+        padding: 14px 20px;
+    }
+
+    .user_info_btn_text {
+        font-size: 18px;
+    }
+
+    .pagination_button {
+        font-size: 18px;
+    }
+
+    .navigation_btn .material-icons {
+        font-size: 18px;
+    }
+
+    .user_info_btn_container {
+        width: 100%;
+        margin-top: unset;
+        padding-right: 10px;
+        padding-bottom: 10px;
+    }
+}
+
+@media (max-width: 350px) {
+    .doctors_list_header {
+        font-size: 26px;
+    }
+
+    .doctors_container {
+        width: 350px;
+        padding-left: 20px;
+        padding-right: 20px;
+        text-align: center;
+    }
+
+    .avatar {
+        height: 220px;
+    }
+
+    .doctors_wrapper {
+        flex-direction: column;
+    }
+
+    .all_doctors {
+        justify-content: space-between;
+    }
+
+    .user_card_wrapper {
+        width: 100%;
+        padding: 10px;
+    }
+
+    .settings_icon_wrapper {
+        display: block;
+
+        .material-icons {
+            font-size: 26px;
+            color: white;
+            background: #606060;
+            border-radius: 16px;
+        }
+    }
+
+    .user_card {
+        height: 100%;
+    }
+
+    .user_avatar {
+        margin: 0;
+    }
+
+    .doc_info {
+        height: 140px;
+        justify-content: space-evenly;
+    }
+
+    .user_name {
+        font-size: 22px;
+        margin: 0;
+        height: auto;
+        white-space: normal;
+        word-wrap: break-word;
+        overflow: visible;
+    }
+
+    .user_additional_info {
+        font-size: 16px;
+    }
+
+    .user_info_btn {
+        width: 100%;
+        padding: 14px 20px;
+    }
+
+    .user_info_btn_text {
+        font-size: 16px;
+    }
+
+    .pagination_button {
+        font-size: 16px;
+        padding: 17px;
+    }
+
+    .navigation_btn .material-icons {
+        font-size: 16px;
+    }
+
+    .user_info_btn_container {
+        width: 100%;
+        margin-top: unset;
+        padding-right: 10px;
+        padding-bottom: 10px;
+    }
+
+    .doctors_list_header_description {
+        letter-spacing: 0;
+    }
+}

@@ -6,6 +6,7 @@ from django.shortcuts import render
 from .formatters import CustomJsonFormatter
 from pythonjsonlogger.jsonlogger import JsonFormatter
 from dotenv import load_dotenv
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 load_dotenv()
@@ -19,6 +20,10 @@ CSRF_TRUSTED_ORIGINS = [
     'http://www.doctors.readyschool.ru',
     'https://www.doctors.readyschool.ru',
     'https://doctors.readyschool.ru',
+    'http://testblogers.readyschool.ru',
+    'https://testblogers.readyschool.ru',
+    'http://www.testblogers.readyschool.ru',
+    'https://www.testblogers.readyschool.ru',
     'http://127.0.0.1',
 ]
 
@@ -27,12 +32,15 @@ ADMIN_TITLE = GRAPPELLI_ADMIN_TITLE = 'MEDBLOGERS BASE'
 ALLOWED_HOSTS = [
     'doctors.readyschool.ru',
     'www.doctors.readyschool.ru',
+    'testblogers.readyschool.ru',
+    'www.testblogers.readyschool.ru',
     '127.0.0.1',
     '81.200.144.45',
     'api.ipify.org',
     'localhost',
-    'localhost127.0.0.1[::1]',
-    '0.0.0.0'
+    '[::1]',
+    '0.0.0.0',
+    '188.225.56.163',
 ]
 
 SERVER_EMAIL = os.getenv('SERVER_EMAIL')
@@ -54,10 +62,6 @@ INSTALLED_APPS = [
     'docstar_site',
     'vpn',
     'infrastructure',
-
-    'allauth',
-    'allauth.account',
-    'guardian',
     'tickets',
 ]
 
@@ -66,7 +70,6 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -103,7 +106,6 @@ WSGI_APPLICATION = 'new_site.wsgi.application'
 
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
-    'guardian.backends.ObjectPermissionBackend',
 )
 
 DATABASES = {
@@ -132,7 +134,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-LANGUAGE_CODE = 'Ru-ru'
+LANGUAGE_CODE = 'ru-RU'
 
 TIME_ZONE = 'Europe/Moscow'
 
@@ -144,8 +146,6 @@ USE_TZ = True
 
 # User
 AUTH_USER_MODEL = 'users.CustomUser'
-ACCOUNT_AUTHENTICATION_METHOD = 'email'
-ACCOUNT_EMAIL_REQUIRED = True
 
 # Login\logout
 LOGIN_REDIRECT_URL = 'homepage'
@@ -162,13 +162,16 @@ STATICFILES_DIRS = [
 STATIC_ROOT = 'staticfiles'
 
 # MEDIA
-MEDIA_URL = 'user_photos/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'docstar_site/docstar/user_photos')
+MEDIA_URL = 'media/'
 
 INTERNAL_IPS = [
     '127.0.0.1',
+    '188.225.56.163',
     '81.200.144.45'
 ]
+
+LIMIT_DOCTORS_ON_PAGE = 30
 
 GK_KEY = os.getenv('GK_KEY')
 GK_ACCOUNT_NAME = os.getenv('GK_ACCOUNT_NAME')
@@ -178,9 +181,32 @@ AVAILABLE_GET_TICKETS_IPS = os.getenv("TILDA_AVAILABLE_IPS", [])
 
 VPN_PRICE = os.getenv('VPN_PRICE')
 
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
-        'LOCATION': os.path.join(BASE_DIR, 'docstar_cache'),
-    }
+ADMIN_CHAT_ID = os.getenv('ADMIN_CHAT_ID')
+SALEBOT_API_URL = f"https://chatter.salebot.pro/api/{os.environ.get('SALEBOT_API_KEY')}/callback"
+GOOGLE_SHEET_URL = os.getenv('GOOGLE_SHEET_URL')
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'django_debug.log'),
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
 }
+
+# CACHES = {
+#     'default': {
+#         'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+#         'LOCATION': os.path.join(BASE_DIR, 'docstar_cache'),
+#     }
+# }

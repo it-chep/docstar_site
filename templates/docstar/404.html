@@ -1,29 +1,36 @@
+{% extends 'base.html' %}
+{% load cache %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Ошибка 404</title>
-    <link href="{% static "css/styles.css" %}" rel="stylesheet">
-{#    <link href="{% static 'img' %}" type="image/png">#}
-</head>
-<body>
-    <div class="container_404">
-        <img class="er" src="{% static "img/Mask group.png"%}">
+{% block title %}
+    Страница не найдена
+{% endblock %}
 
-        <div class="dop_container">
-{#        <img class="vova" src="{% static "img/Ellipse 29.svg" %}">#}
-        <img src="{% static "img/vova123.png" %}">
+{% block extralinks %}
+    <link type="text/css" rel="stylesheet" href="{% static 'css/404.css' %}">
+    <link type="text/css" rel="stylesheet" href="{% static 'css/search_header.css' %}">
 
-        <div class="error_text_container">
-        <p class="error_text">Упс.....</p>
-        <p class="error_text sec">Такой страницы нет ;(</p>
-            <p class="p_404">Перейдите на главную</p>
-            <a class="a_404" href="{% url 'homepage' %}"><div class="btn_404">Перейти</div></a>
-        </div>
+    <link type="text/css" rel="stylesheet" href="{% static 'css/mobile/mobile_404.css' %}">
+    <link type="text/css" rel="stylesheet" href="{% static 'css/mobile/mobile_search_header.css' %}">
+
+    <script src="{% static "js/main_page.js" %}"></script>
+{% endblock %}
+
+{% block content %}
+    {% include "docstar/modals/search_doctors_modal.html" %}
+
+    <div class="not-found-container">
+        <div class="not-found-page">
+            <div class="not-found-content">
+                <div></div>
+                <div class="error_code">Ошибка 404</div>
+                <div class="error_description">Неправильно набран адрес или такой страницы не существует</div>
+                <a class="user_info_btn_container" href="https://t.me/maxim_jordan">
+                    <div class="user_info_btn">
+                        <div class="user_info_btn_text">Сообщить об ошибке</div>
+                    </div>
+                </a>
             </div>
-
-{#        <div class="club_time">Самое время вступить в клуб!</div>#}
+        </div>
     </div>
-</body>
-</html>
+
+{% endblock %}

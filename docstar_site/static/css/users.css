@@ -22,8 +22,6 @@ body {
     background-color: #f6f6f6;
     font-size: 16px;
     color: #333;
-    font-family: Monster-Medium, sans-serif;
-
 }
 
 .container {
@@ -38,7 +36,8 @@ h1 {
     width: 100%;
     padding-bottom: 20px;
 }
-.input-group{
+
+.input-group {
     width: 300px;
     margin: 0 auto;
     padding-top: 10px;
@@ -46,11 +45,8 @@ h1 {
 
 form {
     text-align: center;
-    font-family: Monster-Medium, sans-serif;
     margin-top: 50px;
 }
-
-
 
 
 input:focus {
@@ -88,7 +84,6 @@ input:focus {
     /*border-color: #01abaa;*/
     border-radius: 15px;
     color: #fff;
-    font-family: Monster-Medium, sans-serif;
     /*transition: all 0.5s ease-in-out;*/
     border: none;
     text-decoration: none;
@@ -108,7 +103,7 @@ input:focus {
     /*transform: rotate(360deg);*/
 }
 
-.register{
+.register {
     margin: 20px auto;
     width: 250px;
 }
@@ -137,7 +132,6 @@ input:focus {
 
 h2 {
     text-align: center;
-    font-family: Monster-Bold, sans-serif;
     font-size: 30px;
 }
 
@@ -200,5 +194,4 @@ h2 {
 p {
     text-align: center;
     padding-top: 15px;
-    font-family: Monster-Medium, sans-serif;
 }

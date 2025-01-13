@@ -1,0 +1,145 @@
+@media (max-width: 420px) {
+    .search_filter_indicator .material-icons {
+        font-size: 30px;
+    }
+
+    .filter-title {
+        font-size: 26px;
+    }
+
+    .filters_wrapper {
+        overflow-y: auto;
+        display: none;
+        width: 100%;
+        padding: 20px;
+        position: fixed;
+        z-index: 9999;
+        margin-top: 0;
+        top: 0;
+        height: 100%;
+        background: #0E0F0F;
+    }
+
+    .mobile_filter_header_title {
+        font-size: 30px;
+    }
+
+    .close_mobile_filter_btn {
+        border-radius: 100px;
+        background: #161616;
+    }
+
+    .close_mobile_filter_btn .material-icons {
+        color: white;
+        font-size: 30px;
+    }
+
+    .active_filter {
+        font-size: 18px;
+    }
+
+    .active_filters_wrapper {
+        padding-top: 5px;
+    }
+
+    .checkbox-label {
+        font-size: 18px;
+    }
+
+    .checkbox-view {
+        width: 30px;
+        height: 30px;
+    }
+
+    .search-input {
+        height: 45px;
+        font-size: 18px;
+    }
+
+    .search-input::placeholder {
+        font-size: 18px;
+    }
+
+    .material-icons.cancel {
+        font-size: 30px;
+    }
+
+    .search-container img {
+        width: 30px;
+        height: 30px;
+        margin-top: 5px;
+    }
+}
+
+@media (max-width: 350px) {
+    .search_filter_indicator .material-icons {
+        font-size: 26px;
+    }
+
+    .filter-title {
+        font-size: 22px;
+    }
+
+    .filters_wrapper {
+        overflow-y: auto;
+        display: none;
+        width: 100%;
+        padding: 20px;
+        position: fixed;
+        z-index: 9999;
+        margin-top: 0;
+        top: 0;
+        height: 100%;
+        background: #0E0F0F;
+    }
+
+    .mobile_filter_header_title {
+        font-size: 26px;
+    }
+
+    .close_mobile_filter_btn {
+        border-radius: 100px;
+        background: #161616;
+    }
+
+    .close_mobile_filter_btn .material-icons {
+        color: white;
+        font-size: 26px;
+    }
+
+    .active_filter {
+        font-size: 16px;
+    }
+
+    .active_filters_wrapper {
+        padding-top: 5px;
+    }
+
+    .checkbox-label {
+        font-size: 16px;
+    }
+
+    .checkbox-view {
+        width: 26px;
+        height: 26px;
+    }
+
+    .search-input {
+        height: 45px;
+        font-size: 16px;
+    }
+
+    .search-input::placeholder {
+        font-size: 16px;
+    }
+
+    .material-icons.cancel {
+        font-size: 26px;
+    }
+
+    .search-container img {
+        width: 30px;
+        height: 30px;
+        margin-top: 5px;
+    }
+}

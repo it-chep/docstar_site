@@ -1,15 +1,6 @@
-from django.db import models
 from django.contrib.auth.models import AbstractUser
-import jwt
-
-from datetime import datetime, timedelta
-
-from django.conf import settings
-from django.contrib.auth.models import BaseUserManager, PermissionsMixin
-
+from django.contrib.auth.models import PermissionsMixin
 from django.db import models
-
-
 from django.contrib.auth.models import BaseUserManager
 
 

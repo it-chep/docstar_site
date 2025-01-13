@@ -1,0 +1,96 @@
+@media (max-width: 420px) {
+
+    .header-container {
+        width: 420px;
+        flex-direction: column;
+        margin: 20px auto 0;
+        gap: 20px;
+    }
+
+    .logo {
+        display: block;
+    }
+
+    .logo img {
+        width: 300px;
+        height: 85px;
+    }
+
+    .login-container {
+        display: none;
+    }
+
+    .search-doctors-container {
+        width: 300px;
+    }
+
+    .search-doctors-container input {
+        height: 45px;
+        font-size: 18px;
+    }
+
+    .search-doctors-container input::placeholder {
+        font-size: 18px;
+    }
+
+    .search-doctors-container img {
+        width: 30px;
+        height: 45px;
+        margin-top: -5px;
+    }
+
+    .mobile_burger {
+        display: block;
+    }
+
+}
+
+@media (max-width: 350px) {
+
+    .header-container {
+        width: 350px;
+        margin: 20px auto 0;
+        gap: 20px;
+        flex-direction: column;
+    }
+
+    .login-container {
+        display: none;
+    }
+
+    .search-doctors-container {
+        width: 250px;
+    }
+
+    .search-doctors-container input {
+        height: 35px;
+        font-size: 16px;
+    }
+
+    .search-doctors-container input::placeholder {
+        font-size: 16px;
+    }
+
+    .search-doctors-container img {
+        width: 20px;
+        height: 25px;
+        margin-top: -5px;
+    }
+
+    .mobile_burger span {
+        color: white;
+        font-size: 26px;
+        padding: 13px;
+        border-radius: 50px;
+        background: #2E99FC;
+    }
+
+    .mobile_burger {
+        display: block;
+    }
+
+    .logo img {
+        width: 250px;
+        height: 70px;
+    }
+}

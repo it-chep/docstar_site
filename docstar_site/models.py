@@ -9,24 +9,39 @@ User = settings.AUTH_USER_MODEL
 
 class Doctor(models.Model):
     """User Docstar"""
-    name = models.CharField('ФИО', max_length=100)
-    slug = models.SlugField("URL", max_length=225, unique=True, db_index=True)
-    email = models.CharField('email', max_length=100, null=True)
-    inst_url = models.CharField('Аккаунт инстаграм', max_length=100)
-    vk_url = models.CharField('Аккаунт VK', max_length=100)
-    dzen_url = models.CharField('Аккаунт Яндекс.Дзен', max_length=100)
-    tg_url = models.CharField('Аккаунт TG', max_length=100)
-    city = models.ForeignKey('City', on_delete=models.PROTECT, null=True)
-    medical_directions = models.CharField('Направление медицины', max_length=100)
-    speciallity = models.ForeignKey('Speciallity', on_delete=models.PROTECT, null=True)
-    additional_speciallity = models.CharField('Доп специальность', max_length=100)
-    main_blog_theme = models.CharField('Тематика блога', max_length=100)
-    status_club = models.BooleanField('Подписка на клуб', null=True)
-    avatar = models.ImageField("Личное фото", upload_to="user_photos/", null=True, default='user_photos/zag.png')
+    name = models.CharField(verbose_name='ФИО', max_length=100)
+    slug = models.SlugField(verbose_name="URL", max_length=225, unique=True, db_index=True)
+    email = models.CharField(verbose_name='email', max_length=100, null=True)
+
+    inst_url = models.CharField(verbose_name='Аккаунт инстаграм', max_length=100, null=True, blank=True)
+    vk_url = models.CharField(verbose_name='Аккаунт VK', max_length=100, null=True, blank=True)
+    dzen_url = models.CharField(verbose_name='Аккаунт Яндекс.Дзен', max_length=100, null=True, blank=True)
+    tg_url = models.CharField(verbose_name='Аккаунт TG', max_length=100, null=True, blank=True)
+    youtube_url = models.CharField(verbose_name='Аккаунт YOUTUBE', max_length=100, null=True, blank=True)
+
+    city = models.ForeignKey('City', on_delete=models.PROTECT, null=True, blank=True, verbose_name="Город")
+    medical_directions = models.CharField(verbose_name='Направление медицины', max_length=255, null=True, blank=True)
+    speciallity = models.ForeignKey('Speciallity', on_delete=models.PROTECT, null=True, verbose_name="Специальность")
+    additional_speciallity = models.CharField('Доп специальность', max_length=255, null=True, blank=True)
+    main_blog_theme = models.TextField(verbose_name='Тематика блога', null=True, blank=True)
+
+    status_club = models.BooleanField(verbose_name='Подписка на клуб', null=True)
+    avatar = models.ImageField(
+        verbose_name="Личное фото",
+        upload_to="user_photos/",
+        null=True,
+        default='user_photos/zag.png'
+    )
     doctor = models.ForeignKey(User, on_delete=models.PROTECT, blank=True, null=True)
-    members = models.ManyToManyField(User, related_name='members', blank=True)
-    prodoctorov = models.CharField("ПРОДОКТОРОВ", null=True, max_length=255, unique=True)
-    subscribers_inst = models.CharField("Подписчики инста", null=True,  max_length=255,)
+
+    prodoctorov = models.CharField(verbose_name="ПРОДОКТОРОВ", null=True, max_length=255, unique=False, blank=True)
+    subscribers_inst = models.CharField(verbose_name="Подписчики инста", null=True, max_length=255, blank=True)
+
+    age = models.IntegerField(verbose_name="Возраст", null=True, blank=True)
+    birth_date = models.DateField(verbose_name="Дата рождения", null=True, blank=True)
+
+    is_active = models.BooleanField(verbose_name='Показывать доктора', default=True)
+    date_created = models.DateTimeField(auto_now_add=True, null=True, blank=True)
 
     def __str__(self):
         return self.name
@@ -42,18 +57,18 @@ class Doctor(models.Model):
         return reverse('edit', kwargs={'slug': self.slug})
 
     class Meta:
-        verbose_name = 'Пользователь'
-        verbose_name_plural = 'Пользователи'
+        verbose_name = 'Врач'
+        verbose_name_plural = 'Врачи'
         ordering = ["name"]
 
 
 class Lection(models.Model):
     """Docstar Lection"""
-    lection_name = models.CharField('Название лекции', max_length=100)
-    slug = models.SlugField("URL", max_length=225, unique=True, db_index=True)
-    youtube_url = models.CharField('Cсылка на лекцию', max_length=100)
-    pre_photo = models.ImageField('Превью к лекции', upload_to="photos/", null=True)
-    lector_inst = models.CharField('Ссылка на инст лектора', max_length=100, null=True)
+    lection_name = models.CharField(verbose_name='Название лекции', max_length=100)
+    slug = models.SlugField(verbose_name="URL", max_length=225, unique=True, db_index=True)
+    youtube_url = models.CharField(verbose_name='Cсылка на лекцию', max_length=100)
+    pre_photo = models.ImageField(verbose_name='Превью к лекции', upload_to="photos/", null=True)
+    lector_inst = models.CharField(verbose_name='Ссылка на инст лектора', max_length=100, null=True)
 
     def __str__(self):
         return self.lection_name
@@ -86,8 +101,8 @@ class Speciallity(models.Model):
 
 class City(models.Model):
     """Users City"""
-    name = models.CharField("Название города", max_length=100, db_index=True)
-    code = models.CharField("Код города", max_length=100)
+    name = models.CharField(verbose_name="Название города", max_length=100, db_index=True)
+    code = models.CharField(verbose_name="Код города", max_length=100, null=True, blank=True)
 
     def __str__(self):
         return self.name
@@ -101,9 +116,9 @@ class City(models.Model):
 class Knowledge(models.Model):
     """Knowlrdge base"""
 
-    name = models.CharField("Насзвание поста", max_length=100)
-    tg_link = models.CharField("Ссылка на тг", max_length=100)
-    slug = models.SlugField("URL", max_length=225, unique=True, db_index=True)
+    name = models.CharField(verbose_name="Насзвание поста", max_length=100)
+    tg_link = models.CharField(verbose_name="Ссылка на тг", max_length=100)
+    slug = models.SlugField(verbose_name="URL", max_length=225, unique=True, db_index=True)
 
     def __str__(self):
         return self.name
@@ -115,9 +130,8 @@ class Knowledge(models.Model):
 
 
 class GetCourseExportID(models.Model):
-
-    export_id = models.CharField("Export_id", max_length=40, unique=True)
-    export_time = models.DateTimeField("Время экспорта", auto_now=True)
+    export_id = models.CharField(verbose_name="Export_id", max_length=40, unique=True)
+    export_time = models.DateTimeField(verbose_name="Время экспорта", auto_now=True)
 
     def __str__(self):
         return self.export_id
@@ -125,4 +139,3 @@ class GetCourseExportID(models.Model):
     class Meta:
         verbose_name = 'Айдишник'
         verbose_name_plural = 'Айдишники'
-

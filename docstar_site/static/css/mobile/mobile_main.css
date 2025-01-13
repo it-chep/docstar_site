@@ -1,0 +1,117 @@
+@media (max-width: 420px) {
+    .container {
+        width: 420px;
+    }
+
+    footer {
+        width: 420px;
+    }
+
+    .logo-wrapper {
+        display: flex;
+        align-items: center;
+        flex-direction: row;
+        gap: 20px;
+    }
+
+    .mobile_burger span {
+        color: white;
+        font-size: 26px;
+        padding: 18px;
+        border-radius: 50px;
+        background: #2E99FC;
+    }
+
+    .burger-container {
+        overflow-y: auto;
+        width: 100%;
+        padding: 20px;
+        position: fixed;
+        z-index: 9999;
+        margin-top: 0;
+        top: 0;
+        height: 100%;
+        background: #0E0F0F;
+    }
+
+    .mobile_burger_body {
+        display: flex;
+        gap: 20px;
+        flex-direction: column;
+    }
+
+    .close_mobile_burger_btn {
+        border-radius: 100px;
+        background: #161616;
+    }
+
+    .close_mobile_burger_btn .material-icons {
+        color: white;
+        font-size: 26px;
+    }
+
+    .mobile_burger_body {
+        font-size: 20px;
+    }
+
+    .main-title {
+        text-align: center;
+    }
+}
+
+@media (max-width: 350px) {
+    .container {
+        width: 350px;
+    }
+
+    .logo-wrapper {
+        display: flex;
+        align-items: center;
+        flex-direction: row;
+        gap: 20px;
+    }
+
+    .mobile_burger span {
+        color: white;
+        font-size: 26px;
+        padding: 18px;
+        border-radius: 50px;
+        background: #2E99FC;
+    }
+
+    .burger-container {
+        overflow-y: auto;
+        width: 100%;
+        padding: 20px;
+        position: fixed;
+        z-index: 9999;
+        margin-top: 0;
+        top: 0;
+        height: 100%;
+        background: #0E0F0F;
+    }
+
+    .mobile_burger_body {
+        display: flex;
+        gap: 20px;
+        flex-direction: column;
+    }
+
+    .close_mobile_burger_btn {
+        border-radius: 100px;
+        background: #161616;
+    }
+
+    .close_mobile_burger_btn .material-icons {
+        color: white;
+        font-size: 26px;
+    }
+
+    .mobile_burger_body {
+        font-size: 20px;
+    }
+
+    .main-title {
+        text-align: center;
+    }
+}

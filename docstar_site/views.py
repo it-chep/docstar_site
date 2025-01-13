@@ -12,7 +12,7 @@ from django.forms import model_to_dict
 from django.shortcuts import render, get_object_or_404, redirect
 from django.template import RequestContext
 from django.views.decorators.cache import cache_page
-from django.views.generic import ListView, DetailView, UpdateView
+from django.views.generic import ListView, DetailView, UpdateView, TemplateView
 from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -20,7 +20,7 @@ import requests
 from time import sleep
 import threading
 
-from docstar_site.forms import UpdateDoc
+from docstar_site.forms import UpdateDoc, DoctorSearchForm, CreateDoctorForm
 from docstar_site.models import *
 from docstar_site.utils import *
 from docstar_site.permissions import DoctorPermissionsMixin, MembersPermissionsMixin
@@ -30,8 +30,6 @@ from docstar_site.functions import *
 import logging
 
 logger = logging.getLogger(__name__)
-thread_1 = threading.Thread(target=get_users_export_id, daemon=True)
-thread_1.start()
 
 
 @cache_page(60 * 60 * 10)
@@ -45,15 +43,16 @@ def spasibo_book(request):
     gkname = request.GET.get("gkname")
     gkphone = request.GET.get("gkphone")
     gkemail = request.GET.get("gkemail")
-    return render(request,
-                  'docstar/docstar_book.html',
-                  {
-                      'uid': uid,
-                      'gkname': gkname,
-                      'gkphone': gkphone,
-                      'gkemail': gkemail
-                  }
-                  )
+    return render(
+        request,
+        'docstar/docstar_book.html',
+        {
+            'uid': uid,
+            'gkname': gkname,
+            'gkphone': gkphone,
+            'gkemail': gkemail
+        }
+    )
 
 
 def e_handler500(request):
@@ -69,57 +68,53 @@ class CitySpeciallity:
         return Speciallity.objects.all()
 
 
-class Doctors(CitySpeciallity, DataMixin, ListView):
+class Doctors(DataMixin, ListView):
     model = Doctor
     template_name = "docstar/doctors.html"
     context_object_name = 'doctors'
+    form_class = DoctorSearchForm
 
-    def get_context_data(self, *, object_list=None, **kwargs):
+    def get(self, request, *args, **kwargs):
+        form = DoctorSearchForm(self.request.GET or None)
+        self.object_list = self.get_queryset()
+        context = self.get_context_data(form=form, object_list=self.object_list)
+        return self.render_to_response(context)
+
+    def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        c_def = self.get_user_context(title="Доктора")
-        return dict(list(context.items()) + list(c_def.items()))
-
-    def get_queryset(self):
-        return Doctor.objects.all().select_related('city').select_related('speciallity')
+        context['cities'] = City.objects.all()
+        context['specialities'] = Speciallity.objects.all()
+        context["title"] = "Врачи MEDBLOGERS"
+        return context
 
 
 class ShowDoc(DataMixin, DetailView):
     model = Doctor
-    template_name = 'docstar/doctor_card.html'
-    context_object_name = 'doctor'
+    template_name = 'docstar/doctor_detail.html'
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        c_def = self.get_user_context(title=context['doctor'].name)
-        if self.request.user.is_authenticated:
-            email = self.request.user.email
-        else:
-            email = '123@yandex.ru'
+        context["title"] = f"{self.object.name}"
+        return context
 
-        return dict(list(context.items()) + list(c_def.items()))
-
-
-class Lections(DataMixin, ListView):
-    model = Lection
-    template_name = "docstar/tech_work.html"
-    context_object_name = 'lections'
-
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super().get_context_data(**kwargs)
-        c_def = self.get_user_context(title='Лекции')
-        return dict(list(context.items()) + list(c_def.items()))
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        context = self.get_context_data()
+        return self.render_to_response(context)
 
 
-class ShowLection(DataMixin, DetailView):
-    model = Lection
-    template_name = 'docstar/lection_card.html'
-    context_object_name = 'lection'
-    pk_url_kwarg = 'lection_id'
+class NewClubParticipantView(TemplateView):
+    template_name = "docstar/new_club_participant.html"
+    form_class = CreateDoctorForm
 
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super().get_context_data(**kwargs)
-        c_def = self.get_user_context(title=context['lection'].lection_name)
-        return dict(list(context.items()) + list(c_def.items()))
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+        context["form"] = self.form_class
+        return context
+
+
+class SpasiboClubParticipantView(TemplateView):
+    template_name = "docstar/spasibo_club_participant.html"
 
 
 class DoctorsApiView(APIView):
@@ -179,27 +174,6 @@ def getcourse_get_api(request):
         logger.error(ex)
 
 
-class FilterDocViews(Doctors, CitySpeciallity, ListView):
-    model = Doctor
-    template_name = "docstar/doctors.html"
-
-    def get_queryset(self):
-        queryset = Doctor.objects.filter(city__in=self.request.GET.getlist("city"),
-                                         speciallity__in=self.request.GET.getlist("speciallity")).select_related(
-            'city').select_related('speciallity')
-
-        if not queryset:
-            queryset = Doctor.objects.filter(
-                Q(city__in=self.request.GET.getlist("city")) |
-                Q(speciallity__in=self.request.GET.getlist("speciallity"))).select_related('city').select_related(
-                'speciallity')
-
-        if not queryset:
-            queryset = Doctor.objects.all().select_related('city').select_related('speciallity')
-
-        return queryset
-
-
 @sync_to_async
 def Get_gk_email_result(request):
     try:
@@ -229,54 +203,6 @@ def Get_gk_email_result(request):
 
 def get_gk_email(request):
     return render(request, 'docstar/chek_gk.html', {'title': 'Проверка на подлинность'})
-
-
-@cache_page(60 * 60 * 10)
-class DoctorUpdateView(DoctorPermissionsMixin, DataMixin, DetailView):
-    model = Doctor
-    template_name = 'docstar/edit_doc.html'
-    form_class = UpdateDoc
-    success_url = 'doctors'
-
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super().get_context_data(**kwargs)
-        c_def = self.get_user_context(title='Обновление')
-
-        return dict(list(context.items()) + list(c_def.items()))
-
-    def get_form_kwargs(self):
-        kwargs = super().get_form_kwargs()
-        email_doc = kwargs['instance'].email
-        user = self.request.user.email
-
-        if user != email_doc:
-            self.handle_no_permission()
-        else:
-            pass
-
-        return kwargs
-
-
-@cache_page(60 * 60 * 10)
-def success_edit(request):
-    return render(request, 'docstar/success_edit.html', {'title': 'Мое имя успех'})
-
-
-class AvaUpdate(UpdateView):
-    model = Doctor
-    form_class = UpdateDoc
-    template_name = 'docstar/edit_doc.html'
-    success_url = '/'
-
-    def save(self):
-        try:
-            form = UpdateDoc(self.request.POST or None)
-            if form.is_valid():
-                form.save()
-
-                return redirect('success')
-        except Exception as ex:
-            logger.error(ex)
 
 
 class DoctorApiView(APIView):

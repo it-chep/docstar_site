@@ -1,0 +1,118 @@
+.main_img_container {
+    width: 500px;
+    margin: 20px auto 0;
+    text-align: center;
+}
+
+.main_img_container img {
+    width: 500px;
+    border-radius: 20px;
+}
+
+.main_title_head {
+    font-size: 30px;
+}
+
+.main_title_container {
+    margin: 15px auto 0;
+    color: white;
+    text-align: center;
+}
+
+.form_wrapper {
+    width: 1200px;
+    text-align: center;
+    color: white;
+    margin: 0 auto;
+}
+
+.form_container {
+    display: flex;
+    justify-content: center;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-top: 15px;
+    text-align: left;
+    width: 500px;
+}
+
+.label-wrapper {
+    padding-left: 10px;
+    padding-right: 10px;
+    font-size: 16px;
+}
+
+.input-wrapper {
+    background: #242424;
+    border-radius: 6px;
+    height: 50px;
+    width: 500px;
+    align-items: center;
+    border: 2px solid #606060;
+    transition: border-color 0.3s ease;
+    padding: 10px 10px 10px 15px;
+}
+
+.input-wrapper.error {
+    background: rgba(255, 65, 65, 0.22);
+    border: 1px solid #ff4141;
+}
+
+.error-message {
+    color: #ff4141;
+    font-size: 14px;
+}
+
+.input-wrapper input {
+    font-size: 20px;
+    width: 100%;
+    height: 100%;
+    color: white;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    box-shadow: none;
+}
+
+.input-wrapper input::placeholder {
+    font-size: 16px;
+}
+
+.main_title_description a {
+    color: #278dec;
+    text-decoration: #278dec;
+}
+
+.input-wrapper:focus-within {
+    border-color: #278dec;
+}
+
+.submit-button-container {
+    margin-top: 20px;
+    margin-bottom: 50px;
+}
+
+.input-wrapper.error .select2-container--dark .select2-selection--single {
+    background: unset;
+}
+
+.submit-button {
+    background: radial-gradient(
+            closest-side,
+            rgba(47, 155, 255, 1) 0%,
+            rgba(21, 109, 189, 1) 100%
+    );
+    border-radius: 10px;
+    padding: 16px 24px 16px 24px;
+    font-size: 18px;
+}
+
+.main_title_description {
+    width: 500px;
+    margin: 15px auto;
+    text-align: center;
+}

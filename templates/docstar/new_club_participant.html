@@ -1,0 +1,256 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="shortcut icon" href="{% static "img/dcs.png" %}" type="image/png">
+
+    <link type="text/css" rel="stylesheet" href="{% static "css/select2.min.css" %}"/>
+    <link type="text/css" rel="stylesheet" href="{% static "css/jquery-ui.css" %}"/>
+    <link type="text/css" rel="stylesheet" href="{% static "css/bootstrap.min.css" %}">
+    <link type="text/css" rel="stylesheet" href="{% static "css/bootstrap-datepicker.min.css" %}">
+
+    <link type="text/css" rel="stylesheet" href="{% static 'css/main.css' %}">
+    <link type="text/css" rel="stylesheet" href="{% static 'css/mobile/mobile_main.css' %}">
+    <link type="text/css" rel="stylesheet" href="{% static "css/new_club_participant.css" %}"/>
+    <link type="text/css" rel="stylesheet" href="{% static "css/mobile/mobile_new_club_participant.css" %}"/>
+    <link type="text/css" rel="stylesheet" href="{% static "css/select2_custom/dark.css" %}"/>
+    <link type="text/css" rel="stylesheet" href="{% static "css/datepicker/dark.css" %}">
+
+    <script src="{% static "js/jquery-3.6.0.min.js" %}"></script>
+    <script src="{% static "js/select2.min.js" %}"></script>
+    <script src="{% static "js/select2_ru.js" %}"></script>
+    <script src="{% static "js/bootstrap.bundle.min.js" %}"></script>
+    <script src="{% static "js/bootstrap-datepicker.min.js" %}"></script>
+    <script src="{% static "js/bootstrap-datepicker.ru.min.js" %}"></script>
+    
+    <script src="{% static "js/new_club_participant.js" %}"></script>
+    
+    <title>Регистрация</title>
+</head>
+<body>
+<div class="main_container">
+    <div class="main_img_container">
+        <img src="{% static "img/new_club_participant/dog_about.png" %}">
+    </div>
+    <div class="main_title_container">
+        <h1 class="main_title_head">Анкета участника MEDBLOGERS</h1>
+        <p class="main_title_description">Привет, MEDBLOGERец! Эта форма позволит вам попасть на единый сайт - базу
+            врачей-блогеров, а также
+            поможет вам и коллегам найти вас и предложить сотрудничество.</p>
+    </div>
+    <div class="form_wrapper">
+        <div class="form_container">
+            <form method="post" id="create-doctor-form">
+                {% csrf_token %}
+                <div class="form-group">
+                    <div class="label-wrapper">
+                        {{ form.email.label }}
+                    </div>
+                    <div class="input-wrapper">
+                        {{ form.email }}
+                    </div>
+                    <div class="help-wrapper">
+                        {{ form.email.help_text }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="label-wrapper">
+                        {{ form.first_name.label }}
+                    </div>
+                    <div class="input-wrapper">
+                        {{ form.first_name }}
+                    </div>
+                    <div class="help-wrapper">
+                        {{ form.first_name.help_text }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="label-wrapper">
+                        {{ form.last_name.label }}
+                    </div>
+                    <div class="input-wrapper">
+                        {{ form.last_name }}
+                    </div>
+                    <div class="help-wrapper">
+                        {{ form.last_name.help_text }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="label-wrapper">
+                        {{ form.middle_name.label }}
+                    </div>
+                    <div class="input-wrapper">
+                        {{ form.middle_name }}
+                    </div>
+                    <div class="help-wrapper">
+                        {{ form.middle_name.help_text }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="label-wrapper">
+                        {{ form.age.label }}
+                    </div>
+                    <div class="input-wrapper">
+                        {{ form.age }}
+                    </div>
+                    <div class="help-wrapper">
+                        {{ form.age.help_text }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="label-wrapper">
+                        {{ form.birth_date.label }}
+                    </div>
+                    <div class="input-wrapper">
+                        {{ form.birth_date }}
+                    </div>
+                    <div class="help-wrapper">
+                        {{ form.birth_date.help_text }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="label-wrapper">
+                        {{ form.instagram_username.label }}
+                    </div>
+                    <div class="input-wrapper">
+                        {{ form.instagram_username }}
+                    </div>
+                    <div class="help-wrapper">
+                        {{ form.instagram_username.help_text }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="label-wrapper">
+                        {{ form.instagram_subscribers.label }}
+                    </div>
+                    <div class="input-wrapper">
+                        {{ form.instagram_subscribers }}
+                    </div>
+                    <div class="help-wrapper">
+                        {{ form.instagram_subscribers.help_text }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="label-wrapper">
+                        {{ form.vk_username.label }}
+                    </div>
+                    <div class="input-wrapper">
+                        {{ form.vk_username }}
+                    </div>
+                    <div class="help-wrapper">
+                        {{ form.vk_username.help_text }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="label-wrapper">
+                        {{ form.telegram_username.label }}
+                    </div>
+                    <div class="input-wrapper">
+                        {{ form.telegram_username }}
+                    </div>
+                    <div class="help-wrapper">
+                        {{ form.telegram_username.help_text }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="label-wrapper">
+                        {{ form.dzen_username.label }}
+                    </div>
+                    <div class="input-wrapper">
+                        {{ form.dzen_username }}
+                    </div>
+                    <div class="help-wrapper">
+                        {{ form.dzen_username.help_text }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="label-wrapper">
+                        {{ form.youtube_username.label }}
+                    </div>
+                    <div class="input-wrapper">
+                        {{ form.youtube_username }}
+                    </div>
+                    <div class="help-wrapper">
+                        {{ form.youtube_username.help_text }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="label-wrapper">
+                        {{ form.city.label }}
+                    </div>
+                    <div class="input-wrapper">
+                        {{ form.city }}
+                    </div>
+                    <div class="help-wrapper">
+                        {{ form.city.help_text }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="label-wrapper">
+                        {{ form.speciallity.label }}
+                    </div>
+                    <div class="input-wrapper">
+                        {{ form.speciallity }}
+                    </div>
+                    <div class="help-wrapper">
+                        {{ form.speciallity.help_text }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="label-wrapper">
+                        {{ form.medical_directions.label }}
+                    </div>
+                    <div class="input-wrapper">
+                        {{ form.medical_directions }}
+                    </div>
+                    <div class="help-wrapper">
+                        {{ form.medical_directions.help_text }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="label-wrapper">
+                        {{ form.additional_speciallity.label }}
+                    </div>
+                    <div class="input-wrapper">
+                        {{ form.additional_speciallity }}
+                    </div>
+                    <div class="help-wrapper">
+                        {{ form.additional_speciallity.help_text }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="label-wrapper">
+                        {{ form.main_blog_theme.label }}
+                    </div>
+                    <div class="input-wrapper">
+                        {{ form.main_blog_theme }}
+                    </div>
+                    <div class="help-wrapper">
+                        {{ form.main_blog_theme.help_text }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="label-wrapper">
+                        {{ form.prodoctorov.label }}
+                    </div>
+                    <div class="input-wrapper">
+                        {{ form.prodoctorov }}
+                    </div>
+                    <div class="help-wrapper">
+                        {{ form.prodoctorov.help_text }}
+                    </div>
+                </div>
+                <div class="submit-button-container">
+                    <div class="submit-button">
+                        <span>Отправить анкету</span>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

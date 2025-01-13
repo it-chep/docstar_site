@@ -15,3 +15,7 @@ docstar_site/user_photos/
 __pycache__/
 *.json
 .idea/
+myenv/
+.env2
+staticfiles
+dumps/

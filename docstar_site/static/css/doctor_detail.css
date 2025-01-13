@@ -1,0 +1,123 @@
+.doctor_detail_card_container {
+    padding-left: 20px;
+    padding-right: 25px;
+    width: 1200px;
+    margin: 0 auto;
+    color: white;
+}
+
+.doctor_detail_card {
+    display: flex;
+    flex-direction: row;
+    border-radius: 20px;
+    background: #1E1E1E;
+    gap: 20px;
+    padding: 20px;
+}
+
+.container_ava {
+    width: 300px;
+    height: 300px;
+    image-orientation: revert;
+    object-fit: cover;
+}
+
+.avatar {
+    object-position: 10% 10%;
+    object-fit: cover;
+    position: relative;
+    width: 100%;
+    height: 300px;
+    border-radius: 14px;
+}
+
+.doctor_info {
+    width: 570px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    .doctor_name {
+        color: white;
+    }
+
+    .doctor_city_speciallity_wrapper {
+        margin-top: 10px;
+    }
+
+    .doctor_city_wrapper {
+        .doctor_city {
+            color: #717171;
+        }
+    }
+
+    .doctor_speciallity_wrapper {
+        margin-top: 10px;
+        margin-bottom: 10px;
+
+        .doctor_speciallity {
+            background: #01284B;
+            color: #2E99FC;
+            width: fit-content;
+            border-radius: 8px;
+
+            p {
+                padding: 8px 20px 8px 20px;
+            }
+        }
+    }
+
+}
+
+
+.society_block {
+    display: flex;
+    flex-direction: row;
+    column-gap: 20px;
+    justify-content: flex-end;
+}
+
+.society_block img {
+    width: 25px;
+    height: 25px;
+}
+
+.additional_block {
+    word-wrap: break-word;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+}
+
+.additional_block span {
+    color: #717171;
+}
+
+.additional_specialities {
+    margin-bottom: 10px;
+}
+
+.theme {
+    margin-bottom: 10px;
+}
+
+a {
+    color: white;
+    text-decoration: none;
+}
+
+.doctor_actions {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.prodoc_btn {
+    cursor: pointer;
+    padding: 8px 20px;
+    border-radius: 100px;
+    color: white;
+    border: 2px solid #2E99FC;
+    background: #2E99FC;
+    transition: background-color 0.5s ease;
+}

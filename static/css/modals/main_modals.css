@@ -1,0 +1,103 @@
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-content {
+    background-color: white;
+    border-radius: 10px;
+    width: 400px;
+    text-align: center;
+    position: relative;
+}
+
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.search_doctors_modal .modal-content {
+    width: 585px;
+    margin: 135px auto 0;
+    border-radius: 30px;
+    background: #1E1E1E;
+    color: white;
+    max-height: 480px;
+    overflow-y: scroll;
+}
+
+.search_doctors_modal {
+    position: absolute;
+}
+
+.mini_user_card {
+    cursor: pointer;
+    display: flex;
+    flex-direction: row;
+    gap: 40px;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 30px;
+}
+
+.mini_user_card:hover {
+    cursor: pointer;
+    background-color: #2E99FC;
+}
+
+.mini_user_avatar {
+    width: 100px;
+    height: 100px;
+    overflow: hidden;
+    position: relative;
+    border-radius: 22px;
+}
+
+.mini_avatar {
+    transform: scale(1.6) translateY(16%);
+    width: 100%;
+    height: 100%;
+    border-radius: 22px;
+    object-fit: cover;
+    object-position: center;
+}
+
+.mini_doctor_name {
+    color: #FFF;
+    font-size: 22px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+
+.mini_additional_info {
+    color: #606060;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.mini_doctor_info {
+    text-align: left;
+}
+
+.mini_doctor_link {
+    pointer-events: auto;
+}
+
+.search_doctors_modal {
+    position: fixed;
+}

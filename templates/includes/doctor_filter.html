@@ -1,0 +1,70 @@
+{% load static %}
+
+{% block extralinks %}
+    <link type="text/css" rel="stylesheet" href="{% static 'css/doctor_filter.css' %}">
+    <link type="text/css" rel="stylesheet" href="{% static 'css/mobile/mobile_doctor_filter.css' %}">
+    <script src="{% static "js/doctor_filter.js" %}"></script>
+{% endblock %}
+
+<div class="filters_wrapper">
+    <div class="filters-inline-wrapper">
+        <div class="filter-section">
+            <div class="filter-header" id="city-filter-header">
+                <div class="filter_open_close_arrow search_filter_indicator">
+                    <span class="material-icons next">
+                        navigate_next
+                    </span>
+                </div>
+                <div class="filter-title">Город</div>
+            </div>
+            <div id="city-filter" class="filter-content">
+                <div class="search-container">
+                    <img src="/static/img/lupa.svg">
+                    <input type="text" id="citySearchInput" placeholder="Найти свой город..." class="search-input">
+                </div>
+
+                <div class="filter-list" id="city-list">
+                    {% for city in cities %}
+                        <label for="city-{{ city.id }}" class="checkbox-label city">
+                            <input type="checkbox" id="city-{{ city.id }}" class="checkbox">
+                            <span class="checkbox-view">
+                                <img class="checkbox-icon" src="{% static 'img/homepage/check_mark.svg' %}">
+                            </span>
+                            <p class="checkbox-text">{{ city.name }}</p>
+                        </label>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="filter-section">
+            <div class="filter-header" id="speciality-filter-header">
+                <div class="filter_open_close_arrow search_filter_indicator">
+                    <span class="material-icons next">
+                        navigate_next
+                    </span>
+                </div>
+                <div class="filter-title">Специальность</div>
+            </div>
+
+            <div id="speciality-filter" class="filter-content">
+                <div class="search-container">
+                    <img src="/static/img/lupa.svg">
+                    <input type="text" id="specialitySearchInput" placeholder="Найти специальность..."
+                           class="search-input">
+                </div>
+                <div class="filter-list" id="speciality-list">
+                    {% for speciality in specialities %}
+                        <label for="speciality-{{ speciality.id }}" class="checkbox-label speciality">
+                            <input type="checkbox" id="speciality-{{ speciality.id }}" class="checkbox">
+                            <span class="checkbox-view">
+                                <img class="checkbox-icon" src="{% static 'img/homepage/check_mark.svg' %}">
+                            </span>
+                            <p class="checkbox-text">{{ speciality.name }}</p>
+                        </label>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,131 @@
+.filters-inline-wrapper {
+    height: auto;
+    border-radius: 20px;
+    background: #161616;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.filter-section {
+    padding: 10px 20px 10px 28px;
+    border-radius: 8px;
+}
+
+.filter-header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.filter_open_close_arrow {
+    margin-right: 10px;
+    transition: transform 0.3s ease;
+    transform: rotate(0deg);
+}
+
+.filter_open_close_arrow.open {
+    transform: rotate(90deg);
+}
+
+.filter-title {
+    font-size: 18px;
+    font-weight: normal;
+    cursor: pointer;
+    color: white;
+}
+
+.filter-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+    color: white;
+}
+
+.filter-content.show {
+    max-height: 300px; /* Adjust this value as needed */
+}
+
+.search-box {
+    width: 100%;
+    margin-top: 20px;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #2c2c2c;
+    color: #fff;
+}
+
+.filter-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    overflow-y: scroll;
+    max-height: 200px;
+}
+
+.filter-list li {
+    margin-bottom: 5px;
+}
+
+.filter-list label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.filter-list input[type="checkbox"] {
+    margin-right: 8px;
+}
+
+.show-all {
+    color: #1e90ff;
+    cursor: pointer;
+    margin-top: 10px;
+    display: inline-block;
+}
+
+.filters_wrapper {
+    width: 370px;
+}
+
+.active_filters_wrapper {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding-top: 5px;
+    padding-bottom: 20px;
+}
+
+.active_filter {
+    display: flex;
+    flex-direction: row;
+    border-radius: 64px;
+    align-items: center;
+    margin-right: 15px;
+    margin-top: 15px;
+    background: #2F9BFF;
+}
+
+.search_filter_indicator .material-icons {
+    color: #2F9BFF;
+    padding: 5px 0 0;
+}
+
+.active_filter_text {
+    padding: 5px 0 5px 15px;
+    color: white;
+}
+
+.active_filter_delete_btn {
+    padding: 5px 15px 5px 15px;
+}
+
+.material-icons.cancel {
+    color: white;
+    padding: 5px 0 0;
+}
+
+.active_filter:hover {
+    background: #FF3737;
+}

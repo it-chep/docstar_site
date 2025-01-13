@@ -1,0 +1,167 @@
+.doctors_list_header {
+    color: white;
+}
+
+.doctors_list_container {
+    background-color: #0E0F0F;
+}
+
+.doctors_container {
+    padding-left: 20px;
+    padding-right: 25px;
+    width: 1200px;
+    margin: 0 auto;
+}
+
+.settings_icon_wrapper {
+    display: none;
+}
+
+.doctors_wrapper {
+    display: flex;
+    flex-direction: row;
+}
+
+.all_doctors {
+    column-gap: 20px;
+    row-gap: 20px;
+    text-align: center;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: left;
+}
+
+.user_card_wrapper {
+    width: 278px;
+    height: auto;
+    padding: 10px 10px 20px 10px;
+    border-radius: 20px;
+    background: #1E1E1E;
+}
+
+.user_card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: nowrap;
+}
+
+.user_avatar {
+    width: 100%;
+    margin: 0 0 10px;
+    image-orientation: revert;
+    object-fit: cover;
+}
+
+.doc_info {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 10px;
+    width: 100%;
+    height: 110px;
+    justify-content: space-between;
+}
+
+.avatar {
+    object-position: 10% 10%;
+    object-fit: cover;
+    position: relative;
+    width: 100%;
+    height: 160px;
+    border-radius: 14px;
+}
+
+.user_name {
+    font-weight: 600;
+    font-style: normal;
+    font-size: 20px;
+    margin-top: -2%;
+    width: 100%;
+    height: 50px;
+    float: left;
+    text-align: left;
+}
+
+.doctor_name {
+    color: white;
+}
+
+.user_additional_info {
+    font-size: 14px;
+    color: #717171;
+    text-align: left;
+}
+
+.user_name p {
+    line-height: 25px;
+}
+
+.user_additional_info p {
+    line-height: 18px;
+}
+
+a {
+    text-decoration: none;
+    color: white;
+}
+
+.user_info_btn {
+    cursor: pointer;
+    width: 150px;
+    padding: 8px 20px;
+    border-radius: 100px;
+    border: 2px solid #2E99FC;
+    background: #01284B;
+    transition: background-color 0.5s ease;
+}
+
+.user_info_btn:hover {
+    background: #2E99FC
+}
+
+.pagination_container {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    display: flex;
+    position: relative;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: nowrap;
+}
+
+.pagination_button {
+    color: #717171;
+    cursor: pointer;
+    padding: 21px;
+}
+
+.pagination_button:hover {
+    color: #2E99FC;
+}
+
+.pagination_dots {
+    color: #717171;
+}
+
+.material-icons {
+    color: #717171;
+    padding: 12px;
+    padding-top: 14px;
+}
+
+.material-icons:hover {
+    cursor: pointer;
+    color: #2E99FC;
+}
+
+.pagination_button.active {
+    color: #2E99FC;
+}
+
+.user_info_btn_container {
+    padding-left: 10px;
+    margin-top: 10px;
+}

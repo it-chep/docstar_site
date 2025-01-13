@@ -1,0 +1,125 @@
+/*IPHONE 15 PRO MAX*/
+@media (max-width: 430px) {
+    .main_img_container {
+        width: 410px;
+    }
+
+    .main_img_container img {
+        width: 410px;
+    }
+
+    .form_wrapper {
+        width: 430px;
+    }
+
+    .form_container form {
+        width: 410px;
+    }
+
+    .form-group {
+        width: 410px;
+    }
+
+    .input-wrapper {
+        height: 50px;
+        width: 410px;
+    }
+
+    .main_title_description {
+        width: 410px;
+    }
+}
+
+@media (max-width: 420px) {
+    .main_img_container {
+        width: 400px;
+    }
+
+    .main_img_container img {
+        width: 400px;
+    }
+
+    .form_wrapper {
+        width: 420px;
+    }
+
+    .form_container form {
+        width: 400px;
+    }
+
+    .form-group {
+        width: 400px;
+    }
+
+    .input-wrapper {
+        height: 50px;
+        width: 400px;
+    }
+
+    .main_title_description {
+        width: 400px;
+    }
+}
+
+/*IPHONE 15 PRO*/
+@media (max-width: 390px) {
+    .main_img_container {
+        width: 370px;
+    }
+
+    .main_img_container img {
+        width: 370px;
+    }
+
+    .form_wrapper {
+        width: 370px;
+    }
+
+    .form_container form {
+        width: 370px;
+    }
+
+    .form-group {
+        width: 370px;
+    }
+
+    .input-wrapper {
+        height: 50px;
+        width: 370px;
+    }
+
+    .main_title_description {
+        width: 370px;
+    }
+}
+
+@media (max-width: 350px) {
+    .main_img_container {
+        width: 330px;
+    }
+
+    .main_img_container img {
+        width: 330px;
+    }
+
+    .form_wrapper {
+        width: 350px;
+    }
+
+    .form_container form {
+        width: 330px;
+    }
+
+    .form-group {
+        width: 330px;
+    }
+
+    .input-wrapper {
+        height: 50px;
+        width: 330px;
+    }
+
+    .main_title_description {
+        width: 330px;
+    }
+}

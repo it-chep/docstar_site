@@ -123,7 +123,7 @@ class CreateNewDoctorApiView(views.APIView):
                 self.notificator_bot(doctor)
                 return JsonResponse(
                     {
-                        "redirect_url": "Доктор успешно создан!",
+                        "redirect_url": reverse("spasibo_club_participant"),
                         "endpoint": reverse('doctor_card', kwargs={'slug': doctor.slug}),
                     },
                     status=status.HTTP_201_CREATED

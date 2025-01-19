@@ -250,6 +250,7 @@ class CreateDoctorForm(forms.Form):
                 birth_date=self.cleaned_data["birth_date"],
                 prodoctorov=self.cleaned_data["prodoctorov"],
                 subscribers_inst=self.cleaned_data["instagram_subscribers"],
+                is_active=False,
             )
             return doctor
         except City.DoesNotExist:

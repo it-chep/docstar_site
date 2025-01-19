@@ -1,9 +1,24 @@
 @media (max-width: 420px) {
+    .settings_icon_wrapper {
+        display: none;
+    }
+
+    .search-doctors-container {
+        width: 370px;
+    }
+
+    .search_doctors_modal .modal-content {
+        width: 370px;
+        max-height: 385px;
+        margin: 215px auto 0;
+    }
+
     .doctor_detail_card_container {
         width: 420px;
         padding-left: 25px;
         text-align: center;
         margin-bottom: 40px;
+        margin-top: 20px;
     }
 
     .doctor_detail_card {
@@ -39,7 +54,8 @@
 
     .doctor_info {
         width: 100%;
-        .doctor_name h1{
+
+        .doctor_name h1 {
             font-size: 24px;
         }
     }
@@ -80,11 +96,27 @@
 }
 
 @media (max-width: 350px) {
+
+    .search-doctors-container {
+        width: 300px;
+    }
+
+    .settings_icon_wrapper {
+        display: none;
+    }
+
+    .search_doctors_modal .modal-content {
+        width: 300px;
+        max-height: 330px;
+        margin: 190px auto 0;
+    }
+
     .doctor_detail_card_container {
         width: 350px;
         padding-left: 25px;
         text-align: center;
         margin-bottom: 40px;
+        margin-top: 20px;
     }
 
     .doctor_detail_card {
@@ -120,7 +152,8 @@
 
     .doctor_info {
         width: 100%;
-        .doctor_name h1{
+
+        .doctor_name h1 {
             font-size: 24px;
         }
     }

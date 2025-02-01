@@ -179,16 +179,16 @@ class CreateDoctorForm(forms.Form):
         city_id = self.cleaned_data.get('city')
         if not city_id:
             raise ValidationError('Обязательное поле.')
-        if city := City.objects.filter(id=city_id).exists():
-            return city
+        if City.objects.filter(id=city_id).exists():
+            return city_id
         raise ValidationError('Указанного города не существует.')
 
     def clean_speciallity(self):
         speciallity_id = self.cleaned_data.get('speciallity')
         if not speciallity_id:
             raise ValidationError('Обязательное поле.')
-        if speciallity := Speciallity.objects.filter(id=speciallity_id).exists():
-            return speciallity
+        if Speciallity.objects.filter(id=speciallity_id).exists():
+            return speciallity_id
         raise ValidationError('Указанной специальности не существует.')
 
     def _clean_social_link(self, field_value, platform_url):

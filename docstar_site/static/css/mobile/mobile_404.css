@@ -1,29 +1,58 @@
 @media (max-width: 420px) {
+    .search-doctors-container {
+        width: 385px !important;
+    }
+
+    .settings_icon_wrapper {
+        display: none;
+    }
+
+    .search_doctors_modal .modal-content {
+        margin: 215px auto 0;
+    }
+
     .not-found-container {
         width: 420px;
     }
 
+    .not-found-page {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
     .not-found-content {
-        gap: 50px;
+        gap: 20px;
     }
 
     .error_code {
-        font-size: 60px;
+        font-size: 24px;
     }
 
     .error_description {
-        font-size: 50px;
-        line-height: 60px;
+        font-size: 22px;
+        line-height: 22px;
     }
 
     .user_info_btn {
-        font-size: 40px;
-        padding: 15px 60px;
+        font-size: 16px;
+        padding: 15px 20px;
     }
 
 }
 
 @media (max-width: 350px) {
+    .search-doctors-container {
+        width: 300px !important;
+    }
+
+    .search_doctors_modal .modal-content {
+        margin: 190px auto 0;
+    }
+
+    .settings_icon_wrapper {
+        display: none;
+    }
+
     .logo {
         display: block;
     }

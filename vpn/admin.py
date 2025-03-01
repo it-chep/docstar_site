@@ -7,7 +7,7 @@ class BloggerAdmin(admin.ModelAdmin):
     list_filter = ('utm',)
     search_fields = ('name', 'username')
     list_display_links = ('id', 'name')
-    change_form_template = 'admin/change_blogger_form.html'
+    change_form_template = 'admin/change_form.html'
 
 
 class UTMAdmin(admin.ModelAdmin):

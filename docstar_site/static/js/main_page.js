@@ -15,7 +15,7 @@ function resizeMainTitle() {
 function relocateMainTitle($mainTitle) {
     const windowWidth = $(window).width();
     if (windowWidth <= 420) {
-        $mainTitle.detach().insertAfter('.logo-wrapper');
+        $mainTitle.detach().insertAfter('.banner_new_doctor_mobile');
     } else {
         $mainTitle.detach().prependTo('.doctors_container');
     }
@@ -87,7 +87,8 @@ function loadDoctors(page) {
                                             <p>${doctor.name}</p>
                                         </div>
                                         <div class="user_additional_info">
-                                            <p>${doctor.speciality}, г. ${doctor.city}</p>
+                                            <p>${doctor.speciality}</p>
+                                            <p>📍${doctor.city}</p>
                                         </div>
                                     </div>
                                     <a class="user_info_btn_container" href="${doctor.doctor_url}">

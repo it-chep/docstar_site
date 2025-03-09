@@ -1,5 +1,8 @@
 $(document).ready(function () {
     $(".submit-button-container").on("click", function () {
+        const $button = $(this);
+        $button.prop("disabled", true);
+
         const formData = $("#create-doctor-form").serialize();
 
         $.ajax({
@@ -7,10 +10,9 @@ $(document).ready(function () {
             type: "POST",
             data: formData,
             success: function (response) {
-                alert("Анкета успешно отправлена!");
+                window.location.href = response.redirect_url;
             },
             error: function (response, status, error) {
-
                 const errors = response.responseJSON.errors;
                 if (errors) {
                     displayErrors(errors);
@@ -20,6 +22,8 @@ $(document).ready(function () {
                 if (Alert) {
                     alert(Alert);
                 }
+
+                $button.prop("disabled", false);
             },
         });
     });

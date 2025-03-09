@@ -78,6 +78,38 @@
     font-style: normal;
 }
 
+/* DrukCyr Bold */
+@font-face {
+    font-family: 'DrukCyr';
+    src: url('../fonts/DrukCyr/DrukCyr-Bold.ttf') format('truetype');
+    font-weight: 800;
+    font-style: normal;
+}
+
+/* DrukCyr Medium */
+@font-face {
+    font-family: 'DrukCyr';
+    src: url('../fonts/DrukCyr/DrukCyr-Medium.ttf') format('truetype');
+    font-weight: 600;
+    font-style: normal;
+}
+
+/* DrukCyr Super */
+@font-face {
+    font-family: 'DrukCyr';
+    src: url('../fonts/DrukCyr/DrukCyr-Super.ttf') format('truetype');
+    font-weight: 900;
+    font-style: normal;
+}
+
+/* DrukCyr Heavy */
+@font-face {
+    font-family: 'DrukCyr';
+    src: url('../fonts/DrukCyr/DrukCyr-Heavy.ttf') format('truetype');
+    font-weight: 700;
+    font-style: normal;
+}
+
 * {
     margin: 0;
     padding: 0;

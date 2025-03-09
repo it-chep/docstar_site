@@ -22,7 +22,7 @@ function renderPagination(currentPage, totalPages) {
             loadDoctors(currentPage - 1);
         });
     }
-    if (totalPages - currentPage < 3) {
+    if (totalPages - currentPage < 3 && totalPages > 4) {
         $paginationContainer.append(
             `<span class="pagination_button" data-page="1">
                         1

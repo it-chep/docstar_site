@@ -4,7 +4,7 @@ import requests
 from django.http import JsonResponse
 from django.db.models import Q
 from django.conf import settings
-from django.urls import reverse
+from django.urls import reverse, NoReverseMatch
 from rest_framework import views, status
 
 from docstar_site.models import Doctor
@@ -19,6 +19,11 @@ class BaseDoctorApiView:
     def prepare_doctors_data(doctors) -> list[dict]:
         doctors_list = []
         for doctor in doctors:
+            try:
+                reverse('doctor_card', kwargs={'slug': doctor.slug})
+            except NoReverseMatch as e:
+                continue
+
             doctors_list.append({
                 'name': doctor.name,
                 'city': doctor.city.name,
@@ -118,7 +123,7 @@ class CreateNewDoctorApiView(views.APIView):
                 self.notificator_bot(doctor)
                 return JsonResponse(
                     {
-                        "redirect_url": "Доктор успешно создан!",
+                        "redirect_url": reverse("spasibo_club_participant"),
                         "endpoint": reverse('doctor_card', kwargs={'slug': doctor.slug}),
                     },
                     status=status.HTTP_201_CREATED

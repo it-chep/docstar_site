@@ -91,6 +91,10 @@
         padding-right: 10px;
         padding-bottom: 10px;
     }
+
+    .user_name p {
+        line-height: 25px;
+    }
 }
 
 @media (max-width: 350px) {
@@ -186,5 +190,9 @@
 
     .doctors_list_header_description {
         letter-spacing: 0;
+    }
+
+    .user_name p {
+        line-height: 25px;
     }
 }

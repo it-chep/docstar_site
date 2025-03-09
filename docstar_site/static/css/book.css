@@ -1,21 +1,21 @@
 @font-face {
     font-family: 'CYR-heavy';
-    src: url('../fonts/DrukCyr-Heavy.ttf') format('truetype');
+    src: url('../fonts/DrukCyr/DrukCyr-Heavy.ttf') format('truetype');
 }
 
 @font-face {
     font-family: 'CYR-Medium';
-    src: url('../fonts/DrukCyr-Medium.ttf') format('truetype');
+    src: url('../fonts/DrukCyr/DrukCyr-Medium.ttf') format('truetype');
 }
 
 @font-face {
     font-family: 'CYR-SUPER';
-    src: url('../fonts/DrukCyr-Super.ttf') format('truetype');
+    src: url('../fonts/DrukCyr/DrukCyr-Super.ttf') format('truetype');
 }
 
 @font-face {
     font-family: 'CYR-Bold';
-    src: url('../fonts/DrukCyr-Bold.ttf') format('truetype');
+    src: url('../fonts/DrukCyr/DrukCyr-Bold.ttf') format('truetype');
 }
 
 @font-face {
@@ -25,12 +25,12 @@
 
 @font-face {
     font-family: 'LAST';
-    src: url('../fonts/DrukWideCyTTHeavy.ttf') format('truetype');
+    src: url('../fonts/DrukCyr/DrukWideCyTTHeavy.ttf') format('truetype');
 }
 
 @font-face {
     font-family: 'Medi';
-    src: url('../fonts/FontsFree-Net-Druk-Wide-Medium.ttf') format('truetype');
+    src: url('../fonts/DrukCyr/FontsFree-Net-Druk-Wide-Medium.ttf') format('truetype');
 }
 
 

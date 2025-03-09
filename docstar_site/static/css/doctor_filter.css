@@ -6,6 +6,39 @@
     padding-bottom: 20px;
 }
 
+.banner_new_doctor_mobile {
+    display: none;
+}
+
+.banner_new_doctor_inline {
+    background-color: #01284B;
+    border-radius: 18px;
+    padding: 20px;
+    border: 2px solid #2E99FC;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.banner_new_doctor_header {
+    width: 100%;
+    text-align: center;
+    font-weight: 600;
+    font-size: 35px;
+    font-family: 'DrukCyr', 'sans-serif';
+}
+
+.banner_new_doctor_button {
+    text-align: center;
+    padding: 10px 20px;
+    width: 100%;
+    background-color: #2E99FC;
+    border-radius: 100px;
+    font-size: 16px;
+    font-family: 'Proxima Nova', sans-serif;
+}
+
 .filter-section {
     padding: 10px 20px 10px 28px;
     border-radius: 8px;

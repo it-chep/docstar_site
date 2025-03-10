@@ -85,6 +85,7 @@ class Doctors(DataMixin, ListView):
         context['cities'] = City.objects.all()
         context['specialities'] = Speciallity.objects.all()
         context["title"] = "Врачи MEDBLOGERS"
+        context["new_doctor_banner"] = True
         return context
 
 

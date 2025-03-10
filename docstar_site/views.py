@@ -1,30 +1,19 @@
-import os
-
 from asgiref.sync import sync_to_async
-from django.conf.urls import handler500
-from django.contrib.auth.mixins import LoginRequiredMixin
+
 from django.contrib.sites import requests
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import Q
-from django.conf import settings
-from django.http import HttpResponse, Http404
+
+from django.http import HttpResponse, JsonResponse
 from django.forms import model_to_dict
-from django.shortcuts import render, get_object_or_404, redirect
-from django.template import RequestContext
+from django.shortcuts import render
 from django.views.decorators.cache import cache_page
-from django.views.generic import ListView, DetailView, UpdateView, TemplateView
-from rest_framework import generics
+from django.views.generic import ListView, DetailView, TemplateView
 from rest_framework.response import Response
 from rest_framework.views import APIView
 import requests
-from time import sleep
-import threading
 
-from docstar_site.forms import UpdateDoc, DoctorSearchForm, CreateDoctorForm
-from docstar_site.models import *
+from docstar_site.forms import DoctorSearchForm, CreateDoctorForm
 from docstar_site.utils import *
-from docstar_site.permissions import DoctorPermissionsMixin, MembersPermissionsMixin
-from docstar_site.Treads import get_users_export_id
 from docstar_site.functions import *
 
 import logging
@@ -35,6 +24,10 @@ logger = logging.getLogger(__name__)
 @cache_page(60 * 60 * 10)
 def page_not_found_view(request, exception):
     return render(request, 'docstar/404.html', status=404, )
+
+
+def health_check(request):
+    return JsonResponse({"status": "ok"}, status=200)
 
 
 @cache_page(60 * 60 * 10)
@@ -85,6 +78,7 @@ class Doctors(DataMixin, ListView):
         context['cities'] = City.objects.all()
         context['specialities'] = Speciallity.objects.all()
         context["title"] = "Врачи MEDBLOGERS"
+        context["new_doctor_banner"] = True
         return context
 
 

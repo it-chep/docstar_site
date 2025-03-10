@@ -3,6 +3,8 @@ from django.urls import path
 from docstar_site.views import *
 
 urlpatterns = [
+    path("health/", health_check, name="health_check"),
+
     path('spasibo_book/', spasibo_book, name='spasibo_book'),
     path('new_club_participant/', NewClubParticipantView.as_view(), name="new_club_participant"),
     path('spasibo_club_participant/', SpasiboClubParticipantView.as_view(), name="spasibo_club_participant"),

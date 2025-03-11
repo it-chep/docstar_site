@@ -15,10 +15,19 @@ $(document).ready(function () {
 
     $searchDoctorContainer.find('input').on('focus', function (event) {
         $('.search_doctors_modal').show()
-        $('.modal-content').css({
+        const element = $('.search-doctors-container')[0];
+        const rect = element.getBoundingClientRect();
+        const modalContent = $('.modal-content')
+        modalContent.css({
             'top': event.target.getBoundingClientRect().top,
             'margin': '75px auto 0'
         });
+        if (event.target.getBoundingClientRect().top > rect) {
+            modalContent.css({
+                'top': rect.top,
+                'margin': '75px auto 0'
+            });
+        }
     })
 
     $(document).on("scroll", function () {

@@ -13,8 +13,21 @@ $(document).ready(function () {
         }
     );
 
-    $searchDoctorContainer.find('input').on('focus', function () {
+    $searchDoctorContainer.find('input').on('focus', function (event) {
         $('.search_doctors_modal').show()
+        $('.modal-content').css({
+            'top': event.target.getBoundingClientRect().top,
+            'margin': '75px auto 0'
+        });
+    })
+
+    $(document).on("scroll", function () {
+        const element = $('.search-doctors-container')[0];
+        const rect = element.getBoundingClientRect();
+        $('.modal-content').css({
+            'top': rect.top + 10,
+            'margin': '75px auto 0'
+        });
     })
 
     $(document).on('click', function (event) {

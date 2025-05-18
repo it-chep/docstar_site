@@ -188,4 +188,12 @@
     .banner_new_doctor_mobile .banner_new_doctor_inline {
         margin-bottom: 0;
     }
+
+    .submit_button p {
+        font-size: 16px;
+    }
+
+    .clear_button p {
+        font-size: 16px;
+    }
 }

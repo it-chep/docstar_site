@@ -36,7 +36,7 @@
                 <div class="filter-list" id="city-list">
                     {% for city in cities %}
                         <label for="city-{{ city.id }}" class="checkbox-label city">
-                            <input type="checkbox" id="city-{{ city.id }}" class="checkbox">
+                            <input type="checkbox" id="city-{{ city.id }}" data-id="{{ city.id }}" class="checkbox">
                             <span class="checkbox-view">
                                 <img class="checkbox-icon" src="{% static 'img/homepage/check_mark.svg' %}">
                             </span>
@@ -66,7 +66,7 @@
                 <div class="filter-list" id="speciality-list">
                     {% for speciality in specialities %}
                         <label for="speciality-{{ speciality.id }}" class="checkbox-label speciality">
-                            <input type="checkbox" id="speciality-{{ speciality.id }}" class="checkbox">
+                            <input type="checkbox" id="speciality-{{ speciality.id }}" data-id="{{ speciality.id }}" class="checkbox">
                             <span class="checkbox-view">
                                 <img class="checkbox-icon" src="{% static 'img/homepage/check_mark.svg' %}">
                             </span>
@@ -76,5 +76,14 @@
                 </div>
             </div>
         </div>
+
+        <div class="submit_button">
+            <p>Применить</p>
+        </div>
+
+        <div class="clear_button">
+            <p>Сбросить</p>
+        </div>
+
     </div>
 </div>

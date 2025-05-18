@@ -180,3 +180,10 @@
     padding: 10px;
     text-align: center;
 }
+
+.submit_button p{
+    font-size: 18px;
+}
+.clear_button p{
+    font-size: 18px;
+}

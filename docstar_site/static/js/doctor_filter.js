@@ -11,6 +11,7 @@ function showAll(listId) {
     }
 }
 
+// initializeFilterClickAction инициализация тоглов открывания фильтров "Города", "Специальности"
 function initializeFilterClickAction() {
     const cityFilterHeader = document.getElementById('city-filter-header')
     const specialityFilterHeader = document.getElementById('speciality-filter-header')
@@ -36,6 +37,7 @@ function showFiltersBySearchText(object, searchText) {
     }
 }
 
+// initializeSearchFiltersInput инициализация поиска фильтров "Города", "Специальности"
 function initializeSearchFiltersInput() {
     const citySearchInput = $('#citySearchInput')
     const cityList = $('#city-list .checkbox-label')
@@ -58,24 +60,165 @@ function initializeSearchFiltersInput() {
     });
 }
 
+// closeMobileFilterSidebar убирает на мобилке шторку фильтров
+function closeMobileFilterSidebar() {
+    const windowWidth = $(window).width();
+    if (windowWidth <= 420) {
+        $('.filters_wrapper').fadeOut(300);
+    }
+}
+
+// initializeCleanFilterBtn инициализация кнопки "Очистить" фильтры
+function initializeCleanFilterBtn() {
+    const clearBtn = $('.clear_button');
+
+    clearBtn.on('click', function (event) {
+        // очищаем фильтры над списком врачей
+        $('.active_filters_wrapper').empty();
+        // убираем чек у всех фильтров
+        $(`.checkbox-label`).each(function () {
+            $(this).find('input[type="checkbox"]').prop('checked', false);
+        });
+        // убираем фильтры из URL
+        clearAllFilters();
+        // убираем на мобилке шторку
+        closeMobileFilterSidebar();
+        // грузим 1 страницу
+        filterDoctors(getFilterQueryParams(), 1);
+    })
+}
+
+// clearAllFilters - полностью очищает фильтры города и специальности из URL
+function clearAllFilters() {
+    const urlParams = new URLSearchParams(window.location.search);
+
+    urlParams.delete('city');
+    urlParams.delete('speciality');
+
+    const newUrl = urlParams.toString()
+        ? `${window.location.pathname}?${urlParams}`
+        : window.location.pathname;
+
+    history.pushState(null, null, newUrl);
+}
+
+// pushQueryParamsToURL - пушит новый фильтр в поисковую строку
+function pushQueryParamsToURL() {
+    const selectedCities = [];
+    const selectedSpecialities = [];
+
+    // Собираем ID выбранных городов
+    $('.checkbox-label.city input[type="checkbox"]:checked').each(function () {
+        selectedCities.push($(this).data('id')); // или $(this).attr('id').split('-')[1]
+    });
+
+    // Собираем ID выбранных специальностей
+    $('.checkbox-label.speciality input[type="checkbox"]:checked').each(function () {
+        selectedSpecialities.push($(this).data('id')); // или $(this).attr('id').split('-')[1]
+    });
+
+    // Формируем URL-параметры
+    const params = new URLSearchParams();
+
+    if (selectedCities.length > 0) {
+        params.append('city', selectedCities.join(','));
+    }
+
+    if (selectedSpecialities.length > 0) {
+        params.append('speciality', selectedSpecialities.join(','));
+    }
+
+    const newUrl = `${window.location.pathname}?${params.toString()}`;
+
+    // Меняем URL в адресной строке (без перезагрузки)
+    history.pushState(null, null, newUrl);
+}
+
+
+// initializeSubmitFilterBtn инициализация кнопки "Применить" фильтры
+function initializeSubmitFilterBtn() {
+    const submitButton = $('.submit_button');
+
+    submitButton.on('click', function (event) {
+        event.preventDefault();
+
+        // Очищаем текущие активные фильтры
+        $('.active_filters_wrapper').empty();
+
+        // Собираем все выбранные чекбоксы из filters-inline-wrapper
+        $('.filters-inline-wrapper input[type="checkbox"]:checked').each(function () {
+            const checkbox = $(this);
+            const labelText = checkbox.closest('.checkbox-label').find('.checkbox-text').text();
+            const className = checkbox.closest('.checkbox-label').hasClass('speciality') ? 'speciality' : 'city';
+
+            // Добавляем фильтр в active_filters_wrapper
+            $('.active_filters_wrapper').append(`
+            <div class="active_filter" data-${className}="${labelText}">
+                <p class="active_filter_text">${labelText}</p>
+                <div class="active_filter_delete_btn">
+                    <span class="material-icons cancel">cancel</span>
+                </div>
+            </div>
+        `);
+        });
+        // пушим параметры в URL пользователя
+        pushQueryParamsToURL()
+
+        // Применяем фильтры
+        filterDoctors(getFilterQueryParams(), 1);
+
+        // убираем на мобилке шторку
+        closeMobileFilterSidebar();
+    })
+}
+
+// cleanFilterQueryParam получает объект чекбокса специальности или города
+function cleanFilterQueryParam(checkbox) {
+    const $checkbox = $(checkbox);
+
+    // "city-1" или "speciality-3"
+    const id = $checkbox.attr('id');
+    const [type, value] = id.split('-');
+
+    // получаем параметр
+    const urlParams = new URLSearchParams(window.location.search);
+    const currentValues = urlParams.get(type)?.split(',') || [];
+
+    const updatedValues = currentValues.filter(v => v !== value);
+
+    // чистим параметры
+    if (updatedValues.length > 0) {
+        urlParams.set(type, updatedValues.join(','));
+    } else {
+        urlParams.delete(type);
+    }
+
+    // удаляем из урла
+    const newUrl = urlParams.toString() ? `${window.location.pathname}?${urlParams.toString()}` : window.location.pathname;
+    history.pushState(null, null, newUrl);
+}
+
 $(document).ready(function () {
+    // инициализация тоглов открывания фильтров "Города", "Специальности"
     initializeFilterClickAction();
+    // инициализация поиска фильтров "Города", "Специальности"
     initializeSearchFiltersInput();
+    // инициализация кнопки "Очистить" фильтры
+    initializeCleanFilterBtn();
+    // инициализация кнопки "Применить" фильтры
+    initializeSubmitFilterBtn();
+
     sortList("city-list");
     sortList("speciality-list");
-
-    $('.checkbox-label.speciality, .checkbox-label.city').click(function (event) {
-        const className = $(this).hasClass('speciality') ? 'speciality' : 'city';
-
-        handleFilterClick.call(this, event, className);
-    });
 
     $(document).on('click', '.active_filter_delete_btn', function (event) {
         const text = $(this).siblings('.active_filter_text').text();
         $(this).parent('.active_filter').remove();
         $(`.checkbox-label`).each(function () {
             if ($(this).find('.checkbox-text').text() === text) {
-                $(this).find('input[type="checkbox"]').prop('checked', false);
+                let checkbox = $(this).find('input[type="checkbox"]')
+                cleanFilterQueryParam(checkbox);
+                checkbox.prop('checked', false);
             }
         });
 
@@ -147,9 +290,7 @@ function filterDoctors(filters, page = 1) {
 
     const $doctorListContainer = $('.all_doctors');
     $.ajax({
-        url: `/api/v1/filter-doctor/?${filters}&page=${page}`,
-        method: 'GET',
-        success: function (response) {
+        url: `/api/v1/filter-doctor/?${filters}&page=${page}`, method: 'GET', success: function (response) {
             $doctorListContainer.empty();
 
             if (response.data && response.data.length > 0) {
@@ -184,8 +325,7 @@ function filterDoctors(filters, page = 1) {
                 $doctorListContainer.append('<p class="white_text">Доктора не найдены.</p>');
                 renderPagination(0, 0);
             }
-        },
-        error: function (xhr, status, error) {
+        }, error: function (xhr, status, error) {
             console.error('Ошибка при фильтрации врачей:', error);
             $doctorListContainer.empty().append('<p class="white_text">Произошла ошибка при загрузке данных.</p>');
         }

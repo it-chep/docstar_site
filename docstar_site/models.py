@@ -17,7 +17,9 @@ class Doctor(models.Model):
     vk_url = models.CharField(verbose_name='Аккаунт VK', max_length=100, null=True, blank=True)
     dzen_url = models.CharField(verbose_name='Аккаунт Яндекс.Дзен', max_length=100, null=True, blank=True)
     tg_url = models.CharField(verbose_name='Аккаунт TG', max_length=100, null=True, blank=True)
+    tg_channel_url = models.CharField(verbose_name='Канал TG', max_length=100, null=True, blank=True)
     youtube_url = models.CharField(verbose_name='Аккаунт YOUTUBE', max_length=100, null=True, blank=True)
+    tiktok_url = models.CharField(verbose_name='Аккаунт TikTok', max_length=100, null=True, blank=True)
 
     city = models.ForeignKey('City', on_delete=models.PROTECT, null=True, blank=True, verbose_name="Город")
     medical_directions = models.CharField(verbose_name='Направление медицины', max_length=255, null=True, blank=True)
@@ -34,7 +36,7 @@ class Doctor(models.Model):
     )
     doctor = models.ForeignKey(User, on_delete=models.PROTECT, blank=True, null=True)
 
-    prodoctorov = models.CharField(verbose_name="ПРОДОКТОРОВ", null=True, max_length=255, unique=False, blank=True)
+    prodoctorov = models.CharField(verbose_name="Ссылка для записи", null=True, max_length=255, unique=False, blank=True)
     subscribers_inst = models.CharField(verbose_name="Подписчики инста", null=True, max_length=255, blank=True)
 
     age = models.IntegerField(verbose_name="Возраст", null=True, blank=True)
@@ -49,6 +51,7 @@ class Doctor(models.Model):
     def avatar_url(self):
         if self.avatar and hasattr(self.avatar, 'url'):
             return self.avatar.url
+        return None
 
     def get_absolute_url(self):
         return reverse('doctor_card', kwargs={'slug': self.slug})
@@ -76,6 +79,7 @@ class Lection(models.Model):
     def yt_link(self):
         if self.youtube_url and hasattr(self.youtube_url, 'url'):
             return self.youtube_url.url
+        return None
 
     def get_absolute_url(self):
         return reverse('lection_card', kwargs={'lection_id': self.pk})

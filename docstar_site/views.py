@@ -91,8 +91,23 @@ class ShowDoc(DataMixin, DetailView):
         context["title"] = f"{self.object.name}"
         return context
 
+    def prepare_tg_url(self):
+        tg = self.object.tg_url
+        tg = tg.replace('@', "")
+        if tg and "https" not in tg:
+            self.object.tg_url = f"https://t.me/{tg}"
+
+    def prepare_doctor_link(self):
+        doc_link = self.object.prodoctorov
+        some_url = self.object.inst_url or self.object.tg_url or self.object.vk_url
+        if doc_link and "http" not in doc_link and not doc_link[0:4] == "http":
+            self.object.prodoctorov = some_url
+
     def get(self, request, *args, **kwargs):
-        self.object = self.get_object()
+        self.object: Doctor = self.get_object()
+        self.prepare_tg_url()
+        self.prepare_doctor_link()
+
         context = self.get_context_data()
         return self.render_to_response(context)
 

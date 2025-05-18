@@ -12,6 +12,7 @@ class DoctorAdmin(admin.ModelAdmin):
     list_display = ("id", 'name', 'email', 'city', 'speciallity', 'is_active')
     search_fields = ("email", "name",)
     prepopulated_fields = {"slug": ("name",)}
+    ordering = ("id",)
 
     list_filter = ('city', 'speciallity', 'is_active')
     raw_id_fields = ('city', 'speciallity')

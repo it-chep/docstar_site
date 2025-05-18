@@ -66,6 +66,7 @@ $(document).ready(function () {
 
     $('.checkbox-label.speciality, .checkbox-label.city').click(function (event) {
         const className = $(this).hasClass('speciality') ? 'speciality' : 'city';
+
         handleFilterClick.call(this, event, className);
     });
 
@@ -164,7 +165,8 @@ function filterDoctors(filters, page = 1) {
                                         <p>${doctor.name}</p>
                                     </div>
                                     <div class="user_additional_info">
-                                        <p>${doctor.speciality}, г. ${doctor.city}</p>
+                                        <p>${doctor.speciality}</p>
+                                        <p>📍${doctor.city}</p>
                                     </div>
                                 </div>
                                 <a class="user_info_btn_container" href="${doctor.doctor_url}">

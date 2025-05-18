@@ -1,18 +1,22 @@
+import uuid
+
 from translate import Translator
 from docstar_site.models import *
 
 
-def get_eng_slug(text, src='ru', dest='en'):
+def get_eng_slug(text, src='ru', dest='en') -> str:
     try:
         text = text.lower()
         text = "-".join(text.split(" "))
         translator = Translator(from_lang=src, to_lang=dest)
         translation = translator.translate(text)
+        if " " in translation:
+            translation = translation.replace(" ", "-")
+
         return translation
 
     except Exception as e:
-        return e
-
+        return str(uuid.uuid4())
 
 def validate_data(data):
     valid_ans = str(data if data != '' else '---')
@@ -25,6 +29,7 @@ def validate_foreign(city, speciallity, city_list, spec_list):
 
     if speciallity in spec_list:
         return Speciallity.objects.get(name=speciallity)
+    return None
 
 
 def subs_to_str(number):
@@ -46,6 +51,7 @@ def subs_to_str(number):
                 return str(number // 1000000) + '.' + str(number // 100000 % 10) + 'м'
             else:
                 return str(number // 1000000) + 'м'
+        return None
     except Exception as ex:
         return 0
 

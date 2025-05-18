@@ -102,6 +102,14 @@ class CreateDoctorForm(forms.Form):
         }),
     )
 
+    telegram_channel = forms.CharField(
+        label='Ссылка на ваш канал в телеграм',
+        required=False,
+        widget=forms.TextInput(attrs={
+            'placeholder': 'Можете оставить пустым'
+        }),
+    )
+
     city = forms.ChoiceField(
         label='Выберите город (Если вашего нет, напишите об этом в бота)',
         required=True,
@@ -113,13 +121,6 @@ class CreateDoctorForm(forms.Form):
         choices=[(None, None)] + [(spec.id, spec.name) for spec in Speciallity.objects.all()]
     )
 
-    medical_directions = forms.CharField(
-        label='Направление медицины',
-        required=False,
-        widget=forms.TextInput(attrs={
-            'placeholder': 'Можете оставить пустым'
-        }),
-    )
     additional_speciallity = forms.CharField(
         label='Дополнительная специальность',
         widget=forms.TextInput(attrs={
@@ -133,6 +134,9 @@ class CreateDoctorForm(forms.Form):
     )
     prodoctorov = forms.CharField(
         label='Куда записываться к вам на прием?',
+        widget=forms.TextInput(attrs={
+            'placeholder': 'Укажите ссылку на сайт/соц.сеть'
+        }),
         required=False,
     )
 
@@ -145,6 +149,7 @@ class CreateDoctorForm(forms.Form):
             not self.cleaned_data.get('instagram_username'),
             not self.cleaned_data.get('vk_username'),
             not self.cleaned_data.get('telegram_username'),
+            not self.cleaned_data.get('telegram_channel'),
             not self.cleaned_data.get('dzen_username'),
             not self.cleaned_data.get('youtube_username'),
         ]):
@@ -179,7 +184,7 @@ class CreateDoctorForm(forms.Form):
         city_id = self.cleaned_data.get('city')
         if not city_id:
             raise ValidationError('Обязательное поле.')
-        if City.objects.filter(id=city_id).exists():
+        if City.objects.filter(id=int(city_id)).exists():
             return city_id
         raise ValidationError('Указанного города не существует.')
 
@@ -187,7 +192,7 @@ class CreateDoctorForm(forms.Form):
         speciallity_id = self.cleaned_data.get('speciallity')
         if not speciallity_id:
             raise ValidationError('Обязательное поле.')
-        if Speciallity.objects.filter(id=speciallity_id).exists():
+        if Speciallity.objects.filter(id=int(speciallity_id)).exists():
             return speciallity_id
         raise ValidationError('Указанной специальности не существует.')
 
@@ -222,11 +227,17 @@ class CreateDoctorForm(forms.Form):
         data = self.cleaned_data.get("youtube_username")
         return self._clean_social_link(data, "https://youtube.com/")
 
+    def clean_telegram_channel(self):
+        data = self.cleaned_data.get("telegram_channel")
+        return self._clean_social_link(data, "https://t.me/")
+
     def clean_prodoctorov(self):
         data = self.cleaned_data.get("prodoctorov")
         if not data:
             data = self.cleaned_data.get("instagram_username")
             return self._clean_social_link(data, "https://instagram.com/")
+        if data and "http" not in data and not data[0:4] == "http":
+            raise ValidationError("Пожалуйста, укажите ссылку на сайт или соц.сеть")
         return self._clean_social_link(data, "")
 
     def save(self, commit=True):
@@ -240,9 +251,9 @@ class CreateDoctorForm(forms.Form):
                 vk_url=self.cleaned_data["vk_username"],
                 dzen_url=self.cleaned_data["dzen_username"],
                 tg_url=self.cleaned_data["telegram_username"],
+                tg_channel_url=self.cleaned_data["telegram_channel"],
                 youtube_url=self.cleaned_data["youtube_username"],
                 city_id=self.cleaned_data["city"],
-                medical_directions=self.cleaned_data["medical_directions"],
                 speciallity_id=self.cleaned_data["speciallity"],
                 additional_speciallity=self.cleaned_data["additional_speciallity"],
                 main_blog_theme=self.cleaned_data["main_blog_theme"],

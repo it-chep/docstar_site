@@ -162,3 +162,21 @@
 .active_filter:hover {
     background: #FF3737;
 }
+
+.submit_button {
+    background: #2F9BFF;
+    color: #fff;
+    padding: 10px;
+    border-radius: 8px;
+    margin: 15px 20px 0px;
+    text-align: center;
+}
+
+.clear_button {
+    color: rgba(255, 255, 255, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 8px;
+    margin: 15px 20px 0px;
+    padding: 10px;
+    text-align: center;
+}

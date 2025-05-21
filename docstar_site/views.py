@@ -93,6 +93,9 @@ class ShowDoc(DataMixin, DetailView):
 
     def prepare_tg_url(self):
         tg = self.object.tg_url
+        if not tg:
+            return
+
         tg = tg.replace('@', "")
         if tg and "https" not in tg:
             self.object.tg_url = f"https://t.me/{tg}"

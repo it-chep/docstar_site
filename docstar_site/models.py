@@ -1,5 +1,8 @@
+import boto3
+import os
+from os import path
+
 from django.db import models
-from django.template.defaultfilters import slugify
 from django.urls import reverse
 from django.contrib.auth.models import User
 from django.conf import settings
@@ -36,7 +39,8 @@ class Doctor(models.Model):
     )
     doctor = models.ForeignKey(User, on_delete=models.PROTECT, blank=True, null=True)
 
-    prodoctorov = models.CharField(verbose_name="Ссылка для записи", null=True, max_length=255, unique=False, blank=True)
+    prodoctorov = models.CharField(verbose_name="Ссылка для записи", null=True, max_length=255, unique=False,
+                                   blank=True)
     subscribers_inst = models.CharField(verbose_name="Подписчики инста", null=True, max_length=255, blank=True)
 
     age = models.IntegerField(verbose_name="Возраст", null=True, blank=True)

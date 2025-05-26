@@ -1,6 +1,14 @@
 from django.urls import path
+from django.views.decorators.cache import cache_page
 
-from docstar_site.views import *
+from docstar_site.views import (
+    health_check,
+    spasibo_book,
+    NewClubParticipantView,
+    SpasiboClubParticipantView,
+    ShowDoc,
+    Doctors,
+)
 
 urlpatterns = [
     path("health/", health_check, name="health_check"),

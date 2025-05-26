@@ -17,6 +17,8 @@ class DoctorAdmin(admin.ModelAdmin):
     list_filter = ('city', 'speciallity', 'is_active')
     raw_id_fields = ('city', 'speciallity')
 
+    readonly_fields = ('s3_image',)
+
 
 class SpeciallityAdmin(admin.ModelAdmin):
     list_display = ("id", 'name',)

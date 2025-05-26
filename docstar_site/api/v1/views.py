@@ -27,11 +27,21 @@ class BaseDoctorApiView:
             doctors_list.append({
                 'name': doctor.name,
                 'city': doctor.city.name,
+                'slug': doctor.slug,
                 'speciality': doctor.speciallity.name,
-                'avatar_url': doctor.avatar.url if doctor.avatar else None,
                 'doctor_url': doctor.get_absolute_url(),
             })
         return doctors_list
+
+    def enrich_photo_from_s3(self, doctors_list) -> list:
+        photos_map = settings.S3_CLIENT.get_user_photos()
+        enriched_photos = []
+
+        for doctor in doctors_list:
+            doctor['avatar_url'] = photos_map.get(doctor['slug'], None)
+            enriched_photos.append(doctor)
+
+        return enriched_photos
 
     def get_pages_and_doctors_with_offset(self, current_page: int, doctors):
 
@@ -59,7 +69,7 @@ class SearchDoctorApiView(BaseDoctorApiView, views.APIView):
             is_active=True,
         ).order_by('name')[:self.limit].select_related('city', 'speciallity')
 
-        doctors_list = self.prepare_doctors_data(doctors)
+        doctors_list = self.enrich_photo_from_s3(self.prepare_doctors_data(doctors))
 
         return JsonResponse({'data': doctors_list}, status=status.HTTP_200_OK)
 
@@ -93,7 +103,7 @@ class FilterDoctorApiView(BaseDoctorApiView, views.APIView):
 
         pages, doctors = self.get_pages_and_doctors_with_offset(current_page, doctors)
 
-        doctors_list = self.prepare_doctors_data(doctors)
+        doctors_list = self.enrich_photo_from_s3(self.prepare_doctors_data(doctors))
 
         return JsonResponse({'data': doctors_list, 'pages': pages, 'page': current_page}, status=status.HTTP_200_OK)
 
@@ -105,7 +115,8 @@ class DoctorListApiView(BaseDoctorApiView, views.APIView):
 
         doctors = Doctor.objects.filter(is_active=True).order_by('name').select_related('city', 'speciallity')
         pages, doctors = self.get_pages_and_doctors_with_offset(current_page, doctors)
-        doctors_list = self.prepare_doctors_data(doctors)
+
+        doctors_list = self.enrich_photo_from_s3(self.prepare_doctors_data(doctors))
 
         return JsonResponse({'data': doctors_list, 'pages': pages, 'page': current_page}, status=status.HTTP_200_OK)
 

@@ -7,6 +7,8 @@ from .formatters import CustomJsonFormatter
 from pythonjsonlogger.jsonlogger import JsonFormatter
 from dotenv import load_dotenv
 
+from docstar_site.clients.s3.client import S3Client
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 load_dotenv()
@@ -185,6 +187,21 @@ VPN_PRICE = os.getenv('VPN_PRICE')
 ADMIN_CHAT_ID = os.getenv('ADMIN_CHAT_ID')
 SALEBOT_API_URL = f"https://chatter.salebot.pro/api/{os.environ.get('SALEBOT_API_KEY')}/callback"
 GOOGLE_SHEET_URL = os.getenv('GOOGLE_SHEET_URL')
+
+# S3
+S3_BUCKET_NAME = os.getenv('S3_BUCKET_NAME')
+S3_AWS_ACCESS_KEY_ID = os.getenv('S3_AWS_ACCESS_KEY_ID')
+S3_AWS_SECRET_ACCESS_KEY = os.getenv('S3_AWS_SECRET_ACCESS_KEY')
+S3_REGION_NAME = os.getenv('S3_REGION_NAME')
+S3_ENDPOINT = os.getenv('S3_ENDPOINT')
+
+S3_CLIENT = S3Client(
+    bucket_name=S3_BUCKET_NAME,
+    access_key=S3_AWS_ACCESS_KEY_ID,
+    secret_key=S3_AWS_SECRET_ACCESS_KEY,
+    region=S3_REGION_NAME,
+    endpoint_url=S3_ENDPOINT,
+)
 
 LOGGING = {
     'version': 1,

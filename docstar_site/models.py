@@ -49,19 +49,40 @@ class Doctor(models.Model):
     is_active = models.BooleanField(verbose_name='Показывать доктора', default=True)
     date_created = models.DateTimeField(auto_now_add=True, null=True, blank=True)
 
+    s3_image = models.CharField(max_length=255, null=True, blank=True)
+
     def __str__(self):
         return self.name
-
-    def avatar_url(self):
-        if self.avatar and hasattr(self.avatar, 'url'):
-            return self.avatar.url
-        return None
 
     def get_absolute_url(self):
         return reverse('doctor_card', kwargs={'slug': self.slug})
 
     def get_absolute_edit(self):
         return reverse('edit', kwargs={'slug': self.slug})
+
+    @property
+    def avatar_url(self):
+        """Динамически генерирует URL при запросе"""
+        if self.s3_image:
+            return settings.S3_CLIENT.generate_presigned_url(self.s3_image)
+        if self.avatar and hasattr(self.avatar, 'url'):
+            return self.avatar.url
+        return None
+
+    def save(self, *args, **kwargs):
+        """Сохраняет файл в S3 и записывает ключ"""
+        file_obj = self.avatar
+        if file_obj:
+            self.s3_image = f"images/user_{self.slug}_{file_obj.file.name}"
+            if file_obj and not settings.S3_CLIENT.put_object(file_obj.file, self.s3_image):
+                raise Exception("Не удалось сохранить фотку")
+
+        super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        """Удаляет файл из S3 при удалении модели"""
+        settings.S3_CLIENT.delete_file(self.s3_image)
+        super().delete(*args, **kwargs)
 
     class Meta:
         verbose_name = 'Врач'

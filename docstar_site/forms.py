@@ -133,9 +133,9 @@ class CreateDoctorForm(forms.Form):
         required=False,
     )
     prodoctorov = forms.CharField(
-        label='Куда записываться к вам на прием?',
+        label='Ссылка, куда записываться к вам на прием?',
         widget=forms.TextInput(attrs={
-            'placeholder': 'Укажите ссылку на сайт/соц.сеть'
+            'placeholder': 'Пример: https://taplink.cc/readydoc'
         }),
         required=False,
     )
@@ -237,7 +237,7 @@ class CreateDoctorForm(forms.Form):
             data = self.cleaned_data.get("instagram_username")
             return self._clean_social_link(data, "https://instagram.com/")
         if data and "http" not in data and not data[0:4] == "http":
-            raise ValidationError("Пожалуйста, укажите ссылку на сайт или соц.сеть")
+            raise ValidationError("Пожалуйста, укажите ссылку на сайт или соц.сеть, ссылка должна содержать http")
         return self._clean_social_link(data, "")
 
     def save(self, commit=True):

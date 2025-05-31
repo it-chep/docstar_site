@@ -46,7 +46,8 @@ class Command(BaseCommand):
 
             try:
                 self.stdout.write(f'[{processed}/{total_doctors}] Загрузка фото врача {doctor.slug}...')
-                s3.put_object(avatar.file, s3_image)
+                with open(avatar.path, 'rb') as file_data:
+                    s3.put_object(file_data, s3_image)
 
                 doctor.s3_image = s3_image
                 doctor.save()

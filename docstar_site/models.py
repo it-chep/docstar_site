@@ -88,22 +88,23 @@ class Doctor(models.Model):
     @property
     def get_s3_file(self) -> Optional[str]:
         if self.s3_image:
-            url = settings.S3_CLIENT.get(self.s3_image)
+            url = settings.S3_CLIENT.generate_presigned_url(self.s3_image)
             if url:
                 return url
         return None
 
     def save(self, *args, **kwargs):
         """Сохраняет файл в S3 и записывает ключ"""
-        if settings.DEBUG:
-            super().save(*args, **kwargs)
-            return
+        # if settings.DEBUG:
+        #     super().save(*args, **kwargs)
+        #     return
 
         file_obj = self.avatar
         if file_obj:
             self.s3_image = f"images/user_{self.slug}_{file_obj.file.name}"
             if file_obj and not settings.S3_CLIENT.put_object(file_obj.file, self.s3_image):
                 raise Exception("Не удалось сохранить фотку")
+            self.avatar = None
 
         super().save(*args, **kwargs)
 

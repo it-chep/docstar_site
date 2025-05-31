@@ -1,6 +1,9 @@
+from typing import Optional
+
 import boto3
-import os
 from botocore.exceptions import ClientError, NoCredentialsError
+
+DEFAULT_DOCTOR_IMAGE = 'https://storage.yandexcloud.net/medblogers-photos/images/zag.png'
 
 
 class S3Client:
@@ -78,18 +81,7 @@ class S3Client:
         for file in files:
             user_slug = file.split("_")[1]
             files_map[user_slug] = f"https://storage.yandexcloud.net/medblogers-photos/{file}"
-
-            # https: // storage.yandexcloud.net / medblogers - photos / images / user_trutneva - nataliya - konstantinovna_ % D0 % A1 % D0 % BD % D0 % B8 % D0 % BC % D0 % BE % D0 % BA % 20 % D1 % 8
-            # D % D0 % BA % D1 % 80 % D0 % B0 % D0 % BD % D0 % B0 % 202025 - 05 - 16 % 20 % D0 % B2 % 2023.29
-            # .20.png?X - Amz - Algorithm = AWS4 - HMAC - SHA256 & X - Amz - Credential = YCAJE0dbB1ceTT28e9UHQE3fM % 2
-            # F20250525 % 2
-            # Fru - central1 % 2
-            # Fs3 % 2
-            # Faws4_request & X - Amz - Date = 20250525
-            # T205226Z & X - Amz - Expires = 3600 & X - Amz - SignedHeaders = host & X - Amz - Signature = 238229
-            # d9192e198975209bcbdc3fa744014483d1be856d3152db26d21dc9b1b2
         return files_map
-
 
     def delete_file(self, s3_key: str) -> bool:
         """Удаляет файл из S3."""
@@ -99,7 +91,6 @@ class S3Client:
         except ClientError as e:
             return False
 
-
     def check_connection(self) -> bool:
         """Проверяет подключение к бакету."""
         try:
@@ -107,7 +98,6 @@ class S3Client:
             return True
         except ClientError as e:
             return False
-
 
     def generate_presigned_url(self, s3_key: str, expires_in=3600) -> str:
         """Генерирует временную ссылку на файл"""
@@ -120,3 +110,13 @@ class S3Client:
             return url
         except ClientError as e:
             return ""
+
+    def get(self, s3_key: str) -> Optional[str]:
+        """Получение фотографии по ключу"""
+        try:
+            url = self.client.get_object(Bucket=self.bucket_name, Key=s3_key)
+            if url == "":
+                return None
+            return url
+        except ClientError as e:
+            return None

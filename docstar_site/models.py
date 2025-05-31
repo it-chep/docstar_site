@@ -1,11 +1,11 @@
-import boto3
-import os
-from os import path
+from typing import Optional
 
 from django.db import models
 from django.urls import reverse
 from django.contrib.auth.models import User
 from django.conf import settings
+
+from docstar_site.clients.s3.client import DEFAULT_DOCTOR_IMAGE
 
 User = settings.AUTH_USER_MODEL
 
@@ -61,16 +61,44 @@ class Doctor(models.Model):
         return reverse('edit', kwargs={'slug': self.slug})
 
     @property
-    def avatar_url(self):
+    def avatar_url(self) -> str:
         """Динамически генерирует URL при запросе"""
-        if self.s3_image:
-            return settings.S3_CLIENT.generate_presigned_url(self.s3_image)
+        # возвращает либо файл с s3, либо с диска, либо дефолтный
+        s3_file = self.get_s3_file
+        if s3_file:
+            return s3_file
+
+        local_file = self.get_local_file
+        if local_file:
+            return local_file
+
+        return DEFAULT_DOCTOR_IMAGE
+
+    @property
+    def get_local_file(self) -> Optional[str]:
         if self.avatar and hasattr(self.avatar, 'url'):
-            return self.avatar.url
+            try:
+                # Если файл не удален, то возвращаем его
+                _ = self.avatar.file
+                return self.avatar.url
+            except Exception:
+                return None
+        return None
+
+    @property
+    def get_s3_file(self) -> Optional[str]:
+        if self.s3_image:
+            url = settings.S3_CLIENT.get(self.s3_image)
+            if url:
+                return url
         return None
 
     def save(self, *args, **kwargs):
         """Сохраняет файл в S3 и записывает ключ"""
+        if settings.DEBUG:
+            super().save(*args, **kwargs)
+            return
+
         file_obj = self.avatar
         if file_obj:
             self.s3_image = f"images/user_{self.slug}_{file_obj.file.name}"

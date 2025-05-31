@@ -7,6 +7,7 @@ from django.conf import settings
 from django.urls import reverse, NoReverseMatch
 from rest_framework import views, status
 
+from docstar_site.clients.s3.client import DEFAULT_DOCTOR_IMAGE
 from docstar_site.models import Doctor
 from docstar_site.forms import CreateDoctorForm
 from docstar_site.utils import get_site_url
@@ -30,15 +31,27 @@ class BaseDoctorApiView:
                 'slug': doctor.slug,
                 'speciality': doctor.speciallity.name,
                 'doctor_url': doctor.get_absolute_url(),
+                'local_file': doctor.get_local_file,
             })
         return doctors_list
 
-    def enrich_photo_from_s3(self, doctors_list) -> list:
+    @staticmethod
+    def enrich_photo_from_s3(doctors_list) -> list:
         photos_map = settings.S3_CLIENT.get_user_photos()
         enriched_photos = []
 
         for doctor in doctors_list:
+            # Дефолтно s3
             doctor['avatar_url'] = photos_map.get(doctor['slug'], None)
+
+            # Если нет ни в s3 ни на серваке, то ставим заглушку
+            if not doctor['avatar_url']:
+                doctor['avatar_url'] = DEFAULT_DOCTOR_IMAGE
+
+                # Если фотка на серваке, то отображаем ее для обратной совместимости
+                if doctor['local_file']:
+                    doctor['avatar_url'] = doctor['local_file']
+
             enriched_photos.append(doctor)
 
         return enriched_photos

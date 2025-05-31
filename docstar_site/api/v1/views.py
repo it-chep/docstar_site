@@ -7,6 +7,7 @@ from django.conf import settings
 from django.urls import reverse, NoReverseMatch
 from rest_framework import views, status
 
+from docstar_site.clients.s3.client import DEFAULT_DOCTOR_IMAGE
 from docstar_site.models import Doctor
 from docstar_site.forms import CreateDoctorForm
 from docstar_site.utils import get_site_url
@@ -27,11 +28,33 @@ class BaseDoctorApiView:
             doctors_list.append({
                 'name': doctor.name,
                 'city': doctor.city.name,
+                'slug': doctor.slug,
                 'speciality': doctor.speciallity.name,
-                'avatar_url': doctor.avatar.url if doctor.avatar else None,
                 'doctor_url': doctor.get_absolute_url(),
+                'local_file': doctor.get_local_file,
             })
         return doctors_list
+
+    @staticmethod
+    def enrich_photo_from_s3(doctors_list) -> list:
+        photos_map = settings.S3_CLIENT.get_user_photos()
+        enriched_photos = []
+
+        for doctor in doctors_list:
+            # Дефолтно s3
+            doctor['avatar_url'] = photos_map.get(doctor['slug'], None)
+
+            # Если нет ни в s3 ни на серваке, то ставим заглушку
+            if not doctor['avatar_url']:
+                doctor['avatar_url'] = DEFAULT_DOCTOR_IMAGE
+
+                # Если фотка на серваке, то отображаем ее для обратной совместимости
+                if doctor['local_file']:
+                    doctor['avatar_url'] = doctor['local_file']
+
+            enriched_photos.append(doctor)
+
+        return enriched_photos
 
     def get_pages_and_doctors_with_offset(self, current_page: int, doctors):
 
@@ -59,7 +82,7 @@ class SearchDoctorApiView(BaseDoctorApiView, views.APIView):
             is_active=True,
         ).order_by('name')[:self.limit].select_related('city', 'speciallity')
 
-        doctors_list = self.prepare_doctors_data(doctors)
+        doctors_list = self.enrich_photo_from_s3(self.prepare_doctors_data(doctors))
 
         return JsonResponse({'data': doctors_list}, status=status.HTTP_200_OK)
 
@@ -93,7 +116,7 @@ class FilterDoctorApiView(BaseDoctorApiView, views.APIView):
 
         pages, doctors = self.get_pages_and_doctors_with_offset(current_page, doctors)
 
-        doctors_list = self.prepare_doctors_data(doctors)
+        doctors_list = self.enrich_photo_from_s3(self.prepare_doctors_data(doctors))
 
         return JsonResponse({'data': doctors_list, 'pages': pages, 'page': current_page}, status=status.HTTP_200_OK)
 
@@ -105,7 +128,8 @@ class DoctorListApiView(BaseDoctorApiView, views.APIView):
 
         doctors = Doctor.objects.filter(is_active=True).order_by('name').select_related('city', 'speciallity')
         pages, doctors = self.get_pages_and_doctors_with_offset(current_page, doctors)
-        doctors_list = self.prepare_doctors_data(doctors)
+
+        doctors_list = self.enrich_photo_from_s3(self.prepare_doctors_data(doctors))
 
         return JsonResponse({'data': doctors_list, 'pages': pages, 'page': current_page}, status=status.HTTP_200_OK)
 

@@ -1,8 +1,11 @@
+from typing import Optional
+
 from django.db import models
-from django.template.defaultfilters import slugify
 from django.urls import reverse
 from django.contrib.auth.models import User
 from django.conf import settings
+
+from docstar_site.clients.s3.client import DEFAULT_DOCTOR_IMAGE
 
 User = settings.AUTH_USER_MODEL
 
@@ -36,7 +39,8 @@ class Doctor(models.Model):
     )
     doctor = models.ForeignKey(User, on_delete=models.PROTECT, blank=True, null=True)
 
-    prodoctorov = models.CharField(verbose_name="Ссылка для записи", null=True, max_length=255, unique=False, blank=True)
+    prodoctorov = models.CharField(verbose_name="Ссылка для записи", null=True, max_length=255, unique=False,
+                                   blank=True)
     subscribers_inst = models.CharField(verbose_name="Подписчики инста", null=True, max_length=255, blank=True)
 
     age = models.IntegerField(verbose_name="Возраст", null=True, blank=True)
@@ -45,19 +49,68 @@ class Doctor(models.Model):
     is_active = models.BooleanField(verbose_name='Показывать доктора', default=True)
     date_created = models.DateTimeField(auto_now_add=True, null=True, blank=True)
 
+    s3_image = models.CharField(max_length=255, null=True, blank=True)
+
     def __str__(self):
         return self.name
-
-    def avatar_url(self):
-        if self.avatar and hasattr(self.avatar, 'url'):
-            return self.avatar.url
-        return None
 
     def get_absolute_url(self):
         return reverse('doctor_card', kwargs={'slug': self.slug})
 
     def get_absolute_edit(self):
         return reverse('edit', kwargs={'slug': self.slug})
+
+    @property
+    def avatar_url(self) -> str:
+        """Динамически генерирует URL при запросе"""
+        # возвращает либо файл с s3, либо с диска, либо дефолтный
+        s3_file = self.get_s3_file
+        if s3_file:
+            return s3_file
+
+        local_file = self.get_local_file
+        if local_file:
+            return local_file
+
+        return DEFAULT_DOCTOR_IMAGE
+
+    @property
+    def get_local_file(self) -> Optional[str]:
+        if self.avatar and hasattr(self.avatar, 'url'):
+            try:
+                # Если файл не удален, то возвращаем его
+                _ = self.avatar.file
+                return self.avatar.url
+            except Exception:
+                return None
+        return None
+
+    @property
+    def get_s3_file(self) -> Optional[str]:
+        if self.s3_image:
+            url = settings.S3_CLIENT.get(self.s3_image)
+            if url:
+                return url
+        return None
+
+    def save(self, *args, **kwargs):
+        """Сохраняет файл в S3 и записывает ключ"""
+        if settings.DEBUG:
+            super().save(*args, **kwargs)
+            return
+
+        file_obj = self.avatar
+        if file_obj:
+            self.s3_image = f"images/user_{self.slug}_{file_obj.file.name}"
+            if file_obj and not settings.S3_CLIENT.put_object(file_obj.file, self.s3_image):
+                raise Exception("Не удалось сохранить фотку")
+
+        super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        """Удаляет файл из S3 при удалении модели"""
+        settings.S3_CLIENT.delete_file(self.s3_image)
+        super().delete(*args, **kwargs)
 
     class Meta:
         verbose_name = 'Врач'

@@ -40,6 +40,7 @@ class S3Client:
             self.client.upload_file(file_name, self.bucket_name, s3_key)
             return True
         except (ClientError, NoCredentialsError, FileNotFoundError) as e:
+            print(f"ошибка при загрузке файла {e}")
             return False
 
     def put_object(self, file, s3_key: str) -> bool:
@@ -52,6 +53,7 @@ class S3Client:
             )
             return True
         except (ClientError, NoCredentialsError, FileNotFoundError) as e:
+            print(f"ошибка при загрузке файла {e}")
             return False
 
     def download_file(self, s3_key: str, local_path: str) -> bool:
@@ -60,6 +62,7 @@ class S3Client:
             self.client.download_file(self.bucket_name, s3_key, local_path)
             return True
         except (ClientError, NoCredentialsError) as e:
+            print(f"ошибка при скачивании файла {e}")
             return False
 
     def _list_files(self, prefix: str) -> list:
@@ -73,6 +76,7 @@ class S3Client:
             sorted_objects = sorted(objects, key=lambda x: x["LastModified"])
             return [obj["Key"] for obj in sorted_objects]
         except ClientError as e:
+            print(f"ошибка при получении списка файлов {e}")
             return []
 
     def get_user_photos(self) -> dict:
@@ -89,6 +93,7 @@ class S3Client:
             self.client.delete_object(Bucket=self.bucket_name, Key=s3_key)
             return True
         except ClientError as e:
+            print(f"ошибка при удалении файла {e}")
             return False
 
     def check_connection(self) -> bool:
@@ -97,6 +102,7 @@ class S3Client:
             self.client.head_bucket(Bucket=self.bucket_name)
             return True
         except ClientError as e:
+            print(f"ошибка при коннекте ссылки на файл {e}")
             return False
 
     def generate_presigned_url(self, s3_key: str, expires_in=3600) -> str:
@@ -109,6 +115,7 @@ class S3Client:
             )
             return url
         except ClientError as e:
+            print(f"ошибка при генерации ссылки на файл {e}")
             return ""
 
     def get(self, s3_key: str) -> Optional[str]:
@@ -119,4 +126,5 @@ class S3Client:
                 return None
             return url
         except ClientError as e:
+            print(f"ошибка при получении файла {e}")
             return None

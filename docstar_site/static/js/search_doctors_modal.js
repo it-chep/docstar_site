@@ -201,7 +201,7 @@ function enrichSpecialitySearch(response, searchHTML) {
             ${response.specialities.map(spec => `
                 <div class="speciality-block" data-id="${spec.id}">
                     <div class="search-ico">
-                        <img src="/static/img/icons/search/city.png">
+                        <img src="/static/img/icons/search/speciality.png">
                     </div>
                     <div class="speciality-info">
                         <div class="speciality-name">${spec.name}</div>

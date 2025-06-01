@@ -3,6 +3,7 @@ $(document).ready(function () {
     const $searchDoctorInput = $('.search-doctors-input')
     const $modalContent = $('.modal-content');
     const $searchDoctorsModal = $('.search_doctors_modal');
+    const $darken = $('.dark-substrate')
 
     $searchDoctorContainer.hover(
         function () {
@@ -13,26 +14,15 @@ $(document).ready(function () {
         }
     );
 
-    $searchDoctorContainer.find('input').on('focus', function (event) {
+    $searchDoctorInput.on('focus', function (event) {
         $searchDoctorsModal.show()
         $('.dark-substrate').show();
     })
 
-    $searchDoctorContainer.find('input').on('blur', function (event) {
+    $darken.on('click', function (event) {
         $searchDoctorsModal.hide();
         $('.dark-substrate').hide();
     })
-
-    $(document).on('click', function (event) {
-        if (
-            !$searchDoctorContainer.is(event.target) &&
-            !$searchDoctorContainer.has(event.target).length &&
-            !$searchDoctorsModal.has(event.target).length
-        ) {
-            $searchDoctorsModal.hide();
-            $('.dark-substrate').hide();
-        }
-    });
 
     $searchDoctorInput.on('input', function () {
         const query = $(this).val().trim();
@@ -51,9 +41,9 @@ $(document).ready(function () {
                 let searchHTML
 
                 if (
-                    response.cities.length > 0 ||
-                    response.specialities.length > 0 ||
-                    response.data.length > 0
+                    (response.cities && response.cities.length > 0) ||
+                    (response.specialities && response.specialities.length > 0) ||
+                    (response.data && response.data.length > 0)
                 ) {
                     searchHTML = '<div class="search-city-spec-container">';
                 }
@@ -195,7 +185,8 @@ function initSpecialitySearch($searchDoctorsModal) {
 
             filterDoctors(getFilterQueryParams(), 1);
 
-            $searchDoctorsModal.hide()
+            $searchDoctorsModal.hide();
+            $('.dark-substrate').hide();
         }
     });
 }
@@ -231,6 +222,7 @@ function initCitySearch($searchDoctorsModal) {
             filterDoctors(getFilterQueryParams(), 1);
 
             $searchDoctorsModal.hide()
+            $('.dark-substrate').hide();
         }
     })
 }

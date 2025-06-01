@@ -96,6 +96,37 @@ class BaseDoctorApiView:
 
         return pages, doctors
 
+    def get_doctors(self, request, *args, **kwargs):
+        city_list = self.request.GET.get('city')
+        speciallity_list = request.GET.get('speciality')
+        current_page = int(request.GET.get('page', 1))
+
+        if not city_list and not speciallity_list:
+            doctors = Doctor.objects.filter(is_active=True).order_by('name').select_related('city', 'speciallity')
+            pages, doctors = self.get_pages_and_doctors_with_offset(current_page, doctors)
+            doctors_list = self.enrich_photo_from_s3(self.prepare_doctors_data(doctors))
+            return JsonResponse({'data': doctors_list, 'pages': pages, 'page': current_page}, status=status.HTTP_200_OK)
+
+        city_query = Q()
+        speciallity_query = Q()
+
+        if city_list:
+            city_query = Q(city__name__in=city_list.split(','))
+        if speciallity_list:
+            speciallity_query = Q(speciallity__name__in=speciallity_list.split(','))
+
+        q_args = city_query & speciallity_query
+        doctors = Doctor.objects.filter(
+            q_args,
+            is_active=True,
+        ).order_by('name').select_related('city', 'speciallity')
+
+        pages, doctors = self.get_pages_and_doctors_with_offset(current_page, doctors)
+
+        doctors_list = self.enrich_photo_from_s3(self.prepare_doctors_data(doctors))
+
+        return JsonResponse({'data': doctors_list, 'pages': pages, 'page': current_page}, status=status.HTTP_200_OK)
+
 
 class SearchDoctorApiView(BaseDoctorApiView, views.APIView):
 
@@ -142,48 +173,13 @@ class SearchDoctorApiView(BaseDoctorApiView, views.APIView):
 class FilterDoctorApiView(BaseDoctorApiView, views.APIView):
 
     def get(self, request, *args, **kwargs):
-        city_list = request.GET.get('city')
-        speciallity_list = request.GET.get('speciality')
-        current_page = int(request.GET.get('page', 1))
-
-        if not city_list and not speciallity_list:
-            doctors = Doctor.objects.filter(is_active=True).order_by('name').select_related('city', 'speciallity')
-            pages, doctors = self.get_pages_and_doctors_with_offset(current_page, doctors)
-            doctors_list = self.enrich_photo_from_s3(self.prepare_doctors_data(doctors))
-            return JsonResponse({'data': doctors_list, 'pages': pages, 'page': current_page}, status=status.HTTP_200_OK)
-
-        city_query = Q()
-        speciallity_query = Q()
-
-        if city_list:
-            city_query = Q(city__name__in=city_list.split(','))
-        if speciallity_list:
-            speciallity_query = Q(speciallity__name__in=speciallity_list.split(','))
-
-        q_args = city_query & speciallity_query
-        doctors = Doctor.objects.filter(
-            q_args,
-            is_active=True,
-        ).order_by('name').select_related('city', 'speciallity')
-
-        pages, doctors = self.get_pages_and_doctors_with_offset(current_page, doctors)
-
-        doctors_list = self.enrich_photo_from_s3(self.prepare_doctors_data(doctors))
-
-        return JsonResponse({'data': doctors_list, 'pages': pages, 'page': current_page}, status=status.HTTP_200_OK)
+        return self.get_doctors(request, *args, **kwargs)
 
 
 class DoctorListApiView(BaseDoctorApiView, views.APIView):
 
     def get(self, request, *args, **kwargs):
-        current_page = int(request.GET.get('page', 1))
-
-        doctors = Doctor.objects.filter(is_active=True).order_by('name').select_related('city', 'speciallity')
-        pages, doctors = self.get_pages_and_doctors_with_offset(current_page, doctors)
-
-        doctors_list = self.enrich_photo_from_s3(self.prepare_doctors_data(doctors))
-
-        return JsonResponse({'data': doctors_list, 'pages': pages, 'page': current_page}, status=status.HTTP_200_OK)
+        return self.get_doctors(request, *args, **kwargs)
 
 
 class CreateNewDoctorApiView(views.APIView):

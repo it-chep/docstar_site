@@ -63,6 +63,9 @@ class BaseDoctorApiView:
     def prepare_cities_data(cities: QuerySet) -> list[dict]:
         cities_list = []
         for city in cities:
+            if city.doctors_count == 0:
+                continue
+
             cities_list.append({
                 'id': city.id,
                 'name': city.name,
@@ -75,6 +78,9 @@ class BaseDoctorApiView:
     def prepare_specialities_data(specialities: QuerySet) -> list[dict]:
         specialities_list = []
         for speciality in specialities:
+            if speciality.doctors_count == 0:
+                continue
+
             specialities_list.append({
                 'id': speciality.id,
                 'name': speciality.name,
@@ -108,14 +114,14 @@ class SearchDoctorApiView(BaseDoctorApiView, views.APIView):
         specialities = Speciallity.objects.filter(
             name__icontains=query,
         ).annotate(
-            doctors_count=Count('doctor')
+            doctors_count=Count('doctor', filter=Q(doctor__is_active=True))
         ).order_by('name')[:self.search_speciality_limit]
 
         # Города
         cities = City.objects.filter(
             name__icontains=query,
         ).annotate(
-            doctors_count=Count('doctor')
+            doctors_count=Count('doctor', filter=Q(doctor__is_active=True))
         ).order_by('name')[:self.search_city_limit]
 
         # Доктора

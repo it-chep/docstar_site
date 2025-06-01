@@ -27,6 +27,10 @@
 }
 
 @media (max-width: 350px) {
+    .search_doctors_modal {
+        margin-top: 70px;
+    }
+
     .search_doctors_modal .modal-content {
         width: 100vw;
         max-height: 330px;

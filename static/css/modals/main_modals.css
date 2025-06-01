@@ -101,3 +101,70 @@
 .search_doctors_modal {
     position: fixed;
 }
+
+.search-city-spec-container {
+    margin-top: 20px;
+}
+
+.city-block {
+    display: flex;
+    padding: 30px;
+    align-items: center;
+
+    .city-info {
+        text-align: left;
+        display: flex;
+        flex-direction: column;
+
+        .city-doctors-count {
+            color: #606060;
+        }
+    }
+}
+
+.speciality-block {
+    display: flex;
+    padding: 30px;
+    align-items: center;
+
+    .speciality-info {
+        text-align: left;
+        display: flex;
+        flex-direction: column;
+
+        .speciality-doctors-count {
+            color: #606060;
+        }
+    }
+}
+
+.city-block:hover {
+    cursor: pointer;
+    background-color: #2E99FC;
+}
+
+.speciality-block:hover {
+    cursor: pointer;
+    background-color: #2E99FC;
+}
+
+.search-title {
+    display: flex;
+    text-align: left;
+    padding: 10px 0 10px 30px;
+}
+
+.search-ico {
+    width: 30px;
+    height: 30px;
+    overflow: hidden;
+    position: relative;
+    margin-right: 20px;
+
+    img {
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+    }
+}
+

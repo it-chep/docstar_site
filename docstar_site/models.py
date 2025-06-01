@@ -35,6 +35,7 @@ class Doctor(models.Model):
         verbose_name="Личное фото",
         upload_to="user_photos/",
         null=True,
+        blank=True,
         default='user_photos/zag.png'
     )
     doctor = models.ForeignKey(User, on_delete=models.PROTECT, blank=True, null=True)

@@ -1,20 +1,23 @@
 import math
 import requests
+from django.db.models import Count
 
 from django.http import JsonResponse
-from django.db.models import Q
+from django.db.models import Q, QuerySet
 from django.conf import settings
 from django.urls import reverse, NoReverseMatch
 from rest_framework import views, status
 
 from docstar_site.clients.s3.client import DEFAULT_DOCTOR_IMAGE
-from docstar_site.models import Doctor
+from docstar_site.models import Doctor, Speciallity, City
 from docstar_site.forms import CreateDoctorForm
 from docstar_site.utils import get_site_url
 
 
 class BaseDoctorApiView:
     limit = settings.LIMIT_DOCTORS_ON_PAGE
+    search_speciality_limit = settings.LIMIT_SPECIALITY_ON_SEARCH
+    search_city_limit = settings.LIMIT_CITY_ON_SEARCH
 
     @staticmethod
     def prepare_doctors_data(doctors) -> list[dict]:
@@ -56,6 +59,30 @@ class BaseDoctorApiView:
 
         return enriched_photos
 
+    @staticmethod
+    def prepare_cities_data(cities: QuerySet) -> list[dict]:
+        cities_list = []
+        for city in cities:
+            cities_list.append({
+                'id': city.id,
+                'name': city.name,
+                'doctors_count': city.doctors_count,
+            })
+
+        return cities_list
+
+    @staticmethod
+    def prepare_specialities_data(specialities: QuerySet) -> list[dict]:
+        specialities_list = []
+        for speciality in specialities:
+            specialities_list.append({
+                'id': speciality.id,
+                'name': speciality.name,
+                'doctors_count': speciality.doctors_count,
+            })
+
+        return specialities_list
+
     def get_pages_and_doctors_with_offset(self, current_page: int, doctors):
 
         pages = max(math.ceil(len(doctors) / settings.LIMIT_DOCTORS_ON_PAGE), 1)
@@ -77,14 +104,39 @@ class SearchDoctorApiView(BaseDoctorApiView, views.APIView):
         if not query:
             return JsonResponse({'data': []}, status=status.HTTP_200_OK)
 
+        # Специальности
+        specialities = Speciallity.objects.filter(
+            name__icontains=query,
+        ).annotate(
+            doctors_count=Count('doctor')
+        ).order_by('name')[:self.search_speciality_limit]
+
+        # Города
+        cities = City.objects.filter(
+            name__icontains=query,
+        ).annotate(
+            doctors_count=Count('doctor')
+        ).order_by('name')[:self.search_city_limit]
+
+        # Доктора
         doctors = Doctor.objects.filter(
             name__icontains=query,
             is_active=True,
         ).order_by('name')[:self.limit].select_related('city', 'speciallity')
 
+        # ковертация в json
         doctors_list = self.enrich_photo_from_s3(self.prepare_doctors_data(doctors))
+        cities_list = self.prepare_cities_data(cities)
+        specialities_list = self.prepare_specialities_data(specialities)
 
-        return JsonResponse({'data': doctors_list}, status=status.HTTP_200_OK)
+        return JsonResponse(
+            {
+                'data': doctors_list,
+                'cities': cities_list,
+                'specialities': specialities_list,
+            },
+            status=status.HTTP_200_OK
+        )
 
 
 class FilterDoctorApiView(BaseDoctorApiView, views.APIView):
@@ -97,7 +149,7 @@ class FilterDoctorApiView(BaseDoctorApiView, views.APIView):
         if not city_list and not speciallity_list:
             doctors = Doctor.objects.filter(is_active=True).order_by('name').select_related('city', 'speciallity')
             pages, doctors = self.get_pages_and_doctors_with_offset(current_page, doctors)
-            doctors_list = self.prepare_doctors_data(doctors)
+            doctors_list = self.enrich_photo_from_s3(self.prepare_doctors_data(doctors))
             return JsonResponse({'data': doctors_list, 'pages': pages, 'page': current_page}, status=status.HTTP_200_OK)
 
         city_query = Q()

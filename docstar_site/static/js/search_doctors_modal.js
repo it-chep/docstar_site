@@ -14,63 +14,13 @@ $(document).ready(function () {
     );
 
     $searchDoctorContainer.find('input').on('focus', function (event) {
-        $('.search_doctors_modal').show()
-        const element = $searchDoctorContainer[0];
-        const rect = element.getBoundingClientRect();
-        const modalContent = $('.modal-content')
-        modalContent.css({
-            'top': event.target.getBoundingClientRect().top,
-            'margin': '75px auto 0'
-        });
-        if (event.target.getBoundingClientRect().top > rect) {
-            modalContent.css({
-                'display': 'block',
-                'top': rect.top,
-                'margin': '75px auto 0'
-            });
-        }
+        $searchDoctorsModal.show()
+        $('.dark-substrate').show();
     })
 
     $searchDoctorContainer.find('input').on('blur', function (event) {
-        const element = $('.search-doctors-container')[0];
-        const rect = element.getBoundingClientRect();
-        $('.modal-content').css({
-            'display': 'block',
-            'top': rect.top + 10,
-            'margin': '75px auto 0'
-        });
-    })
-
-    $(document).on("scroll", function () {
-        const inputTop = $searchDoctorInput[0].getBoundingClientRect().top
-        const modalContentTop = $modalContent[0].getBoundingClientRect().top < 0 ? 0 : $modalContent[0].getBoundingClientRect().top;
-
-        $modalContent.css({
-            'display': 'block',
-            'top': inputTop + 10,
-            'margin': '75px auto 0'
-        });
-
-        if (modalContentTop === 0) {
-            $modalContent.css({
-                'display': 'none'
-            });
-        }
-        if (inputTop < $modalContent || inputTop < 120) {
-            $modalContent.css({
-                'display': 'block',
-                'top': 50 + inputTop,
-                'margin': `${50 + inputTop}px auto 0`
-            });
-        }
-
-        if (inputTop < 120 && inputTop > $modalContent) {
-            $modalContent.css({
-                'display': 'block',
-                'top': $modalContent + inputTop,
-                'margin': `${$modalContent + inputTop}px auto 0`
-            });
-        }
+        $searchDoctorsModal.hide();
+        $('.dark-substrate').hide();
     })
 
     $(document).on('click', function (event) {
@@ -80,6 +30,7 @@ $(document).ready(function () {
             !$searchDoctorsModal.has(event.target).length
         ) {
             $searchDoctorsModal.hide();
+            $('.dark-substrate').hide();
         }
     });
 
@@ -97,8 +48,15 @@ $(document).ready(function () {
             data: {query: query},
             success: function (response) {
                 $modalContent.empty();
+                let searchHTML
 
-                let searchHTML = '<div class="search-city-spec-container">';
+                if (
+                    response.cities.length > 0 ||
+                    response.specialities.length > 0 ||
+                    response.data.length > 0
+                ) {
+                    searchHTML = '<div class="search-city-spec-container">';
+                }
 
                 // Добавляем города, если они есть в ответе
                 if (response.cities && response.cities.length > 0) {
@@ -144,15 +102,6 @@ $(document).ready(function () {
 
                         $modalContent.append(doctorCard);
                     });
-                    const inputTop = $searchDoctorInput[0].getBoundingClientRect().top
-                    const modalContentTop = $modalContent[0].getBoundingClientRect().top
-                    if (modalContentTop < inputTop) {
-                        $modalContent.css({
-                            'display': 'block',
-                            'top': inputTop,
-                            'margin': `${modalContentTop + inputTop}px auto 0`
-                        });
-                    }
                 }
                 if (response.data.length === 0 && response.specialities.length === 0 && response.cities.length === 0) {
                     $modalContent.append('<div class="mini_user_card"><p class="empty-doctors">Нет подходящих врачей.</p></div>');

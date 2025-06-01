@@ -15,6 +15,7 @@
 }
 
 .search-doctors-container {
+    position: relative;
     display: flex;
     z-index: 1001;
     width: 600px;
@@ -33,13 +34,14 @@
     border: none;
     outline: none;
     box-shadow: none;
+    z-index: 990;
 }
 
 .search-doctors-container input::placeholder {
     font-size: 16px;
 }
 
-.search-doctors-container img {
+.lupa {
     width: 25px;
     height: 25px;
 }

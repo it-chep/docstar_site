@@ -36,6 +36,7 @@
     <script src="{% static "js/jquery-3.6.0.min.js" %}"></script>
     <script src="{% static 'js/main_main.js' %}"></script>
     <script defer src="{% static 'js/search_doctors_modal.js' %}"></script>
+    <script src="{% static 'js/search_doctors_modal.js' %}"></script>
 
     {% block extralinks %}
     {% endblock %}
@@ -66,8 +67,13 @@
         {% endif %}
         <div class="search-doctors-wrapper">
             <div class="search-doctors-container">
-                <img src="{% static "img/lupa.svg" %}">
+                <img class="lupa" src="{% static "img/lupa.svg" %}">
                 <input class="search-doctors-input" type="text" placeholder="Найдем для вас врача...">
+                <div class="dark-substrate"></div>
+                <div class="modal search_doctors_modal">
+                    <div class="modal-content">
+                    </div>
+                </div>
             </div>
             <div class="settings_icon_wrapper">
                 <span class="material-icons">

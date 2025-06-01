@@ -6,17 +6,41 @@
     top: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
     align-items: center;
     justify-content: center;
+}
+
+.dark-substrate {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    display: none;
+    left: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 900;
 }
 
 .modal-content {
     background-color: white;
     border-radius: 10px;
-    width: 400px;
     text-align: center;
     position: relative;
+}
+
+.search_doctors_modal .modal-content {
+    width: 585px;
+    margin: 0 auto;
+    border-radius: 30px;
+    background: #1E1E1E;
+    color: white;
+    max-height: 480px;
+    overflow-y: scroll;
+}
+
+.search_doctors_modal {
+    margin-top: 60px;
+    position: absolute;
 }
 
 .close-btn {
@@ -26,20 +50,6 @@
     font-size: 24px;
     font-weight: bold;
     cursor: pointer;
-}
-
-.search_doctors_modal .modal-content {
-    width: 585px;
-    margin: 135px auto 0;
-    border-radius: 30px;
-    background: #1E1E1E;
-    color: white;
-    max-height: 480px;
-    overflow-y: scroll;
-}
-
-.search_doctors_modal {
-    position: absolute;
 }
 
 .mini_user_card {
@@ -96,10 +106,6 @@
 
 .mini_doctor_link {
     pointer-events: auto;
-}
-
-.search_doctors_modal {
-    position: fixed;
 }
 
 .search-city-spec-container {

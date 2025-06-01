@@ -1,8 +1,11 @@
 @media (max-width: 420px) {
+    .search_doctors_modal {
+        margin-top: 70px;
+    }
+
     .search_doctors_modal .modal-content {
-        width: 385px;
+        width: 100vw;
         max-height: 385px;
-        margin: 285px auto 0;
     }
 
     .mini_user_avatar {
@@ -25,9 +28,8 @@
 
 @media (max-width: 350px) {
     .search_doctors_modal .modal-content {
-        width: 330px;
+        width: 100vw;
         max-height: 330px;
-        margin: 255px auto 0;
     }
 
     .mini_user_avatar {

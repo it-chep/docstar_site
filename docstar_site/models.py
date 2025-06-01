@@ -96,9 +96,9 @@ class Doctor(models.Model):
 
     def save(self, *args, **kwargs):
         """Сохраняет файл в S3 и записывает ключ"""
-        # if settings.DEBUG:
-        #     super().save(*args, **kwargs)
-        #     return
+        if settings.DEBUG:
+            super().save(*args, **kwargs)
+            return
 
         file_obj = self.avatar
         if file_obj:

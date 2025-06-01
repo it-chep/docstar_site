@@ -111,9 +111,9 @@ class BaseDoctorApiView:
         speciallity_query = Q()
 
         if city_list:
-            city_query = Q(city__name__in=city_list.split(','))
+            city_query = Q(city__id__in=city_list.split(','))
         if speciallity_list:
-            speciallity_query = Q(speciallity__name__in=speciallity_list.split(','))
+            speciallity_query = Q(speciallity__id__in=speciallity_list.split(','))
 
         q_args = city_query & speciallity_query
         doctors = Doctor.objects.filter(
@@ -139,14 +139,14 @@ class SearchDoctorApiView(BaseDoctorApiView, views.APIView):
         specialities = Speciallity.objects.filter(
             name__icontains=query,
         ).annotate(
-            doctors_count=Count('doctor')
+            doctors_count=Count('doctor', filter=Q(doctor__is_active=True))
         ).order_by('name')[:self.search_speciality_limit]
 
         # Города
         cities = City.objects.filter(
             name__icontains=query,
         ).annotate(
-            doctors_count=Count('doctor')
+            doctors_count=Count('doctor', filter=Q(doctor__is_active=True))
         ).order_by('name')[:self.search_city_limit]
 
         # Доктора

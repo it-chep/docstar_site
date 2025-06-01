@@ -150,11 +150,12 @@ function initializeSubmitFilterBtn() {
             const checkbox = $(this);
             const labelText = checkbox.closest('.checkbox-label').find('.checkbox-text').text();
             const className = checkbox.closest('.checkbox-label').hasClass('speciality') ? 'speciality' : 'city';
+            const ID = checkbox.closest('.checkbox-label').find('input').data('id')
 
             // Добавляем фильтр в active_filters_wrapper
             $('.active_filters_wrapper').append(`
-            <div class="active_filter" data-${className}="${labelText}">
-                <p class="active_filter_text">${labelText}</p>
+            <div class="active_filter" data-${className}="${ID}">
+                <p class="active_filter_text" >${labelText}</p>
                 <div class="active_filter_delete_btn">
                     <span class="material-icons cancel">cancel</span>
                 </div>
@@ -266,11 +267,12 @@ function handleFilterClick(event, className) {
 
     const checkbox = $(this).find('input[type="checkbox"]');
     const labelText = $(this).find('.checkbox-text').text();
+    const ID = checkbox.data('id')
 
     checkbox.prop('checked', !checkbox.prop('checked'));
     if (checkbox.prop('checked')) {
         $('.active_filters_wrapper').append(`
-                <div class="active_filter" data-${className}="${labelText}">
+                <div class="active_filter" data-${className}="${ID}">
                     <p class="active_filter_text">${labelText}</p>
                     <div class="active_filter_delete_btn">
                         <span class="material-icons cancel">
@@ -280,7 +282,7 @@ function handleFilterClick(event, className) {
                 </div>
             `);
     } else {
-        $(`.active_filters_wrapper .active_filter[data-${className}="${labelText}"]`).remove();
+        $(`.active_filters_wrapper .active_filter[data-${className}="${ID}"]`).remove();
     }
 
     filterDoctors(getFilterQueryParams(), 1);

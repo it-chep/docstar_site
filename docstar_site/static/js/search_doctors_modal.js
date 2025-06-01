@@ -173,7 +173,7 @@ function initSpecialitySearch($searchDoctorsModal) {
             const labelText = specialityCheckbox.closest('.checkbox-label').find('.checkbox-text').text() || $(this).text().trim();
 
             activeFilterWrapper.append(`
-                <div class="active_filter" data-speciality="${labelText}">
+                <div class="active_filter" data-speciality="${specialityID}">
                     <p class="active_filter_text">${labelText}</p>
                     <div class="active_filter_delete_btn">
                         <span class="material-icons cancel">cancel</span>
@@ -209,7 +209,7 @@ function initCitySearch($searchDoctorsModal) {
             const labelText = cityCheckbox.closest('.checkbox-label').find('.checkbox-text').text() || $(this).text().trim();
 
             activeFilterWrapper.append(`
-                <div class="active_filter" data-city="${labelText}">
+                <div class="active_filter" data-city="${cityID}">
                     <p class="active_filter_text">${labelText}</p>
                     <div class="active_filter_delete_btn">
                         <span class="material-icons cancel">cancel</span>

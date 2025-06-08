@@ -6,6 +6,10 @@
     color: white;
 }
 
+.doctor_info_wrapper {
+    display: flex;
+}
+
 .doctor_detail_card {
     display: flex;
     flex-direction: row;
@@ -36,6 +40,7 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    padding-right: 10px;
 
     .doctor_name {
         color: white;
@@ -109,15 +114,67 @@ a {
 .doctor_actions {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    row-gap: 20px;
+    padding-left: 10px;
+    border-left: 1px solid #ffffff40;
+}
+
+.prodoc_btn_wrapper {
+    display: inline-flex;
+    justify-content: flex-start;
+}
+
+.settings_icon_wrapper {
+    display: none;
 }
 
 .prodoc_btn {
     cursor: pointer;
-    padding: 8px 20px;
+    padding: 8px 60px;
     border-radius: 100px;
     color: white;
     border: 2px solid #2E99FC;
     background: #2E99FC;
     transition: background-color 0.5s ease;
+}
+
+.subscribers_link {
+    background: #404040;
+    color: white;
+    display: flex;
+    flex-direction: row;
+    border-radius: 16px;
+    align-items: center;
+    padding: 10px;
+    column-gap: 20px;
+}
+
+.subs_text {
+    display: flex;
+    flex-direction: row;
+    column-gap: 5px;
+    align-items: center;
+}
+
+.subs_count {
+    font-weight: 700;
+}
+
+.subs_logo {
+    width: 30px;
+    height: 30px;
+}
+
+.subs_logo img {
+    width: 30px;
+    height: 30px;
+}
+
+.subs_ico_link {
+    align-self: flex-start
+}
+
+.subs_ico_link img {
+    width: 10px;
+    height: 10px;
 }

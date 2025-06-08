@@ -158,6 +158,8 @@ a {
 
 .subs_count {
     font-weight: 700;
+    min-width: 35px;
+    white-space: nowrap;
 }
 
 .subs_logo {

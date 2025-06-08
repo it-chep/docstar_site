@@ -106,6 +106,11 @@
     .subscribers_link {
         justify-content: space-between;
     }
+
+    .last_updated_date {
+        font-size: 13px;
+        color: #ffffff80;
+    }
 }
 
 @media (max-width: 350px) {
@@ -197,5 +202,10 @@
     .prodoc_btn {
         font-size: 16px;
         padding: 10px;
+    }
+
+    .last_updated_date {
+        font-size: 13px;
+        color: #ffffff80;
     }
 }

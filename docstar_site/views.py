@@ -134,7 +134,7 @@ class DoctorDetail(DataMixin, DetailView):
 
             self.object.subs_count = data['telegram_short']
             self.object.subs_count_text = data['telegram_text']
-
+            self.object.last_updated_date = data['tg_last_updated_date']
             return
 
         except (requests.exceptions.Timeout, requests.exceptions.HTTPError, ValueError, Exception) as e:

@@ -116,6 +116,7 @@
 
                     </div>
                     {% if doctor.subs_count and doctor.tg_channel_url %}
+                        <div class="subscribers_link_wrapper">
                         <a class="subscribers_link" href="{{ doctor.tg_channel_url }}">
                             <div class="subs_logo">
                                 <img src="{% static "img/logos/telegram_logo.png" %}">
@@ -128,6 +129,8 @@
                                 <img src="{% static "img/icons/doc_detail/subs_link_ico.svg" %}">
                             </div>
                         </a>
+                        <div class="last_updated_date">Дата последнего обновления: {{ doctor.last_updated_date }}</div>
+                        </div>
                     {% endif %}
                 </div>
             </div>

@@ -178,3 +178,10 @@ a {
     width: 10px;
     height: 10px;
 }
+
+.last_updated_date {
+    font-size: 12px;
+    color: #ffffff80;
+    margin-top: 5px;
+    text-align: center;
+}

@@ -1,10 +1,10 @@
 $(document).ready(function() {
     if ($(window).width() <= 768) {
-        var $societyBlock = $('.society_block');
-        var $doctorInfo = $('.doctor_info');
+        var $prodoctorov = $('.prodoc_btn_wrapper');
+        var $doctorActions = $('.doctor_actions');
 
-        if ($societyBlock.length && $doctorInfo.length) {
-            $doctorInfo.prepend($societyBlock);
+        if ($prodoctorov && $doctorActions.length) {
+            $doctorActions.append($prodoctorov);
         }
     }
 });

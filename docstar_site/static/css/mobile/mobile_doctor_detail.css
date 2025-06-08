@@ -1,4 +1,8 @@
 @media (max-width: 420px) {
+    .doctor_info_wrapper {
+        flex-direction: column;
+    }
+
     .settings_icon_wrapper {
         display: none;
     }
@@ -54,6 +58,7 @@
 
     .doctor_info {
         width: 100%;
+        padding-right: unset;
 
         .doctor_name h1 {
             font-size: 24px;
@@ -73,7 +78,6 @@
         justify-content: space-evenly;
         column-gap: 30px;
         margin-top: 10px;
-        margin-bottom: 15px;
     }
 
     .society_block img {
@@ -83,20 +87,28 @@
 
     .doctor_actions {
         width: 100%;
+        padding-left: unset;
+        border-left: unset;
+        border-top: 1px solid #ffffff40;
+        margin-top: 10px;
+        padding-top: 10px;
     }
 
     .prodoc_btn_wrapper {
-        margin-top: 20px;
+        display: block;
     }
 
     .prodoc_btn {
         font-size: 16px;
         padding: 15px;
     }
+
+    .subscribers_link {
+        justify-content: space-between;
+    }
 }
 
 @media (max-width: 350px) {
-
     .search-doctors-container {
         width: 300px;
     }
@@ -171,7 +183,6 @@
         justify-content: space-evenly;
         column-gap: 30px;
         margin-top: 10px;
-        margin-bottom: 15px;
     }
 
     .society_block img {
@@ -183,12 +194,8 @@
         width: 100%;
     }
 
-    .prodoc_btn_wrapper {
-        margin-top: 20px;
-    }
-
     .prodoc_btn {
         font-size: 16px;
-        padding: 15px;
+        padding: 10px;
     }
 }

@@ -82,7 +82,7 @@ class Doctors(DataMixin, ListView):
         return context
 
 
-class ShowDoc(DataMixin, DetailView):
+class DoctorDetail(DataMixin, DetailView):
     model = Doctor
     template_name = 'docstar/doctor_detail.html'
 
@@ -100,16 +100,53 @@ class ShowDoc(DataMixin, DetailView):
         if tg and "https" not in tg:
             self.object.tg_url = f"https://t.me/{tg}"
 
+    def prepare_tg_channel_url(self):
+        tg = self.object.tg_channel_url
+        if not tg:
+            return
+
+        tg = tg.replace('@', "")
+        if tg and "https" not in tg:
+            self.object.tg_url = f"https://t.me/{tg}"
+
     def prepare_doctor_link(self):
         doc_link = self.object.prodoctorov
         some_url = self.object.inst_url or self.object.tg_url or self.object.vk_url
         if doc_link and "http" not in doc_link and not doc_link[0:4] == "http":
             self.object.prodoctorov = some_url
 
+    def enrich_doctor_subs(self):
+        doctor_id = self.object.id
+        api_url = f'{settings.SUBSCRIBERS_URL}/subscribers/{doctor_id}/'
+
+        try:
+            response = requests.get(
+                api_url,
+                timeout=3,
+                headers={'Content-Type': 'application/json'}
+            )
+            response.raise_for_status()
+
+            data = response.json()
+
+            if not all(key in data for key in ['doctor_id', 'telegram']):
+                raise ValueError("Неполные данные в ответе API")
+
+            self.object.subs_count = data['telegram_short']
+            self.object.subs_count_text = data['telegram_text']
+
+            return
+
+        except (requests.exceptions.Timeout, requests.exceptions.HTTPError, ValueError, Exception) as e:
+            return
+
     def get(self, request, *args, **kwargs):
         self.object: Doctor = self.get_object()
         self.prepare_tg_url()
+        self.prepare_tg_channel_url()
         self.prepare_doctor_link()
+
+        self.enrich_doctor_subs()
 
         context = self.get_context_data()
         return self.render_to_response(context)

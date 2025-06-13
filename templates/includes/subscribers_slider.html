@@ -1,0 +1,31 @@
+{% load static %}
+
+{% block extralinks %}
+    {{ super }}
+    <link type="text/css" rel="stylesheet" href="{% static 'css/subscribers_slider.css' %}">
+{% endblock %}
+
+<div class="wrapper">
+    <div class="subscribers-input">
+        <div class="input__range">
+            <div class="input__range-text">от&nbsp;</div>
+            <input type="number" id="min_subscribers" placeholder="300" class="input__range-value">
+        </div>
+        <div class="separator">-</div>
+        <div class="input__range">
+            <div class="input__range-text">до&nbsp;</div>
+            <input type="number" id="max_subscribers" placeholder="100 000" class="input__range-value">
+        </div>
+    </div>
+    <div class="slider">
+        <div class="progress"></div>
+    </div>
+    <div class="range-input">
+        <label>
+            <input type="range" class="range-min" min="300" max="10000" value="300" step="1">
+        </label>
+        <label>
+            <input type="range" class="range-max" min="0" max="100000" value="100000" step="1">
+        </label>
+    </div>
+</div>

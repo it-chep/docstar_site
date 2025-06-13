@@ -12,6 +12,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 import requests
 
+from docstar_site.clients.subscribers.dto import GetDoctorSubscribersResponse
 from docstar_site.forms import DoctorSearchForm, CreateDoctorForm
 from docstar_site.utils import *
 from docstar_site.functions import *
@@ -28,24 +29,6 @@ def page_not_found_view(request, exception):
 
 def health_check(request):
     return JsonResponse({"status": "ok"}, status=200)
-
-
-@cache_page(60 * 60 * 10)
-def spasibo_book(request):
-    uid = request.GET.get("uid")
-    gkname = request.GET.get("gkname")
-    gkphone = request.GET.get("gkphone")
-    gkemail = request.GET.get("gkemail")
-    return render(
-        request,
-        'docstar/docstar_book.html',
-        {
-            'uid': uid,
-            'gkname': gkname,
-            'gkphone': gkphone,
-            'gkemail': gkemail
-        }
-    )
 
 
 def e_handler500(request):
@@ -117,28 +100,16 @@ class DoctorDetail(DataMixin, DetailView):
 
     def enrich_doctor_subs(self):
         doctor_id = self.object.id
-        api_url = f'{settings.SUBSCRIBERS_URL}/subscribers/{doctor_id}/'
-
-        try:
-            response = requests.get(
-                api_url,
-                timeout=3,
-                headers={'Content-Type': 'application/json'}
-            )
-            response.raise_for_status()
-
-            data = response.json()
-
-            if not all(key in data for key in ['doctor_id', 'telegram']):
-                raise ValueError("Неполные данные в ответе API")
-
-            self.object.subs_count = data['telegram_short']
-            self.object.subs_count_text = data['telegram_text']
-            self.object.last_updated_date = data['tg_last_updated_date']
+        subscribers_response: GetDoctorSubscribersResponse = settings.SUBSCRIBERS_CLIENT.get_doctor_subscribers(
+            doctor_id
+        )
+        if subscribers_response.subs_count == 0:
             return
 
-        except (requests.exceptions.Timeout, requests.exceptions.HTTPError, ValueError, Exception) as e:
-            return
+        self.object.subs_count = subscribers_response.subs_count
+        self.object.subs_count_text = subscribers_response.subs_count_text
+        self.object.last_updated_date = subscribers_response.last_updated_date
+        return
 
     def get(self, request, *args, **kwargs):
         self.object: Doctor = self.get_object()
@@ -179,7 +150,6 @@ class DoctorsApiView(APIView):
         return Response({'doc': model_to_dict(new_doc)})
 
 
-@sync_to_async
 def getcourse_get_api(request):
     try:
         export_id = GetCourseExportID.objects.latest('export_time')
@@ -217,7 +187,7 @@ def getcourse_get_api(request):
             except ObjectDoesNotExist:
                 continue
 
-        return render(request, 'docstar/gk_respo.html', {'title': 'Обнова'})
+        return render(request, 'base.html', {'title': 'Обнова'})
 
     except Exception as ex:
         logger.error(ex)

@@ -15,6 +15,7 @@ function showAll(listId) {
 function initializeFilterClickAction() {
     const cityFilterHeader = document.getElementById('city-filter-header')
     const specialityFilterHeader = document.getElementById('speciality-filter-header')
+    const subscribersFilterHeader = document.getElementById('subscribers-filter-header')
 
     cityFilterHeader.addEventListener('click', function () {
         this.querySelector('.filter_open_close_arrow').classList.toggle('open')
@@ -24,6 +25,11 @@ function initializeFilterClickAction() {
     specialityFilterHeader.addEventListener('click', function () {
         this.querySelector('.filter_open_close_arrow').classList.toggle('open')
         toggleFilter('speciality-filter', this);
+    });
+
+    subscribersFilterHeader.addEventListener('click', function () {
+        this.querySelector('.filter_open_close_arrow').classList.toggle('open')
+        toggleFilter('subscribers-filter', this);
     });
 }
 
@@ -68,6 +74,31 @@ function closeMobileFilterSidebar() {
     }
 }
 
+// resetSubscribersFilter очистка фильтра подписчиков
+function resetSubscribersFilter() {
+    const $rangeInput = $(".range-input input");
+    const $subscribersInput = $(".subscribers-input input");
+    const $range = $(".slider .progress");
+    const maxAllowed = parseInt($rangeInput.eq(1).attr('max')) || 10000;
+
+    // Очищаем поля ввода
+    $subscribersInput.val('');
+
+    // Сбрасываем слайдер к начальным значениям
+    const initialMin = 0;
+    const initialMax = maxAllowed;
+
+    $rangeInput.eq(0).val(initialMin);
+    $rangeInput.eq(1).val(initialMax);
+
+    // Сбрасываем прогресс-бар
+    $range.css({
+        'left': '0%',
+        'right': '0%'
+    });
+}
+
+
 // initializeCleanFilterBtn инициализация кнопки "Очистить" фильтры
 function initializeCleanFilterBtn() {
     const clearBtn = $('.clear_button');
@@ -79,6 +110,8 @@ function initializeCleanFilterBtn() {
         $(`.checkbox-label`).each(function () {
             $(this).find('input[type="checkbox"]').prop('checked', false);
         });
+        // очищаем фильтр подписчиков
+        resetSubscribersFilter();
         // убираем фильтры из URL
         clearAllFilters();
         // убираем на мобилке шторку
@@ -94,27 +127,30 @@ function clearAllFilters() {
 
     urlParams.delete('city');
     urlParams.delete('speciality');
+    urlParams.delete('max_subscribers');
+    urlParams.delete('min_subscribers');
 
-    const newUrl = urlParams.toString()
-        ? `${window.location.pathname}?${urlParams}`
-        : window.location.pathname;
+    const newUrl = urlParams.toString() ? `${window.location.pathname}?${urlParams}` : window.location.pathname;
 
     history.pushState(null, null, newUrl);
 }
 
-// pushQueryParamsToURL - пушит новый фильтр в поисковую строку
 function pushQueryParamsToURL() {
     const selectedCities = [];
     const selectedSpecialities = [];
 
+    // Получаем значения подписчиков
+    const minSubscribers = $('#min_subscribers').val();
+    const maxSubscribers = $('#max_subscribers').val();
+
     // Собираем ID выбранных городов
     $('.checkbox-label.city input[type="checkbox"]:checked').each(function () {
-        selectedCities.push($(this).data('id')); // или $(this).attr('id').split('-')[1]
+        selectedCities.push($(this).data('id'));
     });
 
     // Собираем ID выбранных специальностей
     $('.checkbox-label.speciality input[type="checkbox"]:checked').each(function () {
-        selectedSpecialities.push($(this).data('id')); // или $(this).attr('id').split('-')[1]
+        selectedSpecialities.push($(this).data('id'));
     });
 
     // Формируем URL-параметры
@@ -126,6 +162,15 @@ function pushQueryParamsToURL() {
 
     if (selectedSpecialities.length > 0) {
         params.append('speciality', selectedSpecialities.join(','));
+    }
+
+    // Добавляем параметры подписчиков, если они указаны
+    if (minSubscribers && minSubscribers.trim() !== '') {
+        params.append('min_subscribers', minSubscribers);
+    }
+
+    if (maxSubscribers && maxSubscribers.trim() !== '') {
+        params.append('max_subscribers', maxSubscribers);
     }
 
     const newUrl = `${window.location.pathname}?${params.toString()}`;
@@ -257,9 +302,29 @@ function getFilterQueryParams() {
         }
     });
 
+    // Добавляем минимальное количество подписчиков
+    const minSubscribers = $('#min_subscribers').val();
+    if (minSubscribers && minSubscribers.trim() !== '') {
+        filters.min_subscribers = [minSubscribers];
+    }
+
+    // Добавляем максимальное количество подписчиков
+    const maxSubscribers = $('#max_subscribers').val();
+    if (maxSubscribers && maxSubscribers.trim() !== '') {
+        filters.max_subscribers = [maxSubscribers];
+    }
+
+    // Формируем query string
     return Object.entries(filters)
-        .map(([key, values]) => `${key}=${encodeURIComponent(values.join(','))}`)
-        .join('&')
+        .map(([key, values]) => {
+            // Для числовых параметров подписчиков не кодируем значения
+            if (key === 'min_subscribers' || key === 'max_subscribers') {
+                return `${key}=${values.join('')}`;
+            }
+            // Для остальных параметров применяем encodeURIComponent
+            return `${key}=${encodeURIComponent(values.join(','))}`;
+        })
+        .join('&');
 }
 
 function handleFilterClick(event, className) {
@@ -289,7 +354,6 @@ function handleFilterClick(event, className) {
 }
 
 function filterDoctors(filters, page = 1) {
-
     const $doctorListContainer = $('.all_doctors');
     $.ajax({
         url: `/api/v1/filter-doctor/?${filters}&page=${page}`, method: 'GET', success: function (response) {

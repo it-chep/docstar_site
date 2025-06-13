@@ -9,6 +9,8 @@ from django.urls import reverse, NoReverseMatch
 from rest_framework import views, status
 
 from docstar_site.clients.s3.client import DEFAULT_DOCTOR_IMAGE
+from docstar_site.clients.subscribers.dto import FilterDoctorsRequest
+
 from docstar_site.models import Doctor, Speciallity, City
 from docstar_site.forms import CreateDoctorForm
 from docstar_site.utils import get_site_url
@@ -96,8 +98,17 @@ class BaseDoctorApiView:
 
         return pages, doctors
 
+    @staticmethod
+    def get_offset(current_page: int) -> int:
+        if current_page <= 1:
+            offset = 0
+        else:
+            offset = current_page * settings.LIMIT_DOCTORS_ON_PAGE
+
+        return offset
+
     def get_doctors(self, request, *args, **kwargs):
-        city_list = self.request.GET.get('city')
+        city_list = request.GET.get('city')
         speciallity_list = request.GET.get('speciality')
         current_page = int(request.GET.get('page', 1))
 
@@ -126,6 +137,48 @@ class BaseDoctorApiView:
         doctors_list = self.enrich_photo_from_s3(self.prepare_doctors_data(doctors))
 
         return JsonResponse({'data': doctors_list, 'pages': pages, 'page': current_page}, status=status.HTTP_200_OK)
+
+    def get_doctors_by_ids(self, request, doctor_ids, *args, **kwargs):
+        city_list = request.GET.get('city')
+        speciality_list = request.GET.get('speciality')
+        current_page = int(request.GET.get('page', 1))
+
+        city_query = Q()
+        speciality_query = Q()
+
+        if city_list:
+            city_query = Q(city__id__in=city_list.split(','))
+        if speciality_list:
+            speciality_query = Q(speciallity__id__in=speciality_list.split(','))
+
+        q_args = city_query & speciality_query
+        doctors = Doctor.objects.filter(
+            q_args,
+            is_active=True,
+            id__in=doctor_ids,
+        ).order_by('name').select_related('city', 'speciallity')
+
+        pages, doctors = self.get_pages_and_doctors_with_offset(current_page, doctors)
+
+        doctors_list = self.enrich_photo_from_s3(self.prepare_doctors_data(doctors))
+
+        return JsonResponse({'data': doctors_list, 'pages': pages, 'page': current_page}, status=status.HTTP_200_OK)
+
+    def filter_doctors(self, request, *args, **kwargs):
+        if request.GET.get('max_subscribers', None) or request.GET.get('min_subscribers', None):
+            doctor_ids = settings.SUBSCRIBERS_CLIENT.filter_doctors_ids(
+                FilterDoctorsRequest(
+                    social_media="tg",
+                    offset=self.get_offset(current_page=int(request.GET.get('page', 1))),
+                    limit=settings.LIMIT_DOCTORS_ON_PAGE,
+                    max_subscribers=request.GET.get('max_subscribers', 100_000),
+                    min_subscribers=request.GET.get('min_subscribers', 300),
+                )
+            )
+
+            return self.get_doctors_by_ids(request, doctor_ids, *args, **kwargs)
+
+        return self.get_doctors(request, *args, **kwargs)
 
 
 class SearchDoctorApiView(BaseDoctorApiView, views.APIView):
@@ -171,18 +224,18 @@ class SearchDoctorApiView(BaseDoctorApiView, views.APIView):
 
 
 class FilterDoctorApiView(BaseDoctorApiView, views.APIView):
-
     def get(self, request, *args, **kwargs):
-        return self.get_doctors(request, *args, **kwargs)
+        return self.filter_doctors(request, *args, **kwargs)
 
 
 class DoctorListApiView(BaseDoctorApiView, views.APIView):
 
     def get(self, request, *args, **kwargs):
-        return self.get_doctors(request, *args, **kwargs)
+        return self.filter_doctors(request, *args, **kwargs)
 
 
 class CreateNewDoctorApiView(views.APIView):
+    # todo при реге сохранять в subscribers
     form_class = CreateDoctorForm
 
     def post(self, request, *args, **kwargs):

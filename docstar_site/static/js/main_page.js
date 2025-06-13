@@ -1,4 +1,5 @@
 $(document).ready(function () {
+    initializeFiltersFromQuery();
     loadDoctors(getStartPage());
     initMobileFilterAction();
     resizeMainTitle();
@@ -18,6 +19,29 @@ function relocateMainTitle($mainTitle) {
         $mainTitle.detach().insertAfter('.banner_new_doctor_mobile');
     } else {
         $mainTitle.detach().prependTo('.doctors_container');
+    }
+}
+
+function initializeFiltersFromQuery() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const $rangeInput = $(".range-input input");
+    const $range = $(".slider .progress");
+    const maxAllowed = parseInt($rangeInput.eq(1).attr('max')) || 10000;
+
+    // Устанавливаем минимальное количество подписчиков
+    const minSubscribers = urlParams.get('min_subscribers');
+    if (minSubscribers) {
+        $('#min_subscribers').val(minSubscribers);
+        $rangeInput.eq(0).val(minSubscribers);
+        $range.css('left', (minSubscribers / maxAllowed) * 100 + '%');
+    }
+
+    // Устанавливаем максимальное количество подписчиков
+    const maxSubscribers = urlParams.get('max_subscribers');
+    if (maxSubscribers) {
+        $('#max_subscribers').val(maxSubscribers);
+        $rangeInput.eq(1).val(maxSubscribers);
+        $range.css('right', 100 - (maxSubscribers / maxAllowed) * 100 + '%');
     }
 }
 

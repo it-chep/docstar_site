@@ -46,6 +46,7 @@
                 </div>
             </div>
         </div>
+        <div class="filter-section-dash"></div>
 
         <div class="filter-section">
             <div class="filter-header" id="speciality-filter-header">
@@ -66,7 +67,8 @@
                 <div class="filter-list" id="speciality-list">
                     {% for speciality in specialities %}
                         <label for="speciality-{{ speciality.id }}" class="checkbox-label speciality">
-                            <input type="checkbox" id="speciality-{{ speciality.id }}" data-id="{{ speciality.id }}" class="checkbox">
+                            <input type="checkbox" id="speciality-{{ speciality.id }}" data-id="{{ speciality.id }}"
+                                   class="checkbox">
                             <span class="checkbox-view">
                                 <img class="checkbox-icon" src="{% static 'img/homepage/check_mark.svg' %}">
                             </span>
@@ -76,6 +78,23 @@
                 </div>
             </div>
         </div>
+        <div class="filter-section-dash"></div>
+
+        <div class="filter-section">
+            <div class="filter-header" id="subscribers-filter-header">
+                <div class="filter_open_close_arrow search_filter_indicator">
+                    <span class="material-icons next">
+                        navigate_next
+                    </span>
+                </div>
+                <div class="filter-title">Подписчики TG</div>
+            </div>
+
+            <div id="subscribers-filter" class="filter-content">
+                {% include "includes/subscribers_slider.html" %}
+            </div>
+        </div>
+        <div class="filter-section-dash"></div>
 
         <div class="submit_button">
             <p>Применить</p>

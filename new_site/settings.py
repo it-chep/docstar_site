@@ -8,6 +8,7 @@ from pythonjsonlogger.jsonlogger import JsonFormatter
 from dotenv import load_dotenv
 
 from docstar_site.clients.s3.client import S3Client
+from docstar_site.clients.subscribers.client import SubscribersClient
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -207,6 +208,10 @@ S3_CLIENT = S3Client(
 
 # EXTERNAL APIS
 SUBSCRIBERS_URL = os.getenv('SUBSCRIBERS_URL')
+
+SUBSCRIBERS_CLIENT = SubscribersClient(
+    url=SUBSCRIBERS_URL
+)
 
 LOGGING = {
     'version': 1,

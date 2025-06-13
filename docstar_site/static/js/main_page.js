@@ -15,10 +15,18 @@ function resizeMainTitle() {
 
 function relocateMainTitle($mainTitle) {
     const windowWidth = $(window).width();
+    const $targetElement = $mainTitle.find('.doctors_list_header .single-base');
+
     if (windowWidth <= 420) {
         $mainTitle.detach().insertAfter('.banner_new_doctor_mobile');
-        $mainTitle.find('.doctors_list_header .single-base').append('<br>');
+
+        // Проверяем, есть ли уже <br> в элементе
+        if ($targetElement.find('br').length === 0) {
+            $targetElement.append('<br>');
+        }
     } else {
+        // Удаляем <br> при возврате на десктоп
+        $targetElement.find('br').remove();
         $mainTitle.detach().prependTo('.doctors_container');
     }
 }

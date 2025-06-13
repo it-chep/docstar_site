@@ -1,6 +1,7 @@
-from django.contrib import admin
+from django.contrib import admin, messages
 
 from docstar_site.models import *
+from docstar_site.utils import validate_url
 
 
 class CityAdmin(admin.ModelAdmin):
@@ -18,6 +19,30 @@ class DoctorAdmin(admin.ModelAdmin):
     raw_id_fields = ('city', 'speciallity')
 
     readonly_fields = ('s3_image',)
+
+    def save_model(self, request, obj, form, change):
+        if change and 'tg_channel_url' in form.changed_data:
+            success = self._handle_tg_channel_url_change(request, obj.id, obj.tg_channel_url)
+            if not success:
+                return
+
+        super().save_model(request, obj, form, change)
+
+    def _handle_tg_channel_url_change(self, request, doctor_id, tg_channel_url):
+        """Обработка изменения ссылки на канал телеграм"""
+        client = settings.SUBSCRIBERS_CLIENT
+        username = validate_url(tg_channel_url)
+        try:
+            created = client.create_doctor(doctor_id, username, "")
+            if not created:
+                messages.error(request,
+                               "Не удалось обновить данные в сервисе подписчиков.")
+                return False
+            messages.success(request, "Данные телеграм-канала успешно обновлены в сервисе подписчиков")
+            return True
+        except Exception as e:
+            messages.error(request, f"Ошибка при обновлении телеграм-канала: {str(e)}")
+            return False
 
 
 class SpeciallityAdmin(admin.ModelAdmin):

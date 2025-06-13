@@ -13,7 +13,7 @@ from docstar_site.clients.subscribers.dto import FilterDoctorsRequest
 
 from docstar_site.models import Doctor, Speciallity, City
 from docstar_site.forms import CreateDoctorForm
-from docstar_site.utils import get_site_url
+from docstar_site.utils import get_site_url, validate_url
 
 
 class BaseDoctorApiView:
@@ -168,7 +168,7 @@ class BaseDoctorApiView:
         max_subscribers = request.GET.get('max_subscribers', 100_000)
         min_subscribers = request.GET.get('min_subscribers', 300)
 
-        if (max_subscribers or min_subscribers) and (int(max_subscribers) != 100_000 and int(min_subscribers) != 300):
+        if (max_subscribers or min_subscribers) and (int(max_subscribers) != 100_000 or int(min_subscribers) != 300):
             doctor_ids = settings.SUBSCRIBERS_CLIENT.filter_doctors_ids(
                 FilterDoctorsRequest(
                     social_media="tg",
@@ -238,7 +238,6 @@ class DoctorListApiView(BaseDoctorApiView, views.APIView):
 
 
 class CreateNewDoctorApiView(views.APIView):
-    # todo при реге сохранять в subscribers
     form_class = CreateDoctorForm
 
     def post(self, request, *args, **kwargs):
@@ -247,8 +246,11 @@ class CreateNewDoctorApiView(views.APIView):
         try:
             if form.is_valid():
                 doctor = form.save()
+
                 self.send_data_to_google_script(doctor)
                 self.notificator_bot(doctor)
+                self.save_to_subscribers(doctor)
+
                 return JsonResponse(
                     {
                         "redirect_url": reverse("spasibo_club_participant"),
@@ -266,6 +268,17 @@ class CreateNewDoctorApiView(views.APIView):
                 {"alert": "Произошла ошибка, пожалуйста обратитесь в техподдержку"},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
+
+    @staticmethod
+    def save_to_subscribers(doctor):
+        # todo негативные кейсы отработать
+        client = settings.SUBSCRIBERS_CLIENT
+        if not doctor.tg_channel_url:
+            return None
+
+        tg_username = validate_url(doctor.tg_channel_url)
+
+        return client.create_doctor(doctor.id, tg_username, doctor.inst_url)
 
     @staticmethod
     def send_data_to_google_script(doctor):

@@ -1,7 +1,9 @@
 import datetime
 import re
 
+from atatus.contrib.django.client import client
 from django import forms
+from django.conf import settings
 from django.core.exceptions import ValidationError
 
 from docstar_site.functions import get_eng_slug
@@ -106,7 +108,7 @@ class CreateDoctorForm(forms.Form):
         label='Ссылка на ваш канал в телеграм',
         required=False,
         widget=forms.TextInput(attrs={
-            'placeholder': 'Можете оставить пустым'
+            'placeholder': 'Пример: https://t.me/readydoctor, но можно оставить пустым'
         }),
     )
 

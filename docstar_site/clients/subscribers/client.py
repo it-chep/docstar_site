@@ -1,3 +1,7 @@
+from __future__ import annotations
+
+from typing import Optional
+
 import requests
 from django.conf import settings
 
@@ -55,3 +59,44 @@ class SubscribersClient:
 
         except (requests.exceptions.Timeout, requests.exceptions.HTTPError, ValueError, Exception) as e:
             return GetDoctorSubscribersResponse(0, "", "")
+
+    def create_doctor(self, doctor_id: int, telegram: str, instagram: Optional[str], *args, **kwargs) -> bool | None:
+        """
+        Создает нового доктора через API
+        """
+        api_url = f'{self.url}/doctors/create/'
+
+        if not doctor_id or not telegram:
+            return None
+
+        # Подготовка данных для запроса
+        body = {
+            'doctor_id': doctor_id,
+            'instagram': instagram,
+            'telegram': telegram
+        }
+
+        # Удаляем None значения из payload
+        payload = {k: v for k, v in body.items() if v is not None}
+
+        headers = {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        }
+
+        try:
+            response = requests.post(
+                api_url,
+                json=payload,
+                headers=headers,
+                timeout=10
+            )
+            if response.status_code == 400:
+                return False
+
+            # Проверка статус кода
+            response.raise_for_status()
+            return True
+
+        except (requests.exceptions.Timeout, requests.exceptions.HTTPError, ValueError, Exception) as e:
+            return None

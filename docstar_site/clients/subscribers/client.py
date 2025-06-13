@@ -100,3 +100,9 @@ class SubscribersClient:
 
         except (requests.exceptions.Timeout, requests.exceptions.HTTPError, ValueError, Exception) as e:
             return None
+
+    def update_doctor(self, doctor_id: int, telegram: str, instagram: Optional[str], *args, **kwargs) -> bool:
+        ...
+
+    def filter_info(self):
+        ...

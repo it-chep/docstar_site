@@ -1,13 +1,24 @@
 @media (max-width: 420px) {
     .doctors_list_header {
         font-size: 30px;
-        line-height: 30px;
+        line-height: 40px;
+        margin-top: 20px;
     }
 
     .doctors_list_header_description {
-        letter-spacing: 1.3px;
         width: 90%;
         margin: 20px auto 0;
+        font-size: 19px;
+    }
+
+    .doctors-blogers {
+        font-size: 40px;
+        letter-spacing: 2px;
+    }
+
+    .single-base {
+        font-size: 57px;
+        letter-spacing: 2px;
     }
 
     .doctors_container {
@@ -103,8 +114,20 @@
 @media (max-width: 350px) {
     .doctors_list_header {
         font-size: 26px;
-        line-height: 30px;
+        line-height: 35px;
+        margin-top: 20px;
     }
+
+    .doctors-blogers {
+        font-size: 33px;
+        letter-spacing: 2px;
+    }
+
+    .single-base {
+        font-size: 48px;
+        letter-spacing: 2px;
+    }
+
 
     .doctors_container {
         width: 350px;
@@ -193,9 +216,9 @@
     }
 
     .doctors_list_header_description {
-        letter-spacing: 0;
         width: 90%;
         margin: 20px auto 0;
+        font-size: 16px;
     }
 
     .user_name p {

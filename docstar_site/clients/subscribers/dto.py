@@ -1,27 +1,28 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from typing import Optional
 
 
 @dataclass
 class FilterDoctorsRequest:
     # соц.сеть
-    social_media: str
+    social_media: str = "tg"
     # офсет
-    offset: int
+    offset: int = 0
     # лимит
-    limit: int
+    limit: int = 10
     # максимальное количество подписчиков
-    max_subscribers: int
+    max_subscribers: int = 0
     # минимальное количество подписчиков
-    min_subscribers: int
+    min_subscribers: int = 0
 
 
 @dataclass
 class GetDoctorSubscribersResponse:
     # количество подписчиков
-    subs_count: int
+    subs_count: int = 0
     # текст "подписчика", "подписчиков", "подписчик"
-    subs_count_text: str
+    subs_count_text: str = ""
     # дата последнего обновления в сервисе
-    last_updated_date: str
+    last_updated_date: str = ""

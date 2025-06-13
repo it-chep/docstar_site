@@ -98,14 +98,6 @@ class BaseDoctorApiView:
 
         return pages, doctors
 
-    @staticmethod
-    def get_offset(current_page: int) -> int:
-        if current_page <= 1:
-            offset = 0
-        else:
-            offset = current_page * settings.LIMIT_DOCTORS_ON_PAGE
-
-        return offset
 
     def get_doctors(self, request, *args, **kwargs):
         city_list = request.GET.get('city')
@@ -172,14 +164,13 @@ class BaseDoctorApiView:
             doctor_ids = settings.SUBSCRIBERS_CLIENT.filter_doctors_ids(
                 FilterDoctorsRequest(
                     social_media="tg",
-                    offset=self.get_offset(current_page=int(request.GET.get('page', 1))),
-                    limit=settings.LIMIT_DOCTORS_ON_PAGE,
-                    max_subscribers=request.GET.get('max_subscribers', 100_000),
-                    min_subscribers=request.GET.get('min_subscribers', 300),
+                    offset=0,
+                    max_subscribers=max_subscribers,
+                    min_subscribers=min_subscribers,
                 )
             )
-
-            return self.get_doctors_by_ids(request, doctor_ids, *args, **kwargs)
+            if len(doctor_ids) != 0:
+                return self.get_doctors_by_ids(request, doctor_ids, *args, **kwargs)
 
         return self.get_doctors(request, *args, **kwargs)
 

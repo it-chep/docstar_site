@@ -17,6 +17,7 @@ function relocateMainTitle($mainTitle) {
     const windowWidth = $(window).width();
     if (windowWidth <= 420) {
         $mainTitle.detach().insertAfter('.banner_new_doctor_mobile');
+        $mainTitle.find('.doctors_list_header .single-base').append('<br>');
     } else {
         $mainTitle.detach().prependTo('.doctors_container');
     }
@@ -75,6 +76,10 @@ function initMobileFilterAction() {
             const specialityFilterHeader = document.getElementById('speciality-filter-header')
             specialityFilterHeader.querySelector('.filter_open_close_arrow').classList.toggle('open')
             toggleFilter('speciality-filter', specialityFilterHeader);
+
+            const subscribersFilterHeader = document.getElementById('subscribers-filter-header')
+            subscribersFilterHeader.querySelector('.filter_open_close_arrow').classList.toggle('open')
+            toggleFilter('subscribers-filter', subscribersFilterHeader);
         }
     });
 }

@@ -165,7 +165,10 @@ class BaseDoctorApiView:
         return JsonResponse({'data': doctors_list, 'pages': pages, 'page': current_page}, status=status.HTTP_200_OK)
 
     def filter_doctors(self, request, *args, **kwargs):
-        if request.GET.get('max_subscribers', None) or request.GET.get('min_subscribers', None):
+        max_subscribers = request.GET.get('max_subscribers', 100_000)
+        min_subscribers = request.GET.get('min_subscribers', 300)
+
+        if (max_subscribers or min_subscribers) and (int(max_subscribers) != 100_000 and int(min_subscribers) != 300):
             doctor_ids = settings.SUBSCRIBERS_CLIENT.filter_doctors_ids(
                 FilterDoctorsRequest(
                     social_media="tg",

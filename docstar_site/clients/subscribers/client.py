@@ -91,6 +91,7 @@ class SubscribersClient:
                 headers=headers,
                 timeout=10
             )
+            print("создание врача в subscribers", response.status_code, response.__dict__)
             if response.status_code == 400:
                 return False
 

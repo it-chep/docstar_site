@@ -7,11 +7,13 @@ from docstar_site.views import (
     SpasiboClubParticipantView,
     DoctorDetail,
     Doctors,
+    WelcomeView
 )
 
 urlpatterns = [
     path("health/", health_check, name="health_check"),
 
+    path('welcome/', WelcomeView.as_view(), name="welcome"),
     path('new_club_participant/', NewClubParticipantView.as_view(), name="new_club_participant"),
     path('spasibo_club_participant/', SpasiboClubParticipantView.as_view(), name="spasibo_club_participant"),
 

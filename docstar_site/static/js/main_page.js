@@ -1,3 +1,6 @@
+
+let filter_wrapper_mobile_open = false
+
 $(document).ready(function () {
     initializeFiltersFromQuery();
     loadDoctors(getStartPage());
@@ -17,7 +20,7 @@ function relocateMainTitle($mainTitle) {
     const windowWidth = $(window).width();
     const $targetElement = $mainTitle.find('.doctors_list_header .single-base');
 
-    if (windowWidth <= 420) {
+    if (windowWidth <= 450) {
         $mainTitle.detach().insertAfter('.banner_new_doctor_mobile');
 
         // Проверяем, есть ли уже <br> в элементе
@@ -45,6 +48,7 @@ function initializeFiltersFromQuery() {
         $range.css('left', (minSubscribers / maxAllowed) * 100 + '%');
     }
 
+
     // Устанавливаем максимальное количество подписчиков
     const maxSubscribers = urlParams.get('max_subscribers');
     if (maxSubscribers) {
@@ -56,7 +60,8 @@ function initializeFiltersFromQuery() {
 
 function initMobileFilterAction() {
     const $filterWrapper = $('.filters_wrapper')
-
+    const body = document.querySelector('body')
+    checkResizeDesctop()
     const $closeMobileFilterButton = $(`<div class="close_mobile_filter_btn">
         <span class="material-icons">
         close
@@ -65,11 +70,19 @@ function initMobileFilterAction() {
 
     $closeMobileFilterButton.on('click', function () {
         $filterWrapper.fadeOut(300)
+        body.style.overflow=''
+        filter_wrapper_mobile_open=false;
+
+        removeCheckDisplay()
     });
 
     $('.settings_icon_wrapper').on('click', function () {
         $filterWrapper.fadeIn(300);
+        filter_wrapper_mobile_open=true;
+        checkDisplay()
+        body.style.overflow='hidden'
         if (!$filterWrapper.find('.mobile_filter_header').length) {
+
             $filterWrapper.prepend(`
                 <div class="mobile_filter_header">
                     <h1 class="mobile_filter_header_title">Фильтры</h1>
@@ -158,4 +171,46 @@ function getStartPage() {
         currentPage = parseInt(pageParam, 10);
     }
     return currentPage
+}
+
+function checkResizeDesctop() {
+    window.addEventListener('resize', () => {
+        const $target = $('.filters_wrapper')
+        const body = document.querySelector('body')
+        const windowWidth = $(window).width();
+        if (windowWidth > 450) {
+            $target.show()
+            body.style.overflow = ''
+            filter_wrapper_mobile_open=false;
+            removeCheckDisplay()
+        }
+        else {
+            $target.hide()
+        }
+    })
+
+}
+
+function checkResize(){
+    const $target = $('.filters_wrapper')
+    const body = document.querySelector('body')
+    const windowWidth = $(window).width();
+    if(windowWidth <= 450){
+        if(filter_wrapper_mobile_open){
+            $target.show()
+            body.style.overflow = 'hidden'
+        }
+        else {
+            $target.hide()
+            body.style.overflow = ''
+        }
+    }
+}
+
+function checkDisplay(){
+    window.addEventListener('resize', checkResize)
+}
+
+function removeCheckDisplay(){
+    window.removeEventListener('resize', checkResize)
 }

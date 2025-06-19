@@ -1,3 +1,15 @@
+@media (max-width: 450px) {
+     .settings_icon_wrapper {
+         display: block;
+         .material-icons {
+            font-size: 30px;
+            color: white;
+            background: #606060;
+            border-radius: 16px;
+        }
+    }
+}
+
 @media (max-width: 420px) {
     .doctors_list_header {
         font-size: 30px;
@@ -43,17 +55,6 @@
     .user_card_wrapper {
         width: 100%;
         padding: 10px;
-    }
-
-    .settings_icon_wrapper {
-        display: block;
-
-        .material-icons {
-            font-size: 30px;
-            color: white;
-            background: #606060;
-            border-radius: 16px;
-        }
     }
 
     .user_card {

@@ -29,7 +29,7 @@
 }
 
 .search_doctors_modal .modal-content {
-    width: 585px;
+    width: 100%;
     margin: 0 auto;
     border-radius: 30px;
     background: #1E1E1E;

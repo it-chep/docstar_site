@@ -95,7 +95,15 @@
     margin: 0;
     overflow-y: scroll;
     max-height: 200px;
+
+
+
+    .checkbox-view{
+        min-width: 20px;
+        min-height: 20px;
+    }
 }
+
 
 .filter-list li {
     margin-bottom: 5px;

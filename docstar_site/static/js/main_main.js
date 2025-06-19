@@ -38,7 +38,7 @@ function initMobileBurgerAction() {
                 </div>
                 <div class="mobile_burger_body">
                     <a href="https://medblogers.ru/">Что за клуб?</a>
-                    <a href="https://t.me/maxim_jordan">Связаться с техподдержкой</a>
+                    <a href="https://t.me/readydog">Связаться с техподдержкой</a>
                     <a href="https://t.me/Club_Docstar_bot?start=question">Задать вопрос</a>
                 </div>
             </div>

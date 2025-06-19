@@ -25,9 +25,9 @@
     <script src="{% static "js/bootstrap.bundle.min.js" %}"></script>
     <script src="{% static "js/bootstrap-datepicker.min.js" %}"></script>
     <script src="{% static "js/bootstrap-datepicker.ru.min.js" %}"></script>
-    
+
     <script src="{% static "js/new_club_participant.js" %}"></script>
-    
+
     <title>Регистрация</title>
 </head>
 <body>
@@ -58,17 +58,6 @@
                 </div>
                 <div class="form-group">
                     <div class="label-wrapper">
-                        {{ form.first_name.label }}
-                    </div>
-                    <div class="input-wrapper">
-                        {{ form.first_name }}
-                    </div>
-                    <div class="help-wrapper">
-                        {{ form.first_name.help_text }}
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="label-wrapper">
                         {{ form.last_name.label }}
                     </div>
                     <div class="input-wrapper">
@@ -76,6 +65,17 @@
                     </div>
                     <div class="help-wrapper">
                         {{ form.last_name.help_text }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="label-wrapper">
+                        {{ form.first_name.label }}
+                    </div>
+                    <div class="input-wrapper">
+                        {{ form.first_name }}
+                    </div>
+                    <div class="help-wrapper">
+                        {{ form.first_name.help_text }}
                     </div>
                 </div>
                 <div class="form-group">

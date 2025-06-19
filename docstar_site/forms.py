@@ -84,9 +84,9 @@ class CreateDoctorForm(forms.Form):
     )
     telegram_username = forms.CharField(
         label='Ваш никнейм в Telegram (не канал, а личный никнейм, через @)',
-        required=False,
+        required=True,
         widget=forms.TextInput(attrs={
-            'placeholder': 'Можете оставить пустым'
+            'placeholder': 'Пример: readydoc'
         }),
     )
     dzen_username = forms.CharField(

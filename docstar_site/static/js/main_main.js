@@ -1,4 +1,5 @@
 // Называется main_main, потому что, когда называешь main, в каком-то месте происходит переопределение, поэтому, не мнеять название а брать за галвный файл
+let burgerWrapper_open = false
 
 $(document).ready(function () {
     initMobileBurgerAction();
@@ -12,7 +13,6 @@ function initMobileBurgerAction() {
             </span>
         </div>
     `)
-
     appendBurgerMenu($burgerMenu);
 
     $(window).resize(function () {
@@ -20,6 +20,7 @@ function initMobileBurgerAction() {
         appendBurgerMenu($burgerMenu);
     });
 
+    const body = document.querySelector('body')
     const $mobileBurger = $('.mobile_burger');
     const $closeMobileBurgerButton = $(
         `<div class="close_mobile_burger_btn">
@@ -46,12 +47,22 @@ function initMobileBurgerAction() {
         `
     )
 
+
     $closeMobileBurgerButton.on('click', function () {
         $burgerBody.fadeOut(300)
+        burgerWrapper_open=false
+        body.style.overflow=''
+        removeCheckScrollForBurgerWrapper()
     });
 
     $mobileBurger.on('click', function () {
         let $burgerContainer = $('.burger-container')
+        burgerWrapper_open=true;
+        checkScrollForBurgerWrapper()
+        const windowWidth = $(window).width();
+        if (windowWidth <= 450) {
+            body.style.overflow='hidden';
+        }
         if ($burgerContainer.length > 0) {
             if ($burgerContainer.is(':hidden')) {
                 $burgerBody.fadeIn(300);
@@ -63,16 +74,40 @@ function initMobileBurgerAction() {
         $burgerBody.fadeIn(300);
     })
 
-    $burgerBody.on('click', function () {
-        $burgerBody.fadeOut(300)
+    $burgerBody.on('click', function (e) {
+        if(!e.target.closest('.burger-container')){
+            $burgerBody.fadeOut(300)
+            burgerWrapper_open=false
+            body.style.overflow=''
+            removeCheckScrollForBurgerWrapper()
+        }
     })
 }
 
 function appendBurgerMenu($burgerMenu) {
     const windowWidth = $(window).width();
-    if (windowWidth <= 420) {
+    if (windowWidth <= 800) {
         $('.logo-wrapper').append($burgerMenu);
     } else {
         $('.login-container').append($burgerMenu);
     }
+}
+
+function checkResizeForBurgerWrapper(){
+    const body = document.querySelector('body')
+    const windowWidth = $(window).width();
+    if(windowWidth <= 450 && burgerWrapper_open){
+        body.style.overflow = 'hidden'
+    }
+    else{
+        body.style.overflow = ''
+    }
+}
+
+function checkScrollForBurgerWrapper(){
+    window.addEventListener('resize', checkResizeForBurgerWrapper)
+}
+
+function removeCheckScrollForBurgerWrapper(){
+    window.removeEventListener('resize', checkResizeForBurgerWrapper)
 }

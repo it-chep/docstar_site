@@ -56,10 +56,12 @@ function initializeSearchFiltersInput() {
         cityList.each(function () {
             showFiltersBySearchText($(this), searchText)
         });
+
     })
 
     specialitySearchInput.on('input', function () {
         const searchText = $(this).val().toLowerCase();
+
         specialityList.each(function () {
             showFiltersBySearchText($(this), searchText)
         });
@@ -68,8 +70,9 @@ function initializeSearchFiltersInput() {
 
 // closeMobileFilterSidebar убирает на мобилке шторку фильтров
 function closeMobileFilterSidebar() {
+
     const windowWidth = $(window).width();
-    if (windowWidth <= 420) {
+    if (windowWidth < 450) {
         $('.filters_wrapper').fadeOut(300);
     }
 }
@@ -104,6 +107,9 @@ function initializeCleanFilterBtn() {
     const clearBtn = $('.clear_button');
 
     clearBtn.on('click', function (event) {
+
+        closeFilter()
+
         // очищаем фильтры над списком врачей
         $('.active_filters_wrapper').empty();
         // убираем чек у всех фильтров
@@ -157,6 +163,7 @@ function pushQueryParamsToURL() {
     const params = new URLSearchParams();
 
     if (selectedCities.length > 0) {
+
         params.append('city', selectedCities.join(','));
     }
 
@@ -179,6 +186,12 @@ function pushQueryParamsToURL() {
     history.pushState(null, null, newUrl);
 }
 
+function closeFilter(){
+    filter_wrapper_mobile_open=false
+    removeCheckDisplay()
+    const body = document.querySelector('body')
+    body.style.overflow=''
+}
 
 // initializeSubmitFilterBtn инициализация кнопки "Применить" фильтры
 function initializeSubmitFilterBtn() {
@@ -186,6 +199,8 @@ function initializeSubmitFilterBtn() {
 
     submitButton.on('click', function (event) {
         event.preventDefault();
+
+        closeFilter()
 
         // Очищаем текущие активные фильтры
         $('.active_filters_wrapper').empty();
@@ -258,9 +273,12 @@ $(document).ready(function () {
     sortList("speciality-list");
 
     $(document).on('click', '.active_filter_delete_btn', function (event) {
+
+
         const text = $(this).siblings('.active_filter_text').text();
         $(this).parent('.active_filter').remove();
         $(`.checkbox-label`).each(function () {
+
             if ($(this).find('.checkbox-text').text() === text) {
                 let checkbox = $(this).find('input[type="checkbox"]')
                 cleanFilterQueryParam(checkbox);

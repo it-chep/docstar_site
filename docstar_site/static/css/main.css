@@ -121,8 +121,13 @@ html, body {
     margin: 0;
     padding: 0;
     background-color: #0E0F0F;
+    width: 100%;
 }
 
+.main_container{
+    max-width: 100%;
+    overflow: hidden;
+}
 
 .container {
     width: 1200px;
@@ -134,10 +139,14 @@ html, body {
 }
 
 .search-doctors-wrapper {
+    position: relative;
     align-items: center;
     display: flex;
+    justify-content: space-between;
     flex-direction: row;
     gap: 20px;
+    width: 100%;
+    overflow: visible;
 }
 
 .mobile_burger span {
@@ -182,7 +191,7 @@ html, body {
 }
 
 .close_mobile_burger_btn {
-    border-radius: 100px;
+    border-radius: 50%;
     background: #161616;
 }
 

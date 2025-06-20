@@ -1,10 +1,36 @@
-@media (max-width: 420px) {
+@media (max-width: 800px) {
+    .logo-wrapper {
+        display: flex;
+        width: 100%;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+    }
+
+    .mobile_burger span {
+        margin-right: 12px;
+    }
+
+    .mobile_filter_header {
+        margin-top: 14px;
+        .close_mobile_burger_btn{
+            margin-right: calc(1vw + 12px - 20px + 6px);
+        }
+    }
+}
+
+@media (max-width: 450px) {
     .container {
-        width: 420px;
+        width: 100%;
     }
 
     footer {
         width: 420px;
+    }
+
+    .search-doctors-wrapper {
+        gap: 10px;
+        padding: 0 10px;
     }
 
     .logo-wrapper {
@@ -14,8 +40,13 @@
         gap: 20px;
     }
 
+    .mobile_filter_header{
+        margin-top: 19px;
+    }
+
     .mobile_burger span {
         color: white;
+
         font-size: 26px;
         padding: 18px;
         border-radius: 50px;
@@ -64,6 +95,10 @@
         width: 350px;
     }
 
+    .mobile_filter_header {
+        padding-right: -20px;
+    }
+
     .logo-wrapper {
         display: flex;
         align-items: center;
@@ -74,7 +109,7 @@
     .mobile_burger span {
         color: white;
         font-size: 26px;
-        padding: 18px;
+        padding: 13px;
         border-radius: 50px;
         background: #2E99FC;
     }
@@ -97,9 +132,11 @@
         flex-direction: column;
     }
 
-    .close_mobile_burger_btn {
-        border-radius: 100px;
-        background: #161616;
+    .mobile_filter_header {
+        margin-top: 20px;
+        .close_mobile_burger_btn{
+            margin-right: calc(1vw + 12px - 20px + 1px);
+        }
     }
 
     .close_mobile_burger_btn .material-icons {

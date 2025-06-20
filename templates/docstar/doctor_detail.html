@@ -90,23 +90,23 @@
                     {% endif %}
                     <div class="society_block">
                         {% if doctor.inst_url %}
-                          {% include "../includes/social_link.html" with url=doctor.inst_url img_url="img/logos/Instagram_icon.png" label="Профиль в инстаграм" %}
+                          {% include "../includes/social_link.html" with url=doctor.inst_url img_url="img/logos/Instagram_icon.png" label="Профиль в Instagram" %}
                         {% endif %}
 
                         {% if doctor.vk_url %}
-                            {% include "../includes/social_link.html" with url=doctor.vk_url img_url="img/logos/vk_logo.png" label="Профиль в вк" %}
+                            {% include "../includes/social_link.html" with url=doctor.vk_url img_url="img/logos/vk_logo.png" label="Профиль в VK" %}
                         {% endif %}
 
                         {% if doctor.dzen_url %}
-                            {% include "../includes/social_link.html" with url=doctor.dzen_url img_url="img/logos/dzen_logo.png" label="Профиль в дзен" %}
+                            {% include "../includes/social_link.html" with url=doctor.dzen_url img_url="img/logos/dzen_logo.png" label="Профиль в Dzen" %}
                         {% endif %}
 
                         {% if doctor.tg_url and not doctor.subs_count and not doctor.tg_channel_url %}
-                            {% include "../includes/social_link.html" with url=doctor.tg_url img_url="img/logos/telegram_logo.png" label="Профиль в телеграм" %}
+                            {% include "../includes/social_link.html" with url=doctor.tg_url img_url="img/logos/telegram_logo.png" label="Профиль в Telegram" %}
                         {% endif %}
 
                         {% if doctor.youtube_url %}
-                            {% include "../includes/social_link.html" with url=doctor.youtube_url img_url="img/logos/Youtube_logo.png" label="Профиль в ютуб" %}
+                            {% include "../includes/social_link.html" with url=doctor.youtube_url img_url="img/logos/Youtube_logo.png" label="Профиль в YouTube" %}
                         {% endif %}
                     </div>
                 </div>

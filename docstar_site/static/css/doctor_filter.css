@@ -22,6 +22,7 @@
 }
 
 .banner_new_doctor_header {
+    overflow: hidden;
     width: 100%;
     text-align: center;
     font-weight: 600;
@@ -30,6 +31,7 @@
 }
 
 .banner_new_doctor_button {
+    overflow: hidden;
     text-align: center;
     padding: 10px 20px;
     width: 100%;
@@ -90,20 +92,18 @@
 }
 
 .filter-list {
+    position: relative;
     list-style: none;
     padding: 0;
     margin: 0;
     overflow-y: scroll;
     max-height: 200px;
 
-
-
     .checkbox-view{
         min-width: 20px;
         min-height: 20px;
     }
 }
-
 
 .filter-list li {
     margin-bottom: 5px;

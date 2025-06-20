@@ -176,16 +176,19 @@ function getStartPage() {
 function checkResizeDesctop() {
     window.addEventListener('resize', () => {
         const $target = $('.filters_wrapper')
+        const $close_mobile_filter_btn = $('.close_mobile_filter_btn')
         const body = document.querySelector('body')
         const windowWidth = $(window).width();
         if (windowWidth > 450) {
             $target.show()
+            $close_mobile_filter_btn.hide()
             body.style.overflow = ''
-            filter_wrapper_mobile_open=false;
+            filter_wrapper_mobile_open = false;
             removeCheckDisplay()
         }
         else {
             $target.hide()
+            $close_mobile_filter_btn.show()
         }
     })
 

@@ -36,7 +36,7 @@
                 <div class="filter-list" id="city-list">
                     {% for city in cities %}
                         <label for="city-{{ city.id }}" class="checkbox-label city">
-                            <input type="check" id="city-{{ city.id }}" data-id="{{ city.id }}" class="checkbox">
+                            <input type="checkbox" id="city-{{ city.id }}" data-id="{{ city.id }}" class="checkbox">
                             <span class="checkbox-view">
                                 <img class="checkbox-icon" src="{% static 'img/homepage/check_mark.svg' %}">
                             </span>

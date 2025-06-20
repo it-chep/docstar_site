@@ -41,6 +41,7 @@
 .search_doctors_modal {
     margin-top: 60px;
     position: absolute;
+    z-index: 9999;
 }
 
 .close-btn {
@@ -59,7 +60,7 @@
     gap: 40px;
     align-items: center;
     justify-content: flex-start;
-    padding: 30px;
+    padding: 24px;
 }
 
 .mini_user_card:hover {
@@ -70,6 +71,8 @@
 .mini_user_avatar {
     width: 100px;
     height: 100px;
+    min-height: 100px;
+    min-width: 100px;
     overflow: hidden;
     position: relative;
     border-radius: 22px;
@@ -114,7 +117,7 @@
 
 .city-block {
     display: flex;
-    padding: 30px;
+    padding: 24px;
     align-items: center;
 
     .city-info {
@@ -130,7 +133,7 @@
 
 .speciality-block {
     display: flex;
-    padding: 30px;
+    padding: 24px;
     align-items: center;
 
     .speciality-info {
@@ -157,7 +160,8 @@
 .search-title {
     display: flex;
     text-align: left;
-    padding: 10px 0 10px 30px;
+    padding: 10px 0 10px 24px;
+    font-size: 1.2rem;
 }
 
 .search-ico {

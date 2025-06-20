@@ -25,17 +25,28 @@
     background-color: white;
     border-radius: 10px;
     text-align: center;
-    position: relative;
 }
 
 .search_doctors_modal .modal-content {
-    width: 100%;
-    margin: 0 auto;
-    border-radius: 30px;
-    background: #1E1E1E;
     color: white;
     max-height: 480px;
-    overflow-y: scroll;
+    overflow-y: auto;
+    background: #1E1E1E;
+    border-radius: 26px;
+
+    &::-webkit-scrollbar {
+        width: 6px;
+    }
+    &::-webkit-scrollbar-track {
+        box-sizing: border-box;
+        background: #222;
+        border-radius: 50% / 3px;
+        margin: 20px 0;
+    }
+    &::-webkit-scrollbar-thumb{
+        background-color: #ccc;
+        border-radius: 50% / 3px;
+    }
 }
 
 .search_doctors_modal {
@@ -43,6 +54,10 @@
     margin-top: 60px;
     position: absolute;
     z-index: 9999;
+}
+
+.search-city-spec-container{
+    margin-top: 20px;
 }
 
 .close-btn {
@@ -110,10 +125,6 @@
 
 .mini_doctor_link {
     pointer-events: auto;
-}
-
-.search-city-spec-container {
-    margin-top: 20px;
 }
 
 .city-block {

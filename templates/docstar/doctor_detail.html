@@ -101,7 +101,7 @@
                             {% include "../includes/social_link.html" with url=doctor.dzen_url img_url="img/logos/dzen_logo.png" label="Профиль в Dzen" %}
                         {% endif %}
 
-                        {% if doctor.tg_url and not doctor.subs_count and not doctor.tg_channel_url %}
+                        {% if doctor.tg_url %}
                             {% include "../includes/social_link.html" with url=doctor.tg_url img_url="img/logos/telegram_logo.png" label="Профиль в Telegram" %}
                         {% endif %}
 

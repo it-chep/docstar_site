@@ -52,9 +52,12 @@ class SubscribersClient:
                 raise ValueError("Неполные данные в ответе API")
 
             return GetDoctorSubscribersResponse(
-                subs_count=data['telegram_short'],
-                subs_count_text=data['telegram_text'],
-                last_updated_date=data['tg_last_updated_date'],
+                tg_subs_count=data['telegram_short'],
+                tg_subs_count_text=data['telegram_text'],
+                tg_last_updated_date=data['tg_last_updated_date'],
+                inst_subs_count=data['instagram_short'],
+                inst_subs_count_text=data['instagram_text'],
+                inst_last_updated_date=data['instagram_last_updated_date'],
             )
 
         except (requests.exceptions.Timeout, requests.exceptions.HTTPError, ValueError, Exception) as e:

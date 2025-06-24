@@ -146,6 +146,9 @@ class NewClubParticipantView(TemplateView):
         return context
 
 
+class WelcomeView(TemplateView):
+    template_name = "docstar/welcome_to_base.html"
+
 class SpasiboClubParticipantView(TemplateView):
     template_name = "docstar/spasibo_club_participant.html"
 

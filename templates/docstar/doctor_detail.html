@@ -74,55 +74,10 @@
                     {% endif %}
                 </div>
                 <div class="doctor_actions">
-                    <div class="society_block">
-                        {% if doctor.inst_url %}
-                            <div class="instagram">
-                                <a href="{{ doctor.inst_url }}" target="_blank" rel="noopener noreferrer">
-                                    <img src="{% static "img/logos/Instagram_icon.png" %}">
-                                </a>
-                            </div>
-                        {% endif %}
-
-                        {% if doctor.vk_url %}
-                            <div class="vk">
-                                <a href="{{ doctor.vk_url }}" target="_blank" rel="noopener noreferrer">
-                                    <img src="{% static "img/logos/vk_logo.png" %}">
-                                </a>
-                            </div>
-                        {% endif %}
-
-                        {% if doctor.dzen_url %}
-                            <div class="dzen">
-                                <a href="{{ doctor.dzen_url }}" target="_blank" rel="noopener noreferrer">
-                                    <img src="{% static "img/logos/dzen_logo.png" %}">
-                                </a>
-                            </div>
-                        {% endif %}
-
-                        {% if doctor.tg_url %}
-                            <div class="telegram">
-                                <a href="{{ doctor.tg_url }}" target="_blank" rel="noopener noreferrer">
-                                    <img src="{% static "img/logos/telegram_logo.png" %}">
-                                </a>
-                            </div>
-                        {% endif %}
-
-                        {% if doctor.youtube_url %}
-                            <div class="youtube">
-                                <a href="{{ doctor.youtube_url }}" target="_blank" rel="noopener noreferrer">
-                                    <img src="{% static "img/logos/Youtube_logo.png" %}">
-                                </a>
-                            </div>
-                        {% endif %}
-
-                    </div>
                     {% if doctor.subs_count and doctor.tg_channel_url %}
                         <div class="subscribers_link_wrapper">
-                            <a class="subscribers_link" href="{{ doctor.tg_channel_url }}" target="_blank"
-                               rel="noopener noreferrer">
-                                <div class="subs_logo">
-                                    <img src="{% static "img/logos/telegram_logo.png" %}">
-                                </div>
+                            <a class="subscribers_link" href="{{ doctor.tg_channel_url }}" target="_blank" rel="noopener noreferrer">
+                                <img class="social_icon" src="{% static "img/logos/telegram_logo.png" %}">
                                 <div class="subs_text">
                                     <span class="subs_count">{{ doctor.subs_count }}</span>
                                     <span>{{ doctor.subs_count_text }}</span>
@@ -131,10 +86,30 @@
                                     <img src="{% static "img/icons/doc_detail/subs_link_ico.svg" %}">
                                 </div>
                             </a>
-                            <div class="last_updated_date">Дата последнего
-                                обновления: {{ doctor.last_updated_date }}</div>
+                            <div class="last_updated_date">Дата последнего обновления: {{ doctor.last_updated_date }}</div>
                         </div>
                     {% endif %}
+                    <div class="society_block">
+                        {% if doctor.inst_url %}
+                          {% include "../includes/social_link.html" with url=doctor.inst_url img_url="img/logos/Instagram_icon.png" label="Профиль в Instagram" %}
+                        {% endif %}
+
+                        {% if doctor.vk_url %}
+                            {% include "../includes/social_link.html" with url=doctor.vk_url img_url="img/logos/vk_logo.png" label="Профиль в VK" %}
+                        {% endif %}
+
+                        {% if doctor.dzen_url %}
+                            {% include "../includes/social_link.html" with url=doctor.dzen_url img_url="img/logos/dzen_logo.png" label="Профиль в Dzen" %}
+                        {% endif %}
+
+                        {% if doctor.tg_url %}
+                            {% include "../includes/social_link.html" with url=doctor.tg_url img_url="img/logos/telegram_logo.png" label="Профиль в Telegram" %}
+                        {% endif %}
+
+                        {% if doctor.youtube_url %}
+                            {% include "../includes/social_link.html" with url=doctor.youtube_url img_url="img/logos/Youtube_logo.png" label="Профиль в YouTube" %}
+                        {% endif %}
+                    </div>
                 </div>
             </div>
         </div>

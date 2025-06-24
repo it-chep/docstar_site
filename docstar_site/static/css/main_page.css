@@ -3,40 +3,40 @@
 }
 
 .doctors_list_container {
+    max-width: 98%;
     background-color: #0E0F0F;
-}
 
-.doctors_container {
-    padding-left: 20px;
-    padding-right: 25px;
-    width: 1200px;
-    margin: 0 auto;
-}
+    .doctors_wrapper {
+        display: flex;
+        gap: 20px;
+        flex-direction: row;
+        width: 100%;
 
-.settings_icon_wrapper {
-    display: none;
-}
 
-.doctors_wrapper {
-    display: flex;
-    flex-direction: row;
-}
+        .doctors_container {
 
-.all_doctors {
-    column-gap: 20px;
-    row-gap: 20px;
-    text-align: center;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: left;
-}
+            width: 100%;
 
-.user_card_wrapper {
-    width: 278px;
-    height: auto;
-    padding: 10px 10px 20px 10px;
-    border-radius: 20px;
-    background: #1E1E1E;
+            .all_doctors {
+                width: 100%;
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                column-gap: 20px;
+                row-gap: 20px;
+                text-align: center;
+
+                .user_card_wrapper {
+                    overflow: hidden;
+                    height: auto;
+                    padding: 10px 10px 20px 10px;
+                    border-radius: 20px;
+                    background: #1E1E1E;
+
+
+                }
+            }
+        }
+    }
 }
 
 .user_card {
@@ -45,13 +45,31 @@
     justify-content: space-between;
     align-items: flex-start;
     flex-wrap: nowrap;
-}
 
-.user_avatar {
-    width: 100%;
-    margin: 0 0 10px;
-    image-orientation: revert;
-    object-fit: cover;
+    .user_avatar {
+        width: 100%;
+        margin: 0 0 10px;
+        image-orientation: revert;
+        object-fit: cover;
+
+        .avatar {
+            object-position: 10% 10%;
+            object-fit: cover;
+            position: relative;
+            width: 100%;
+            aspect-ratio: 1.6/1;
+            border-radius: 14px;
+        }
+
+    }
+
+
+
+    .user_info_btn_container {
+        padding-left: 10px;
+        margin-top: 10px;
+    }
+
 }
 
 .doc_info {
@@ -60,18 +78,26 @@
     gap: 8px;
     padding: 9px;
     width: 100%;
-    height: 110px;
     justify-content: space-between;
+
+    .user_additional_info {
+        font-size: 16px;
+        color: #aeaeae;
+        text-align: left;
+        display: flex;
+        gap: 5px;
+        flex-direction: column;
+    }
+
+    .user_additional_info p {
+        line-height: 18px;
+    }
 }
 
-.avatar {
-    object-position: 10% 10%;
-    object-fit: cover;
-    position: relative;
-    width: 100%;
-    height: 160px;
-    border-radius: 14px;
+.settings_icon_wrapper {
+    display: none;
 }
+
 
 .user_name {
     font-weight: 600;
@@ -79,7 +105,7 @@
     font-size: 20px;
     margin-top: -2%;
     width: 100%;
-    height: 50px;
+    height: 55px;
     float: left;
     text-align: left;
 }
@@ -88,41 +114,14 @@
     color: white;
 }
 
-.user_additional_info {
-    font-size: 16px;
-    color: #aeaeae;
-    text-align: left;
-    display: flex;
-    gap: 5px;
-    flex-direction: column;
-}
-
-.user_name p {
-    line-height: 20px;
-}
-
-.user_additional_info p {
-    line-height: 18px;
-}
-
 a {
     text-decoration: none;
     color: white;
 }
 
-.user_info_btn {
-    cursor: pointer;
-    width: 150px;
-    padding: 8px 20px;
-    border-radius: 100px;
-    border: 2px solid #2E99FC;
-    background: #01284B;
-    transition: background-color 0.5s ease;
-}
-
-.user_info_btn:hover {
-    background: #2E99FC
-}
+  .user_name p {
+      line-height: 20px
+  }
 
 .pagination_container {
     margin-top: 10px;
@@ -152,7 +151,6 @@ a {
 .material-icons {
     color: #717171;
     padding: 12px;
-    padding-top: 14px;
 }
 
 .material-icons:hover {
@@ -164,7 +162,20 @@ a {
     color: #2E99FC;
 }
 
-.user_info_btn_container {
-    padding-left: 10px;
-    margin-top: 10px;
+.banner_new_doctor{
+    width: 100%;
+}
+
+.user_info_btn {
+    cursor: pointer;
+    width: 150px;
+    padding: 8px 20px;
+    border-radius: 100px;
+    border: 2px solid #2E99FC;
+    background: #01284B;
+    transition: background-color 0.5s ease;
+}
+
+.user_info_btn:hover {
+    background: #2E99FC
 }

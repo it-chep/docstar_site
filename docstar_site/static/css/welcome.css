@@ -1,0 +1,112 @@
+.main_container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    width: 1200px;
+    max-width: 98%;
+    margin: 60px auto 60px;
+
+    .welcome_image img {
+        width: 100%;
+    }
+
+    .welcome_wrapper{
+        width: 680px;
+        max-width: 94%;
+        font-size: 16px;
+
+        .welcome_header {
+            margin: 20px 0;
+            color: white;
+
+            .medblogs_span{
+                text-wrap: nowrap;
+            }
+
+            h1{
+                font-size: 2rem;
+            }
+        }
+
+        .subtitle{
+            display: block;
+            font-weight: 500;
+            line-height: 28px;
+            margin-top: 16px;
+        }
+
+        .welcome_text{
+            color: white;
+            width: 100%;
+            text-align: left;
+            margin-top: 30px;
+
+            .welcome_list{
+                display: flex;
+                width: 100%;
+                flex-direction: column;
+                list-style: none;
+                gap: 4px;
+                li{
+                    line-height: 20px;
+                }
+            }
+        }
+
+        .condition{
+            display: block;
+            margin-top: 20px;
+        }
+
+        .welcome_action{
+            display: block;
+            margin-top: 4px;
+        }
+    }
+
+    .welcome_btn {
+        max-width: 300px;
+        margin: 40px auto 0;
+        text-align: center;
+        padding: 12px 32px;
+        background-color: #2E99FC;
+        border-radius: 100px;
+        font-size: 16px;
+        font-family: 'Proxima Nova', sans-serif;
+    }
+
+    .welcome_btn a {
+        text-decoration: none;
+        color: white;
+    }
+}
+
+@media (max-width: 650px) {
+    .main_container {
+        .welcome_wrapper {
+            .welcome_header {
+                h1{
+                    font-size: 1.8rem;
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 520px) {
+    .main_container {
+        .welcome_wrapper {
+            font-size: 15px;
+            .welcome_header {
+                h1{
+                    font-size: 1.6rem;
+                }
+            }
+        }
+        .welcome_btn {
+            max-width: 260px;
+        }
+    }
+
+}

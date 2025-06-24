@@ -1,4 +1,5 @@
 .filters-inline-wrapper {
+    width: 100%;
     height: auto;
     border-radius: 20px;
     background: #161616;
@@ -22,6 +23,7 @@
 }
 
 .banner_new_doctor_header {
+    overflow: hidden;
     width: 100%;
     text-align: center;
     font-weight: 600;
@@ -30,6 +32,7 @@
 }
 
 .banner_new_doctor_button {
+    overflow: hidden;
     text-align: center;
     padding: 10px 20px;
     width: 100%;
@@ -90,11 +93,17 @@
 }
 
 .filter-list {
+    position: relative;
     list-style: none;
     padding: 0;
     margin: 0;
     overflow-y: scroll;
     max-height: 200px;
+
+    .checkbox-view{
+        min-width: 20px;
+        min-height: 20px;
+    }
 }
 
 .filter-list li {
@@ -119,7 +128,8 @@
 }
 
 .filters_wrapper {
-    width: 370px;
+    min-width: 280px;
+    width: 280px;
 }
 
 .active_filters_wrapper {
@@ -195,4 +205,20 @@
     height: 1px;
     margin: 0 20px 0 20px;
     background: rgba(255, 255, 255, 0.25);
+}
+
+@media (max-width: 650px) {
+    .filters_wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-width: 0px;
+        width: 80%;
+    }
+}
+
+@media (max-width: 500px) {
+    .filters_wrapper {
+        width: 100%;
+    }
 }

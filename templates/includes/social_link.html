@@ -1,0 +1,13 @@
+{% load static %}
+
+<div class="social_links_wrapper">
+    <a class="social_link" href="{{ url }}" target="_blank" rel="noopener noreferrer">
+        <img class="social_icon" src="{% static img_url %}">
+        <div class="subs_text">
+            <span>{{ label }}</span>
+        </div>
+        <div class="subs_ico_link">
+            <img src="{% static "img/icons/doc_detail/subs_link_ico.svg" %}">
+        </div>
+    </a>
+</div>

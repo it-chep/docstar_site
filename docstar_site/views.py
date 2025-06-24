@@ -77,8 +77,8 @@ class DoctorDetail(DataMixin, DetailView):
 
         context["title"] = f"{self.object.name}"
 
-        context["city_help_text"] = "Город" if len(cities) == 0 else "Города"
-        primary_city_text = f"{primary_city.name}" if len(cities) == 0 else f"{primary_city.name}, "
+        context["city_help_text"] = "Город" if len(cities) == 1 else "Города"
+        primary_city_text = f"{primary_city.name}" if len(cities) == 1 else f"{primary_city.name}, "
         context["additional_doctor_cities_str"] = primary_city_text + ", ".join(
             [city['name'] for city in cities if city["id"] != primary_city_id]
         )

@@ -108,14 +108,6 @@ class CreateDoctorForm(forms.Form):
         required=True,
         choices=[(None, None)] + [(spec.id, spec.name) for spec in Speciallity.objects.all()]
     )
-
-    additional_speciallity = forms.CharField(
-        label='Дополнительная специальность',
-        widget=forms.TextInput(attrs={
-            'placeholder': 'Если нет, можете не указывать'
-        }),
-        required=False,
-    )
     main_blog_theme = forms.CharField(
         label='Основная тематика блога',
         required=False,
@@ -225,7 +217,6 @@ class CreateDoctorForm(forms.Form):
                 youtube_url=self.cleaned_data["youtube_username"],
                 city_id=self.cleaned_data["city"],
                 speciallity_id=self.cleaned_data["speciallity"],
-                additional_speciallity=self.cleaned_data["additional_speciallity"],
                 main_blog_theme=self.cleaned_data["main_blog_theme"],
                 age=self.cleaned_data["age"],
                 prodoctorov=self.cleaned_data["prodoctorov"],

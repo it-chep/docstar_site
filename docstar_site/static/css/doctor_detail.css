@@ -97,8 +97,7 @@
 
     .doctor_additional_speciallity_wrapper {
         .doctor_additional_speciallity {
-            background: none;
-            border: 1px solid #aeaeae;
+            background: #404040;
             color: #aeaeae;
             width: fit-content;
             border-radius: 8px;

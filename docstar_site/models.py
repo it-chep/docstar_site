@@ -31,17 +31,16 @@ class Doctor(models.Model):
         on_delete=models.PROTECT,
         null=True,
         blank=True,
-        verbose_name="Города",
+        verbose_name="Город",
         related_name='doctors_primary',
     )
 
     additional_cities = models.ManyToManyField(
         'City',
         blank=True,
-        null=True,
-        verbose_name="Дополнительные города работы",
+        verbose_name="Дополнительные города",
         related_name='doctors_additional'
-    )
+    ) # + содержит основной город
 
     speciallity = models.ForeignKey(
         'Speciallity',
@@ -55,10 +54,9 @@ class Doctor(models.Model):
     additional_specialties = models.ManyToManyField(
         'Speciallity',
         blank=True,
-        null=True,
         verbose_name="Дополнительные специальности",
         related_name='doctors_additional'
-    )
+    ) # + содержит основную специальность
 
     additional_speciallity = models.CharField('Доп специальность', max_length=255, null=True, blank=True)
     main_blog_theme = models.TextField(verbose_name='Тематика блога', null=True, blank=True)

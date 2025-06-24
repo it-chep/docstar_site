@@ -4,6 +4,21 @@ from django.db import migrations, models
 import django.db.models.deletion
 
 
+def transfer_data(apps, schema_editor):
+    Doctor = apps.get_model('docstar_site', 'Doctor')
+    for doctor in Doctor.objects.all():
+        if doctor.city:
+            doctor.additional_cities.add(doctor.city)
+        if doctor.speciallity:
+            doctor.additional_specialties.add(doctor.speciallity)
+
+def reverse_transfer_data(apps, schema_editor):
+    Doctor = apps.get_model('docstar_site', 'Doctor')
+    for doctor in Doctor.objects.all():
+        # Очищаем дополнительные города и специальности
+        doctor.additional_cities.clear()
+        doctor.additional_specialties.clear()
+
 class Migration(migrations.Migration):
 
     dependencies = [
@@ -14,13 +29,16 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='doctor',
             name='additional_cities',
-            field=models.ManyToManyField(blank=True, null=True, related_name='doctors_additional', to='docstar_site.city', verbose_name='Дополнительные города работы'),
+            field=models.ManyToManyField(blank=True, related_name='doctors_additional', to='docstar_site.city', verbose_name='Дополнительные города работы'),
         ),
         migrations.AddField(
             model_name='doctor',
             name='additional_specialties',
-            field=models.ManyToManyField(blank=True, null=True, related_name='doctors_additional', to='docstar_site.speciallity', verbose_name='Дополнительные специальности'),
+            field=models.ManyToManyField(blank=True, related_name='doctors_additional', to='docstar_site.speciallity', verbose_name='Дополнительные специальности'),
         ),
+
+        migrations.RunPython(transfer_data, reverse_code=reverse_transfer_data),
+
         migrations.AlterField(
             model_name='doctor',
             name='city',

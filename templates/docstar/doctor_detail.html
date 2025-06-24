@@ -31,30 +31,30 @@
                         </div>
 
                         <div class="doctor_city_speciallity_wrapper">
-                            <div class="doctor_city_wrapper">
-                                <div class="doctor_city">
-                                    <p>{{ doctor.city }}</p>
+                            <div class="doctor_all_specialties_wrapper">
+                                <div class="doctor_city_wrapper">
+                                    <div class="doctor_city">
+                                        <span>{{ city_help_text }}: </span><span>{{ additional_doctor_cities_str }}</span>
+                                    </div>
                                 </div>
                             </div>
-
-                            <div class="doctor_speciallity_wrapper">
-                                <div class="doctor_speciallity">
-                                    <p>{{ doctor.speciallity }}</p>
+                            <div class="doctor_all_specialties_wrapper">
+                                <div class="doctor_speciallity_wrapper">
+                                    <div class="doctor_speciallity">
+                                        <p>{{ doctor.speciallity }}</p>
+                                    </div>
                                 </div>
-
+                                {% for speciality in additional_doctor_specialities %}
+                                    <div class="doctor_additional_speciallity_wrapper">
+                                        <div class="doctor_additional_speciallity">
+                                            <p>{{ speciality }}</p>
+                                        </div>
+                                    </div>
+                                {% endfor %}
                             </div>
                         </div>
                     </div>
                     <div class="additional_information">
-                        {% if doctor.additional_speciallity %}
-                            <div class="additional_block">
-                                <p class="additional_specialities">
-                                    <span>Доп.специальность:</span>
-                                    {{ doctor.additional_speciallity }}
-                                </p>
-                            </div>
-                        {% endif %}
-
                         {% if doctor.main_blog_theme %}
                             <div class="additional_block">
                                 <p class="theme">
@@ -65,7 +65,8 @@
                         {% endif %}
                     </div>
                     {% if doctor.prodoctorov %}
-                        <a class="prodoc_btn_wrapper" href="{{ doctor.prodoctorov }}" target="_blank" rel="noopener noreferrer">
+                        <a class="prodoc_btn_wrapper" href="{{ doctor.prodoctorov }}" target="_blank"
+                           rel="noopener noreferrer">
                             <div class="prodoc_btn">
                                 <p class="prodoc_btn_text">Связаться</p>
                             </div>
@@ -117,19 +118,21 @@
                     </div>
                     {% if doctor.subs_count and doctor.tg_channel_url %}
                         <div class="subscribers_link_wrapper">
-                        <a class="subscribers_link" href="{{ doctor.tg_channel_url }}" target="_blank" rel="noopener noreferrer">
-                            <div class="subs_logo">
-                                <img src="{% static "img/logos/telegram_logo.png" %}">
-                            </div>
-                            <div class="subs_text">
-                                <span class="subs_count">{{ doctor.subs_count }}</span>
-                                <span>{{ doctor.subs_count_text }}</span>
-                            </div>
-                            <div class="subs_ico_link">
-                                <img src="{% static "img/icons/doc_detail/subs_link_ico.svg" %}">
-                            </div>
-                        </a>
-                        <div class="last_updated_date">Дата последнего обновления: {{ doctor.last_updated_date }}</div>
+                            <a class="subscribers_link" href="{{ doctor.tg_channel_url }}" target="_blank"
+                               rel="noopener noreferrer">
+                                <div class="subs_logo">
+                                    <img src="{% static "img/logos/telegram_logo.png" %}">
+                                </div>
+                                <div class="subs_text">
+                                    <span class="subs_count">{{ doctor.subs_count }}</span>
+                                    <span>{{ doctor.subs_count_text }}</span>
+                                </div>
+                                <div class="subs_ico_link">
+                                    <img src="{% static "img/icons/doc_detail/subs_link_ico.svg" %}">
+                                </div>
+                            </a>
+                            <div class="last_updated_date">Дата последнего
+                                обновления: {{ doctor.last_updated_date }}</div>
                         </div>
                     {% endif %}
                 </div>

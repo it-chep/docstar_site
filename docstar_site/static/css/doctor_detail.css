@@ -56,13 +56,33 @@
         }
     }
 
-    .doctor_speciallity_wrapper {
+    .doctor_all_specialties_wrapper {
+        display: flex;
+        flex-direction: row;
+        gap: 10px;
+        flex-wrap: wrap;
         margin-top: 10px;
         margin-bottom: 10px;
+    }
 
+    .doctor_speciallity_wrapper {
         .doctor_speciallity {
             background: #01284B;
             color: #2E99FC;
+            width: fit-content;
+            border-radius: 8px;
+
+            p {
+                padding: 8px 20px 8px 20px;
+            }
+        }
+    }
+
+    .doctor_additional_speciallity_wrapper {
+        .doctor_additional_speciallity {
+            background: none;
+            border: 1px solid #aeaeae;
+            color: #aeaeae;
             width: fit-content;
             border-radius: 8px;
 

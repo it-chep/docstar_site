@@ -52,26 +52,12 @@ class CreateDoctorForm(forms.Form):
         label='Сколько вам лет',
         min_value=0,
     )
-    birth_date = forms.DateField(
-        label='Ваш день рождения',
-        widget=forms.TextInput(attrs={
-            'class': 'datepicker',
-            'placeholder': 'Укажите дату в формате ДД.ММ.ГГГГ',
-        }),
-    )
-
+    # additional_cities =
+    # additional_specialties =
     instagram_username = forms.CharField(
         label='Ваш никнейм в инстаграм',
         required=False,
         widget=forms.TextInput(attrs={
-            'placeholder': 'Можете оставить пустым'
-        }),
-    )
-    instagram_subscribers = forms.IntegerField(
-        label='Количество подписчиков в Инстаграм (целое число)',
-        required=False,
-        min_value=0,
-        widget=forms.NumberInput(attrs={
             'placeholder': 'Можете оставить пустым'
         }),
     )
@@ -135,7 +121,7 @@ class CreateDoctorForm(forms.Form):
         required=False,
     )
     prodoctorov = forms.CharField(
-        label='Ссылка, куда записываться к вам на прием?',
+        label='Ваш сайт/таплинк',
         widget=forms.TextInput(attrs={
             'placeholder': 'Пример: https://taplink.cc/readydoc'
         }),
@@ -163,24 +149,6 @@ class CreateDoctorForm(forms.Form):
         if self.cleaned_data.get('last_name') and self.cleaned_data.get('first_name') and self.cleaned_data.get(
                 'middle_name'):
             self.name = f"{self.cleaned_data.get('last_name').strip()} {self.cleaned_data.get('first_name').strip()} {self.cleaned_data.get('middle_name').strip()}"
-
-    def clean_birth_date(self):
-        birth_date = self.cleaned_data.get('birth_date')
-
-        if not birth_date:
-            raise ValidationError('Дата рождения обязательна.')
-
-        if not re.match(r'^\d{2}\.\d{2}\.\d{4}$', birth_date.strftime('%d.%m.%Y')):
-            raise ValidationError('Неверный формат даты. Ожидается ДД.ММ.ГГГГ.')
-
-        if birth_date > datetime.date.today():
-            raise ValidationError('Дата рождения не может быть в будущем.')
-
-        max_age_date = datetime.date.today().replace(year=datetime.date.today().year - 120)
-        if birth_date < max_age_date:
-            raise ValidationError('Дата рождения не должна быть старше 120 лет.')
-
-        return birth_date
 
     def clean_city(self):
         city_id = self.cleaned_data.get('city')
@@ -260,9 +228,7 @@ class CreateDoctorForm(forms.Form):
                 additional_speciallity=self.cleaned_data["additional_speciallity"],
                 main_blog_theme=self.cleaned_data["main_blog_theme"],
                 age=self.cleaned_data["age"],
-                birth_date=self.cleaned_data["birth_date"],
                 prodoctorov=self.cleaned_data["prodoctorov"],
-                subscribers_inst=self.cleaned_data["instagram_subscribers"],
                 is_active=False,
             )
             return doctor

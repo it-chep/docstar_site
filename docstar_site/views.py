@@ -71,7 +71,20 @@ class DoctorDetail(DataMixin, DetailView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
+        primary_city = self.object.city
+        primary_city_id = primary_city.id
+        cities = self.object.additional_cities.all().values("id", "name")
+
         context["title"] = f"{self.object.name}"
+
+        context["city_help_text"] = "Город" if len(cities) == 0 else "Города"
+        primary_city_text = f"{primary_city.name}" if len(cities) == 0 else f"{primary_city.name}, "
+        context["additional_doctor_cities_str"] = primary_city_text + ", ".join(
+            [city['name'] for city in cities if city["id"] != primary_city_id]
+        )
+
+        context["additional_doctor_specialities"] = self.object.additional_specialties.all().exclude(id=self.object.speciallity.id)
+
         return context
 
     def prepare_tg_url(self):

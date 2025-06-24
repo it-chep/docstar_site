@@ -10,15 +10,15 @@ class CityAdmin(admin.ModelAdmin):
 
 
 class DoctorAdmin(admin.ModelAdmin):
-    list_display = ("id", 'name', 'email', 'city', 'speciallity', 'is_active')
+    list_display = ("id", 'name', 'email', 'display_cities', 'display_specialties', 'is_active')
     search_fields = ("email", "name",)
     prepopulated_fields = {"slug": ("name",)}
     ordering = ("id",)
 
-    list_filter = ('city', 'speciallity', 'is_active')
-    raw_id_fields = ('city', 'speciallity')
-
-    readonly_fields = ('s3_image',)
+    # todo кастом фильтр на доп и основные города
+    list_filter = ('city','speciallity','is_active')
+    filter_horizontal = ('additional_cities', 'additional_specialties')
+    readonly_fields = ('s3_image', 'city', 'speciallity')
 
     def save_model(self, request, obj, form, change):
         if change and 'tg_channel_url' in form.changed_data:
@@ -43,6 +43,16 @@ class DoctorAdmin(admin.ModelAdmin):
         except Exception as e:
             messages.error(request, f"Ошибка при обновлении телеграм-канала: {str(e)}")
             return False
+
+    def display_cities(self, obj):
+        return ", ".join([city.name for city in obj.additional_cities.all()])
+
+    display_cities.short_description = "Города"
+
+    def display_specialties(self, obj):
+        return ", ".join([spec.name for spec in obj.additional_specialties.all()])
+
+    display_specialties.short_description = "Специальности"
 
 
 class SpeciallityAdmin(admin.ModelAdmin):

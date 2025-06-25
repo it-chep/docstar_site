@@ -5,7 +5,7 @@ from typing import Optional
 import requests
 from django.conf import settings
 
-from docstar_site.clients.subscribers.dto import FilterDoctorsRequest, GetDoctorSubscribersResponse
+from docstar_site.clients.subscribers.dto import FilterDoctorsRequest, GetDoctorSubscribersResponse, DoctorMiniatureInfoResponse
 
 
 class SubscribersClient:
@@ -14,7 +14,7 @@ class SubscribersClient:
         self.url = url
         self.limit = settings.LIMIT_DOCTORS_ON_PAGE
 
-    def filter_doctors_ids(self, request: FilterDoctorsRequest, *args, **kwargs) -> list[int]:
+    def filter_doctors_ids(self, request: FilterDoctorsRequest, *args, **kwargs) -> list[DoctorMiniatureInfoResponse]:
         # пока хардкодим ТГ, тк только с тг есть интеграшка
         api_url = f'{self.url}/doctors/filter?social_media=tg&max_subscribers={request.max_subscribers}&min_subscribers={request.min_subscribers}&offset={request.offset}'
 
@@ -28,10 +28,18 @@ class SubscribersClient:
 
             data = response.json()
 
-            if not all(key in data for key in ['doctors_ids']):
+            if not all(key in data for key in ['doctors']):
                 raise ValueError("Неверные данные в ответе API")
 
-            return data['doctors_ids']
+            doctors = []
+            for doctor in data['doctors']:
+                doctors.append(DoctorMiniatureInfoResponse(
+                    doctor_id=doctor['id'],
+                    subs_count=doctor['telegram_short'],
+                    subs_count_text=doctor['telegram_text'],
+                ))
+
+            return doctors
         except (requests.exceptions.Timeout, requests.exceptions.HTTPError, ValueError, Exception) as e:
             return []
 
@@ -91,7 +99,6 @@ class SubscribersClient:
                 headers=headers,
                 timeout=10
             )
-            print("создание врача в subscribers", response.status_code, response.__dict__)
             if response.status_code == 400:
                 return False
 
@@ -102,8 +109,46 @@ class SubscribersClient:
         except (requests.exceptions.Timeout, requests.exceptions.HTTPError, ValueError, Exception) as e:
             return None
 
-    def update_doctor(self, doctor_id: int, telegram: str, instagram: Optional[str], *args, **kwargs) -> bool:
-        ...
+    def update_doctor(self, doctor_id: int, telegram: str, instagram: Optional[str], *args, **kwargs) -> int:
+        """
+        Обновляет информацию о докторе
+        """
+        api_url = f'{self.url}/doctors/{doctor_id}/'
+
+        if not doctor_id or not telegram:
+            return None
+
+        # Подготовка данных для запроса
+        body = {
+            'instagram': instagram,
+            'telegram': telegram
+        }
+
+        # Удаляем None значения из payload
+        payload = {k: v for k, v in body.items() if v is not None}
+
+        headers = {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        }
+
+        try:
+            response = requests.patch(
+                api_url,
+                json=payload,
+                headers=headers,
+                timeout=10
+            )
+            if response.status_code == 400:
+                return response.status_code
+
+            # Проверка статус кода
+            response.raise_for_status()
+            return response.status_code
+
+        except (requests.exceptions.Timeout, requests.exceptions.HTTPError, ValueError, Exception) as e:
+            return 500
+
 
     def filter_info(self):
         ...

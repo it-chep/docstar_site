@@ -21,7 +21,7 @@ class DoctorAdmin(admin.ModelAdmin):
     readonly_fields = ('s3_image',)
 
     def save_model(self, request, obj, form, change):
-        if change and 'tg_channel_url' in form.changed_data:
+        if change and ('tg_channel_url' in form.changed_data or 'instagram_url' in form.changed_data):
             success = self._handle_tg_channel_url_change(request, obj.id, obj.tg_channel_url)
             if not success:
                 return
@@ -33,12 +33,16 @@ class DoctorAdmin(admin.ModelAdmin):
         client = settings.SUBSCRIBERS_CLIENT
         username = validate_url(tg_channel_url)
         try:
-            created = client.create_doctor(doctor_id, username, "")
-            if not created:
+            # todo сделать валидацию и отправку инстаграмма
+            status = client.update_doctor(doctor_id, username, "")
+            if status > 400:
                 messages.error(request,
                                "Не удалось обновить данные в сервисе подписчиков.")
                 return False
-            messages.success(request, "Данные телеграм-канала успешно обновлены в сервисе подписчиков")
+            if status == 200:
+                messages.success(request, "Данные телеграм-канала успешно обновлены в сервисе подписчиков")
+            if status == 201:
+                messages.success(request, "Успешно создал новую запись в сервисе подписчиков")
             return True
         except Exception as e:
             messages.error(request, f"Ошибка при обновлении телеграм-канала: {str(e)}")

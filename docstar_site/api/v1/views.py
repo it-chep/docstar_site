@@ -22,6 +22,26 @@ class BaseDoctorApiView:
     search_city_limit = settings.LIMIT_CITY_ON_SEARCH
 
     @staticmethod
+    def configure_doctors_map(doctors):
+        doctors_dict = dict()
+        for doctor in doctors:
+            try:
+                reverse('doctor_card', kwargs={'slug': doctor.slug})
+            except NoReverseMatch as e:
+                continue
+
+            doctors_dict[doctor.id] = {
+                'name': doctor.name,
+                'city': doctor.city.name,
+                'slug': doctor.slug,
+                'speciality': doctor.speciallity.name,
+                'doctor_url': doctor.get_absolute_url(),
+                'local_file': doctor.get_local_file,
+            }
+
+        return doctors_dict
+
+    @staticmethod
     def prepare_doctors_data(doctors) -> list[dict]:
         doctors_list = []
         for doctor in doctors:
@@ -98,7 +118,6 @@ class BaseDoctorApiView:
 
         return pages, doctors
 
-
     def get_doctors(self, request, *args, **kwargs):
         city_list = request.GET.get('city')
         speciallity_list = request.GET.get('speciality')
@@ -130,7 +149,7 @@ class BaseDoctorApiView:
 
         return JsonResponse({'data': doctors_list, 'pages': pages, 'page': current_page}, status=status.HTTP_200_OK)
 
-    def get_doctors_by_ids(self, request, doctor_ids, *args, **kwargs):
+    def get_doctors_by_ids_with_subs(self, request, doctors_with_subs, *args, **kwargs):
         city_list = request.GET.get('city')
         speciality_list = request.GET.get('speciality')
         current_page = int(request.GET.get('page', 1))
@@ -143,6 +162,10 @@ class BaseDoctorApiView:
         if speciality_list:
             speciality_query = Q(speciallity__id__in=speciality_list.split(','))
 
+        doctor_ids = []
+        for doctor in doctors_with_subs:
+            doctor_ids.append(doctor['doctor_id'])
+
         q_args = city_query & speciality_query
         doctors = Doctor.objects.filter(
             q_args,
@@ -152,7 +175,12 @@ class BaseDoctorApiView:
 
         pages, doctors = self.get_pages_and_doctors_with_offset(current_page, doctors)
 
-        doctors_list = self.enrich_photo_from_s3(self.prepare_doctors_data(doctors))
+        doctors_map = self.configure_doctors_map(doctors)
+        for doctor in doctors_with_subs:
+            doctors_map[doctor['doctor_id']]["tg_subs_count"] = doctor['subs_count']
+            doctors_map[doctor['doctor_id']]["tg_subs_count_text"] = doctor['subs_count_text']
+
+        doctors_list = self.enrich_photo_from_s3(doctors_map.values())
 
         return JsonResponse({'data': doctors_list, 'pages': pages, 'page': current_page}, status=status.HTTP_200_OK)
 
@@ -161,7 +189,7 @@ class BaseDoctorApiView:
         min_subscribers = request.GET.get('min_subscribers', 300)
 
         if (max_subscribers or min_subscribers) and (int(max_subscribers) != 100_000 or int(min_subscribers) != 300):
-            doctor_ids = settings.SUBSCRIBERS_CLIENT.filter_doctors_ids(
+            doctors = settings.SUBSCRIBERS_CLIENT.filter_doctors_ids(
                 FilterDoctorsRequest(
                     social_media="tg",
                     offset=0,
@@ -169,8 +197,8 @@ class BaseDoctorApiView:
                     min_subscribers=min_subscribers,
                 )
             )
-            if len(doctor_ids) != 0:
-                return self.get_doctors_by_ids(request, doctor_ids, *args, **kwargs)
+            if len(doctors) != 0:
+                return self.get_doctors_by_ids_with_subs(request, doctors, *args, **kwargs)
 
         return self.get_doctors(request, *args, **kwargs)
 

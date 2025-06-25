@@ -7,13 +7,13 @@ from django.http import HttpResponse, JsonResponse
 from django.forms import model_to_dict
 from django.shortcuts import render
 from django.views.decorators.cache import cache_page
-from django.views.generic import ListView, DetailView, TemplateView
+from django.views.generic import DetailView, TemplateView
 from rest_framework.response import Response
 from rest_framework.views import APIView
 import requests
 
 from docstar_site.clients.subscribers.dto import GetDoctorSubscribersResponse
-from docstar_site.forms import DoctorSearchForm, CreateDoctorForm
+from docstar_site.forms import CreateDoctorForm
 from docstar_site.utils import *
 from docstar_site.functions import *
 
@@ -44,23 +44,11 @@ class CitySpeciallity:
         return Speciallity.objects.all()
 
 
-class Doctors(DataMixin, ListView):
-    model = Doctor
+class Doctors(TemplateView):
     template_name = "docstar/doctors.html"
-    context_object_name = 'doctors'
-    form_class = DoctorSearchForm
-
-    def get(self, request, *args, **kwargs):
-        form = DoctorSearchForm(self.request.GET or None)
-        self.object_list = self.get_queryset()
-        context = self.get_context_data(form=form, object_list=self.object_list)
-        return self.render_to_response(context)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['cities'] = City.objects.all()
-        context['specialities'] = Speciallity.objects.all()
-        context["title"] = "Врачи MEDBLOGERS"
         context["new_doctor_banner"] = True
         return context
 
@@ -148,6 +136,7 @@ class NewClubParticipantView(TemplateView):
 
 class WelcomeView(TemplateView):
     template_name = "docstar/welcome_to_base.html"
+
 
 class SpasiboClubParticipantView(TemplateView):
     template_name = "docstar/spasibo_club_participant.html"

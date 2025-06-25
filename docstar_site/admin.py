@@ -1,25 +1,64 @@
 from django.contrib import admin, messages
 from django.utils.html import format_html
+from django.template.response import TemplateResponse
 
 from docstar_site.models import *
 from docstar_site.utils import validate_url
+from django.utils import timezone
+
+def custom_admin_index_wrapper(original_index):
+    def wrapper(request, extra_context=None):
+        # Получаем стандартный response
+        response = original_index(request, extra_context)
+
+        if not isinstance(response, TemplateResponse):
+            return response
+
+        # Добавляем статистику только для superusers
+        if request.user.is_superuser:
+            now = timezone.now()
+            periods = {
+                'year': now - timezone.timedelta(days=365),
+                'month_6': now - timezone.timedelta(days=180),
+                'month': now - timezone.timedelta(days=30),
+                'week': now - timezone.timedelta(weeks=1),
+                'day': now - timezone.timedelta(days=1),
+            }
+
+            stats = []
+            for type_id, type_name in CooperationType.choices:
+                type_stats = {'type_name': type_name}
+                for period_name, period_date in periods.items():
+                    count = Doctor.objects.filter(
+                        cooperation_type=type_id,
+                        date_created__gte=period_date
+                    ).count()
+                    type_stats[period_name] = count
+                stats.append(type_stats)
+
+            # Добавляем статистику в контекст
+            response.context_data['stats'] = stats
+
+        return response
+
+    return wrapper
 
 
-class CityAdmin(admin.ModelAdmin):
-    list_display = ("id", 'name', 'code')
-    search_fields = ("name",)
+# Применяем декоратор к стандартному index
+admin.site.index = custom_admin_index_wrapper(admin.site.index)
 
 
+@admin.register(Doctor)
 class DoctorAdmin(admin.ModelAdmin):
-    list_display = ("id", 'name', 'email', 'display_cities', 'display_specialties', 'is_active')
+    list_display = ("id", 'name', 'cooperation_type', 'display_cities', 'display_specialties', 'is_active')
     search_fields = ("email", "name",)
     prepopulated_fields = {"slug": ("name",)}
     ordering = ("id",)
 
-    list_filter = ('additional_cities', 'additional_specialties', 'is_active')
+    list_filter = ('additional_cities', 'additional_specialties', 'is_active', 'cooperation_type')
     filter_horizontal = ('additional_cities', 'additional_specialties')
     raw_id_fields = ('city', 'speciallity')
-    readonly_fields = ('s3_image',)
+    readonly_fields = ('s3_image', 'date_created')
 
     def save_related(self, request, form, formsets, change):
         obj = self.model.objects.get(pk=form.instance.pk)
@@ -80,7 +119,7 @@ class DoctorAdmin(admin.ModelAdmin):
         """Обработка изменения ссылки на канал телеграм"""
         client = settings.SUBSCRIBERS_CLIENT
         username = validate_url(tg_channel_url)
-        doctor_admin_url = reverse('admin:docstar_site_doctor_change', args=[obj.id])
+        doctor_admin_url = reverse('admin:docstar_site_doctor_change', args=[doctor_id])
 
         try:
             created = client.create_doctor(doctor_id, username, "")
@@ -111,6 +150,13 @@ class DoctorAdmin(admin.ModelAdmin):
     display_specialties.short_description = "Специальности"
 
 
+@admin.register(City)
+class CityAdmin(admin.ModelAdmin):
+    list_display = ("id", 'name', 'code')
+    search_fields = ("name",)
+
+
+@admin.register(Speciallity)
 class SpeciallityAdmin(admin.ModelAdmin):
     list_display = ("id", 'name',)
     search_fields = ("name",)
@@ -118,11 +164,6 @@ class SpeciallityAdmin(admin.ModelAdmin):
 
 class ExportAdmin(admin.ModelAdmin):
     list_display = ('export_id', 'export_time')
-
-
-admin.site.register(Doctor, DoctorAdmin)
-admin.site.register(City, CityAdmin)
-admin.site.register(Speciallity, SpeciallityAdmin)
 
 from django.contrib.auth.models import Group
 

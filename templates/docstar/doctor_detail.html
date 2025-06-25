@@ -68,8 +68,8 @@
                             </div>
                         {% endif %}
                     </div>
-                    {% if doctor.prodoctorov %}
-                        <a class="prodoc_btn_wrapper" href="{{ doctor.prodoctorov }}" target="_blank"
+                    {% if doctor.tg_url %}
+                        <a class="prodoc_btn_wrapper" href="{{ doctor.tg_url }}" target="_blank"
                            rel="noopener noreferrer">
                             <div class="prodoc_btn">
                                 <p class="prodoc_btn_text">Связаться</p>
@@ -108,12 +108,12 @@
                             {% include "../includes/social_link.html" with url=doctor.dzen_url img_url="img/logos/dzen_logo.png" label="Профиль в Dzen" %}
                         {% endif %}
 
-                        {% if doctor.tg_url %}
-                            {% include "../includes/social_link.html" with url=doctor.tg_url img_url="img/logos/telegram_logo.png" label="Профиль в Telegram" %}
-                        {% endif %}
-
                         {% if doctor.youtube_url %}
                             {% include "../includes/social_link.html" with url=doctor.youtube_url img_url="img/logos/Youtube_logo.png" label="Профиль в YouTube" %}
+                        {% endif %}
+
+                        {% if doctor.prodoctorov %}
+                            {% include "../includes/social_link.html" with url=doctor.prodoctorov img_url="img/logos/internet.png" label="Свой сайт" %}
                         {% endif %}
                     </div>
                 </div>

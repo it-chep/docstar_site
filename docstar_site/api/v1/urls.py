@@ -5,6 +5,7 @@ from .views import (
     FilterDoctorApiView,
     DoctorListApiView,
     CreateNewDoctorApiView,
+    SettingsApiView,
 )
 
 urlpatterns = [
@@ -29,5 +30,10 @@ urlpatterns = [
         "create_new_doctor/",
         CreateNewDoctorApiView.as_view(),
         name="create_new_doctor"
+    ),
+    path(
+        "settings/",
+        SettingsApiView.as_view(),
+        name="settings"
     ),
 ]

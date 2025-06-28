@@ -93,12 +93,28 @@
 }
 
 .filter-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
     position: relative;
     list-style: none;
     padding: 0;
-    margin: 0;
+    margin: 20px 0 0 0;
     overflow-y: scroll;
     max-height: 200px;
+
+    &::-webkit-scrollbar {
+        width: 6px;
+    }
+    &::-webkit-scrollbar-track {
+        box-sizing: border-box;
+        background: #222;
+        border-radius: 50% / 3px;
+    }
+    &::-webkit-scrollbar-thumb{
+        background-color: #ccc;
+        border-radius: 50% / 3px;
+    }
 
     .checkbox-view{
         min-width: 20px;

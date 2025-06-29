@@ -47,13 +47,34 @@ class CreateDoctorForm(forms.Form):
         max_length=100,
         widget=forms.TextInput(attrs={'class': 'input-field'}),
     )
-
-    age = forms.IntegerField(
-        label='Сколько вам лет',
-        min_value=0,
+    birth_date = forms.DateField(
+        label='Ваш день рождения',
+        widget=forms.TextInput(attrs={
+            'class': 'datepicker',
+            'placeholder': 'Укажите дату в формате ДД.ММ.ГГГГ',
+        }),
     )
-    # additional_cities =
-    # additional_specialties =
+
+    additional_cities = forms.ModelMultipleChoiceField(
+        label='Дополнительные города',
+        queryset=City.objects.all(),
+        required=False,
+        widget=forms.SelectMultiple(attrs={
+            'class': 'select-multiple',
+            'placeholder': 'Выберите города'
+        })
+    )
+
+    additional_specialties = forms.ModelMultipleChoiceField(
+        label='Дополнительные специальности',
+        queryset=Speciallity.objects.all(),
+        required=False,
+        widget=forms.SelectMultiple(attrs={
+            'class': 'select-multiple',
+            'placeholder': 'Выберите специальность'
+        })
+    )
+
     instagram_username = forms.CharField(
         label='Ваш никнейм в инстаграм',
         required=False,
@@ -72,7 +93,7 @@ class CreateDoctorForm(forms.Form):
         label='Ваш никнейм в Telegram (не канал, а личный никнейм, через @)',
         required=True,
         widget=forms.TextInput(attrs={
-            'placeholder': 'Пример: readydoc'
+            'placeholder': 'Пример: @readydoc'
         }),
     )
     dzen_username = forms.CharField(
@@ -109,7 +130,7 @@ class CreateDoctorForm(forms.Form):
         choices=[(None, None)] + [(spec.id, spec.name) for spec in Speciallity.objects.all()]
     )
     main_blog_theme = forms.CharField(
-        label='Основная тематика блога',
+        label='ТОП-5 заболеваний/тем про которые пишете в блоге',
         required=False,
     )
     prodoctorov = forms.CharField(
@@ -120,9 +141,9 @@ class CreateDoctorForm(forms.Form):
         required=False,
     )
 
-    # agree_policy = forms.BooleanField(
-    #     label='Согласен с политикой обработки данных', required=True
-    # )
+    agree_policy = forms.BooleanField(
+        label='Согласен с политикой обработки данных', required=True
+    )
 
     def clean(self):
         if all([
@@ -202,6 +223,24 @@ class CreateDoctorForm(forms.Form):
             raise ValidationError("Пожалуйста, укажите ссылку на сайт или соц.сеть, ссылка должна содержать http")
         return self._clean_social_link(data, "")
 
+    def clean_birth_date(self):
+        birth_date = self.cleaned_data.get('birth_date')
+
+        if not birth_date:
+            raise ValidationError('Дата рождения обязательна.')
+
+        if not re.match(r'^\d{2}\.\d{2}\.\d{4}$', birth_date.strftime('%d.%m.%Y')):
+            raise ValidationError('Неверный формат даты. Ожидается ДД.ММ.ГГГГ.')
+
+        if birth_date > datetime.date.today():
+            raise ValidationError('Дата рождения не может быть в будущем.')
+
+        max_age_date = datetime.date.today().replace(year=datetime.date.today().year - 120)
+        if birth_date < max_age_date:
+            raise ValidationError('Дата рождения не должна быть старше 120 лет.')
+
+        return birth_date
+
     def save(self, commit=True):
         try:
             slug = get_eng_slug(self.name)
@@ -218,10 +257,16 @@ class CreateDoctorForm(forms.Form):
                 city_id=self.cleaned_data["city"],
                 speciallity_id=self.cleaned_data["speciallity"],
                 main_blog_theme=self.cleaned_data["main_blog_theme"],
-                age=self.cleaned_data["age"],
+                birth_date=self.cleaned_data["birth_date"],
                 prodoctorov=self.cleaned_data["prodoctorov"],
                 is_active=False,
             )
+
+            doctor.additional_cities.set(self.cleaned_data["city"])
+            doctor.additional_cities.set(self.cleaned_data["additional_cities"])
+            doctor.additional_specialties.set(self.cleaned_data["speciallity"])
+            doctor.additional_specialties.set(self.cleaned_data["additional_specialties"])
+
             return doctor
         except City.DoesNotExist:
             raise ValidationError('Указанный город не найден.')

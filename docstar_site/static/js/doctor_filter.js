@@ -11,13 +11,24 @@ function showAll(listId) {
     }
 }
 
+function disableTextSelection(targets){
+    targets.forEach(target => {
+        target.addEventListener('mousedown', (e) => {
+            e.preventDefault()
+        })
+    })
+}
+
 // initializeFilterClickAction инициализация тоглов открывания фильтров "Города", "Специальности"
 function initializeFilterClickAction() {
     const cityFilterHeader = document.getElementById('city-filter-header')
     const specialityFilterHeader = document.getElementById('speciality-filter-header')
     const subscribersFilterHeader = document.getElementById('subscribers-filter-header')
 
-    cityFilterHeader.addEventListener('click', function () {
+    disableTextSelection([cityFilterHeader, specialityFilterHeader, subscribersFilterHeader, ...document.querySelectorAll('.checkbox-label')])
+
+    cityFilterHeader.addEventListener('click', function (e) {
+        e.preventDefault()
         this.querySelector('.filter_open_close_arrow').classList.toggle('open')
         toggleFilter('city-filter', this);
     });
@@ -279,7 +290,6 @@ $(document).ready(function () {
         const text = $(this).siblings('.active_filter_text').text();
         $(this).parent('.active_filter').remove();
         $(`.checkbox-label`).each(function () {
-
             if ($(this).find('.checkbox-text').text() === text) {
                 let checkbox = $(this).find('input[type="checkbox"]')
                 cleanFilterQueryParam(checkbox);
@@ -407,18 +417,21 @@ function filterDoctors(filters, page = 1) {
                     const doctorCard = `
                         <div class="user_card_wrapper">
                             <div class="user_card">
-                                <div class="user_avatar">
-                                    ${doctor.avatar_url ? `<img class="avatar" src="${doctor.avatar_url}" />` : ''}
-                                </div>
-                                <div class="doc_info">
-                                    <div class="user_name doctor_name">
-                                        <p>${doctor.name}</p>
+                                <div class="user_info_wrap">
+                                    <div class="user_avatar">
+                                        ${doctor.avatar_url ? `<img class="avatar" src="${doctor.avatar_url}" />` : ''}
                                     </div>
-                                    <div class="user_additional_info">
-                                        <p>${doctor.speciality}</p>
-                                        <p>📍${doctor.city}</p>
+                                    <div class="doc_info">
+                                        <div class="user_name doctor_name">
+                                            <p>${doctor.name}</p>
+                                        </div>
+                                        <div class="user_additional_info">
+                                            <p>${doctor.speciality}</p>
+                                            <p>📍${doctor.city}</p>
+                                        </div>
                                     </div>
                                 </div>
+                                
                                 <a class="user_info_btn_container" href="${doctor.doctor_url}">
                                     <div class="user_info_btn">
                                         <div class="user_info_btn_text">Подробнее</div>

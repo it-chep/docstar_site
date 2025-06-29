@@ -1,3 +1,9 @@
+function loader(target){
+    target.empty();
+    const loader_spinner = `<div class="loader_spinner"></div>`
+    target.append(loader_spinner);
+}
+
 $(document).ready(function () {
     const $searchDoctorContainer = $('.search-doctors-container')
     const $searchDoctorInput = $('.search-doctors-input')

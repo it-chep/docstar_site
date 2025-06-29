@@ -1,8 +1,10 @@
+let isLoading = false;
 $(document).ready(function () {
     $(".submit-button-container").on("click", function () {
-        const $button = $(this);
-        $button.prop("disabled", true);
-
+        if(isLoading){
+            return
+        }
+        isLoading = true;
         const formData = $("#create-doctor-form").serialize();
 
         $.ajax({
@@ -10,9 +12,11 @@ $(document).ready(function () {
             type: "POST",
             data: formData,
             success: function (response) {
+                isLoading = false;
                 window.location.href = response.redirect_url;
             },
             error: function (response, status, error) {
+                isLoading = false;
                 const errors = response.responseJSON.errors;
                 if (errors) {
                     displayErrors(errors);
@@ -23,7 +27,6 @@ $(document).ready(function () {
                     console.log(Alert);
                 }
 
-                $button.prop("disabled", false);
             },
         });
     });

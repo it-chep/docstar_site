@@ -461,10 +461,18 @@ class SettingsApiView(CitySpecialityMixin, views.APIView):
         """Сериализует данные о количестве врачей"""
         return data[0]['doctors_count'] if data else 0
 
+    @staticmethod
+    def _get_subscribers_info():
+        return settings.SUBSCRIBERS_CLIENT.get_all_subscribers_info()
+
     def get(self, request, *args, **kwargs):
+        subscribers_info = self._get_subscribers_info()
         return JsonResponse(
             {
                 'doctors_count': self._serialize_doctors_count(self._get_doctors_count()),
+                'subscribers_count': subscribers_info.subscribers_count,
+                'subscribers_count_text': subscribers_info.subscribers_count_text,
+                'subscribers_last_updated': subscribers_info.subscribers_last_updated,
                 'cities': self._prepare_cities_data(self._get_cities()),
                 'specialities': self._prepare_specialities_data(self._get_specialities()),
                 'new_doctor_banner': True,

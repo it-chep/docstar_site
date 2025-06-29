@@ -26,3 +26,12 @@ class GetDoctorSubscribersResponse:
     subs_count_text: str = ""
     # дата последнего обновления в сервисе
     last_updated_date: str = ""
+
+@dataclass
+class GetAllSubscribersInfoResponse:
+    # количество подписчиков
+    subscribers_count: str = ""
+    # текст "подписчика", "подписчиков", "подписчик"
+    subscribers_count_text: str = ""
+    # дата последнего обновления в сервисе
+    last_updated: str = ""

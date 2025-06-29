@@ -20,7 +20,7 @@ $(document).ready(function () {
                 }
                 const Alert = response.responseJSON.alert
                 if (Alert) {
-                    alert(Alert);
+                    console.log(Alert);
                 }
 
                 $button.prop("disabled", false);

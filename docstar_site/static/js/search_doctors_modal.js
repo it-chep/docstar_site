@@ -24,21 +24,32 @@ $(document).ready(function () {
         $('.dark-substrate').hide();
     })
 
+    let xhr = null;
+
     $searchDoctorInput.on('input', function () {
         const query = $(this).val().trim();
+
+        if(xhr){
+            xhr.abort()
+            xhr = null;
+        }else {
+            loader($modalContent)
+        }
 
         if (!query) {
             $modalContent.empty();
             return;
         }
 
-        $.ajax({
+        xhr = $.ajax({
             url: '/api/v1/search-doctor/',
             method: 'GET',
+
             data: {query: query},
-            success: function (response) {
+            success: async function (response) {
                 $modalContent.empty();
-                let searchHTML
+                xhr = null;
+                let searchHTML;
 
                 if (
                     (response.cities && response.cities.length > 0) ||
@@ -102,6 +113,9 @@ $(document).ready(function () {
                 initCitySearch($searchDoctorsModal);
             },
             error: function (xhr, status, error) {
+                if(error === 'abort'){
+                    return
+                }
                 console.error('Ошибка при поиске:', error);
                 $modalContent.empty().append('<div class="mini_user_card"><p>Ошибка при загрузке данных.</p></div>');
             }

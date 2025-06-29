@@ -379,25 +379,25 @@ function pageUp(){
     });
 }
 
-function loader(){
-        renderPagination(0, 0);
-        const $doctorListContainer = $('.all_doctors');
-        $doctorListContainer.empty();
+    function loader(target){
+        target.empty();
+        const loader_spinner = `<div class="loader_spinner"></div>`
+        target.append(loader_spinner);
+    }
 
-        const loader = `<div class="wrapper_loader_spinner">
-            <div class="loader_spinner">
-        
-            </div>
-        </div>
-        `
-
-        $doctorListContainer.append(loader);
-}
+    function loaderWrapper(target){
+        target.empty();
+        const loaderSpinnerWrapper = `<div class="wrapper_loader_spinner">
+            <div class="loader_spinner"></div>
+        </div>`
+        target.append(loaderSpinnerWrapper);
+    }
 
 function filterDoctors(filters, page = 1) {
-    pageUp()
-    loader()
     const $doctorListContainer = $('.all_doctors');
+    pageUp()
+    loaderWrapper($doctorListContainer)
+
     $.ajax({
         url: `/api/v1/filter-doctor/?${filters}&page=${page}`, method: 'GET', success: function (response) {
             $doctorListContainer.empty();

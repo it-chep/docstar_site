@@ -16,6 +16,12 @@
     height: 75px;
 }
 
+.search_doctors_modal{
+    .loader_spinner{
+        margin: 24px;
+    }
+}
+
 .search-doctors-container {
     position: relative;
     display: flex;

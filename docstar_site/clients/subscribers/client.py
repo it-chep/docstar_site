@@ -1,11 +1,12 @@
 from __future__ import annotations
-
+from urllib.parse import quote
 from typing import Optional
 
 import requests
 from django.conf import settings
 
-from docstar_site.clients.subscribers.dto import FilterDoctorsRequest, GetDoctorSubscribersResponse, DoctorMiniatureInfoResponse
+from docstar_site.clients.subscribers.dto import FilterDoctorsRequest, GetDoctorSubscribersResponse, \
+    DoctorMiniatureInfoResponse
 
 
 class SubscribersClient:
@@ -149,6 +150,34 @@ class SubscribersClient:
         except (requests.exceptions.Timeout, requests.exceptions.HTTPError, ValueError, Exception) as e:
             return 500
 
+    def get_subscribers_by_doctors_ids(self, doctor_ids: list[int]) -> dict:
+        """
+        Получает количество подписчиков для миниатюр по переданным IDs
+        """
+        str_ids = [str(i).strip() for i in doctor_ids if str(i).strip()]
+        encoded_ids = quote(",".join(str_ids))
+        api_url = f'{self.url}/doctors/by_ids/?doctor_ids={encoded_ids}'
+        try:
+            response = requests.get(
+                api_url,
+                timeout=3,
+                headers={'Content-Type': 'application/json'}
+            )
+
+            response.raise_for_status()
+            response_data = response.json()
+
+            dict_response = dict()
+            for doctor_id, doctor_data in response_data['data'].items():
+                dict_response[int(doctor_id)] = DoctorMiniatureInfoResponse(
+                    doctor_id=int(doctor_data['doctor_id']),
+                    subs_count=doctor_data['telegram_subs_count'],
+                    subs_count_text=str(doctor_data['telegram_subs_text']),
+                )
+            return dict_response
+
+        except (requests.exceptions.Timeout, requests.exceptions.HTTPError, ValueError, Exception) as e:
+            return dict()
 
     def filter_info(self):
         ...

@@ -42,6 +42,29 @@ class BaseDoctorApiView:
         return doctors_dict
 
     @staticmethod
+    def enrich_subscribers(doctors_dict, subscribers_dict) -> dict:
+        for doctor_id, doctor_data in doctors_dict.items():
+            # Проверяем, что doctor_data является словарем
+            if not isinstance(doctor_data, dict):
+                continue
+
+            # Получаем данные о подписчиках
+            subscriber_data = subscribers_dict.get(doctor_id)
+
+            if subscriber_data:
+                doctor_data.update({
+                    "tg_subs_count": subscriber_data.subs_count,
+                    "tg_subs_count_text": subscriber_data.subs_count_text,
+                })
+            else:
+                doctor_data.update({
+                    "tg_subs_count": 0,
+                    "tg_subs_count_text": "подписчиков",
+                })
+
+        return doctors_dict
+
+    @staticmethod
     def prepare_doctors_data(doctors) -> list[dict]:
         doctors_list = []
         for doctor in doctors:
@@ -59,6 +82,27 @@ class BaseDoctorApiView:
                 'local_file': doctor.get_local_file,
             })
         return doctors_list
+
+    @staticmethod
+    def enrich_photo_from_s3_map(doctors_map: dict) -> list:
+        photos_map = settings.S3_CLIENT.get_user_photos()
+        enriched_photos = []
+
+        for _, doctor in doctors_map.items():
+            # Дефолтно s3
+            doctor['avatar_url'] = photos_map.get(doctor['slug'], None)
+
+            # Если нет ни в s3 ни на серваке, то ставим заглушку
+            if not doctor['avatar_url']:
+                doctor['avatar_url'] = DEFAULT_DOCTOR_IMAGE
+
+                # Если фотка на серваке, то отображаем ее для обратной совместимости
+                if doctor['local_file']:
+                    doctor['avatar_url'] = doctor['local_file']
+
+            enriched_photos.append(doctor)
+
+        return enriched_photos
 
     @staticmethod
     def enrich_photo_from_s3(doctors_list) -> list:
@@ -126,7 +170,13 @@ class BaseDoctorApiView:
         if not city_list and not speciallity_list:
             doctors = Doctor.objects.filter(is_active=True).order_by('name').select_related('city', 'speciallity')
             pages, doctors = self.get_pages_and_doctors_with_offset(current_page, doctors)
-            doctors_list = self.enrich_photo_from_s3(self.prepare_doctors_data(doctors))
+            doctors_ids = [doctor.id for doctor in doctors]
+            subscribers_map = settings.SUBSCRIBERS_CLIENT.get_subscribers_by_doctors_ids(doctors_ids)
+
+            doctors_map = self.configure_doctors_map(doctors)
+            enriched_by_subscribers_map = self.enrich_subscribers(doctors_map, subscribers_map)
+            doctors_list = self.enrich_photo_from_s3_map(enriched_by_subscribers_map)
+
             return JsonResponse({'data': doctors_list, 'pages': pages, 'page': current_page}, status=status.HTTP_200_OK)
 
         city_query = Q()
@@ -145,7 +195,12 @@ class BaseDoctorApiView:
 
         pages, doctors = self.get_pages_and_doctors_with_offset(current_page, doctors)
 
-        doctors_list = self.enrich_photo_from_s3(self.prepare_doctors_data(doctors))
+        doctors_ids = [doctor.id for doctor in doctors]
+        subscribers_map = settings.SUBSCRIBERS_CLIENT.get_subscribers_by_doctors_ids(doctors_ids)
+
+        doctors_map = self.configure_doctors_map(doctors)
+        enriched_by_subscribers_map = self.enrich_subscribers(doctors_map, subscribers_map)
+        doctors_list = self.enrich_photo_from_s3_map(enriched_by_subscribers_map)
 
         return JsonResponse({'data': doctors_list, 'pages': pages, 'page': current_page}, status=status.HTTP_200_OK)
 

@@ -33,6 +33,6 @@ class DoctorMiniatureInfoResponse:
     # ID доктора
     doctor_id: int
     # количество подписчиков
-    subs_count: int = 0
+    subs_count: str = "0"
     # текст "подписчика", "подписчиков", "подписчик"
     subs_count_text: str = ""

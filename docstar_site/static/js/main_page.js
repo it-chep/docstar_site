@@ -105,10 +105,12 @@ function initMobileFilterAction() {
     });
 }
 
+
 function loadDoctors(page) {
-    pageUp()
-    loader()
     const $doctorListContainer = $('.all_doctors');
+    pageUp()
+    loaderWrapper($doctorListContainer)
+
     const filterParams = getFilterQueryParams()
 
     if (filterParams.length !== 0) {

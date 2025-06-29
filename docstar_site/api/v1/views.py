@@ -176,7 +176,8 @@ class BaseDoctorApiView(CitySpecialityMixin):
             ).
             order_by('name').
             select_related('city', 'speciallity').
-            prefetch_related('additional_cities', 'additional_specialties')
+            prefetch_related('additional_cities', 'additional_specialties').
+            distinct()
         )
 
         pages, doctors = self.get_pages_and_doctors_with_offset(current_page, doctors)

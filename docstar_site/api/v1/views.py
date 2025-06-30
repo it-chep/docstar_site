@@ -145,7 +145,8 @@ class BaseDoctorApiView:
             ).
             order_by('name').
             select_related('city', 'speciallity').
-            prefetch_related('additional_cities', 'additional_specialties')
+            prefetch_related('additional_cities', 'additional_specialties').
+            distinct()
         )
 
         pages, doctors = self.get_pages_and_doctors_with_offset(current_page, doctors)
@@ -280,6 +281,28 @@ class DoctorListApiView(BaseDoctorApiView, views.APIView):
 
     def get(self, request, *args, **kwargs):
         return self.filter_doctors(request, *args, **kwargs)
+
+
+class CitiesListApiView(views.APIView):
+
+    def get(self, request, *args, **kwargs):
+        cities = City.objects.all().order_by('name')
+        data = [{"city_id": city.id, "city_name": city.name} for city in cities]
+        return JsonResponse(
+            {"cities": data},
+            status=status.HTTP_200_OK
+        )
+
+
+class SpecialityListApiView(views.APIView):
+
+    def get(self, request, *args, **kwargs):
+        specialities = Speciallity.objects.all().order_by('name')
+        data = [{"speciality_id": spec.id, "speciality_name": spec.name} for spec in specialities]
+        return JsonResponse(
+            {"specialities": data},
+            status=status.HTTP_200_OK
+        )
 
 
 class CreateNewDoctorApiView(views.APIView):

@@ -1,4 +1,4 @@
-function loader(target){
+function loaderSearchModal(target){
     target.empty();
     const loader_spinner = `<div class="loader_spinner"></div>`
     target.append(loader_spinner);
@@ -39,7 +39,7 @@ $(document).ready(function () {
             xhr.abort()
             xhr = null;
         }else {
-            loader($modalContent)
+            loaderSearchModal($modalContent)
         }
 
         if (!query) {

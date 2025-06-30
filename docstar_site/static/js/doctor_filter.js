@@ -389,12 +389,6 @@ function pageUp(){
     });
 }
 
-    function loader(target){
-        target.empty();
-        const loader_spinner = `<div class="loader_spinner"></div>`
-        target.append(loader_spinner);
-    }
-
     function loaderWrapper(target){
         target.empty();
         const loaderSpinnerWrapper = `<div class="wrapper_loader_spinner">

@@ -2,10 +2,8 @@
     color: white;
 }
 
-
-
 .doctors_list_container {
-    max-width: 98%;
+    max-width: 95%;
     background-color: #0E0F0F;
 
     .doctors_wrapper {
@@ -16,14 +14,11 @@
 
 
         .doctors_container {
-
             width: 100%;
+            min-height: 100vh;
 
             .all_doctors {
                 position: relative;
-                min-height: 100vh;
-                align-content: start;
-                align-items: start;
                 width: 100%;
                 display: grid;
                 grid-template-columns: repeat(3, 1fr);

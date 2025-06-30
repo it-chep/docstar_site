@@ -114,7 +114,7 @@ function loadDoctors(page) {
     const filterParams = getFilterQueryParams()
 
     if (filterParams.length !== 0) {
-        filterDoctors(filterParams, page)
+        // filterDoctors(filterParams, page)  // логика перенесена в doctor_filter
         return
     }
     $.ajax({

@@ -390,18 +390,18 @@ function pageUp(){
 }
 
     function loaderWrapper(target){
+
         target.empty();
         const loaderSpinnerWrapper = `<div class="wrapper_loader_spinner">
             <div class="loader_spinner"></div>
         </div>`
         target.append(loaderSpinnerWrapper);
     }
-
-function filterDoctors(filters, page = 1) {
+    function filterDoctors(filters, page = 1) {
     const $doctorListContainer = $('.all_doctors');
     pageUp()
+    renderPagination(0, 0);
     loaderWrapper($doctorListContainer)
-
     $.ajax({
         url: `/api/v1/filter-doctor/?${filters}&page=${page}`, method: 'GET', success: function (response) {
             $doctorListContainer.empty();

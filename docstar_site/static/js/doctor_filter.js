@@ -226,6 +226,7 @@ function initializeSubmitFilterBtn() {
         pushQueryParamsToURL()
 
         // Применяем фильтры
+
         filterDoctors(getFilterQueryParams(), 1);
 
         // убираем на мобилке шторку
@@ -371,8 +372,32 @@ function handleFilterClick(event, className) {
     filterDoctors(getFilterQueryParams(), 1);
 }
 
+function pageUp(){
+     window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+    });
+}
+
+    function loader(target){
+        target.empty();
+        const loader_spinner = `<div class="loader_spinner"></div>`
+        target.append(loader_spinner);
+    }
+
+    function loaderWrapper(target){
+        target.empty();
+        const loaderSpinnerWrapper = `<div class="wrapper_loader_spinner">
+            <div class="loader_spinner"></div>
+        </div>`
+        target.append(loaderSpinnerWrapper);
+    }
+
 function filterDoctors(filters, page = 1) {
     const $doctorListContainer = $('.all_doctors');
+    pageUp()
+    loaderWrapper($doctorListContainer)
+
     $.ajax({
         url: `/api/v1/filter-doctor/?${filters}&page=${page}`, method: 'GET', success: function (response) {
             $doctorListContainer.empty();

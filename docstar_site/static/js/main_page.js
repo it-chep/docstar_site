@@ -104,18 +104,18 @@ function initMobileFilterAction() {
     });
 }
 
+
 function loadDoctors(page) {
-    window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
-    });
     const $doctorListContainer = $('.all_doctors');
+    pageUp()
+    loaderWrapper($doctorListContainer)
+
     const filterParams = getFilterQueryParams()
+
     if (filterParams.length !== 0) {
         filterDoctors(filterParams, page)
         return
     }
-
     $.ajax({
         url: '/api/v1/doctor-list/',
         method: 'GET',

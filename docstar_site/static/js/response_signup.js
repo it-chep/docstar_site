@@ -2,7 +2,6 @@ const popup = document.querySelector('.popup');
 const closeBtn = popup.querySelector('.close');
 const end_popup = document.querySelector('.end_popup');
 const closeendbtn = end_popup.querySelector('.end_close');
-console.log('1234567890')
 
 
 document.querySelector('form').addEventListener('submit', function (event) {

@@ -204,6 +204,43 @@ function closeFilter(){
     body.style.overflow=''
 }
 
+function setFiltersInlineWrapper(){
+    const urlParams = new URLSearchParams(window.location.search);
+
+    const cities = urlParams.get('city')?.split(',')
+    cities?.forEach(paramCity => {
+        $(`#city-${paramCity}`).prop('checked', true)
+    })
+    const specialities = urlParams.get('speciality')?.split(',')
+    specialities?.forEach(paramSpeciality => {
+        $(`#speciality-${paramSpeciality}`).prop('checked', true)
+    })
+    const page = urlParams.get('page') || 1
+    setActiveFilters()
+    filterDoctors(getFilterQueryParams(), page);
+}
+
+
+function setActiveFilters(){
+    $('.filters-inline-wrapper input[type="checkbox"]:checked').each(function () {
+        const checkbox = $(this);
+        const labelText = checkbox.closest('.checkbox-label').find('.checkbox-text').text();
+        const className = checkbox.closest('.checkbox-label').hasClass('speciality') ? 'speciality' : 'city';
+        const ID = checkbox.closest('.checkbox-label').find('input').data('id')
+
+        // Добавляем фильтр в active_filters_wrapper
+        $('.active_filters_wrapper').append(`
+            <div class="active_filter" data-${className}="${ID}">
+                <p class="active_filter_text" >${labelText}</p>
+                <div class="active_filter_delete_btn">
+                    <span class="material-icons cancel">cancel</span>
+                </div>
+            </div>
+        `);
+    });
+}
+
+
 // initializeSubmitFilterBtn инициализация кнопки "Применить" фильтры
 function initializeSubmitFilterBtn() {
     const submitButton = $('.submit_button');
@@ -217,27 +254,12 @@ function initializeSubmitFilterBtn() {
         $('.active_filters_wrapper').empty();
 
         // Собираем все выбранные чекбоксы из filters-inline-wrapper
-        $('.filters-inline-wrapper input[type="checkbox"]:checked').each(function () {
-            const checkbox = $(this);
-            const labelText = checkbox.closest('.checkbox-label').find('.checkbox-text').text();
-            const className = checkbox.closest('.checkbox-label').hasClass('speciality') ? 'speciality' : 'city';
-            const ID = checkbox.closest('.checkbox-label').find('input').data('id')
+        setActiveFilters()
 
-            // Добавляем фильтр в active_filters_wrapper
-            $('.active_filters_wrapper').append(`
-            <div class="active_filter" data-${className}="${ID}">
-                <p class="active_filter_text" >${labelText}</p>
-                <div class="active_filter_delete_btn">
-                    <span class="material-icons cancel">cancel</span>
-                </div>
-            </div>
-        `);
-        });
         // пушим параметры в URL пользователя
         pushQueryParamsToURL()
 
         // Применяем фильтры
-
         filterDoctors(getFilterQueryParams(), 1);
 
         // убираем на мобилке шторку
@@ -272,6 +294,7 @@ function cleanFilterQueryParam(checkbox) {
 }
 
 $(document).ready(function () {
+    setFiltersInlineWrapper()
     // инициализация тоглов открывания фильтров "Города", "Специальности"
     initializeFilterClickAction();
     // инициализация поиска фильтров "Города", "Специальности"
@@ -285,7 +308,6 @@ $(document).ready(function () {
     sortList("speciality-list");
 
     $(document).on('click', '.active_filter_delete_btn', function (event) {
-
 
         const text = $(this).siblings('.active_filter_text').text();
         $(this).parent('.active_filter').remove();
@@ -389,15 +411,15 @@ function pageUp(){
     });
 }
 
-    function loaderWrapper(target){
+function loaderWrapper(target){
+    target.empty();
+    const loaderSpinnerWrapper = `<div class="wrapper_loader_spinner">
+        <div class="loader_spinner"></div>
+    </div>`
+    target.append(loaderSpinnerWrapper);
+}
 
-        target.empty();
-        const loaderSpinnerWrapper = `<div class="wrapper_loader_spinner">
-            <div class="loader_spinner"></div>
-        </div>`
-        target.append(loaderSpinnerWrapper);
-    }
-    function filterDoctors(filters, page = 1) {
+function filterDoctors(filters, page = 1) {
     const $doctorListContainer = $('.all_doctors');
     pageUp()
     renderPagination(0, 0);

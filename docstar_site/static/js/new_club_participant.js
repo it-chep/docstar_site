@@ -12,7 +12,7 @@ function initializeFilterClickAction(isCity) {
         disableTextSelection([cityFilterHeader, ...document.querySelectorAll('.checkbox-label.city')])
         cityFilterHeader.addEventListener('click', function () {
             this.querySelector('.filter_open_close_arrow').classList.toggle('open')
-            toggleFilter('city-filter', this);
+            toggleFilter('filter-section-cities', this);
         });
     }
     else{
@@ -20,7 +20,7 @@ function initializeFilterClickAction(isCity) {
         disableTextSelection([specialityFilterHeader, ...document.querySelectorAll('.checkbox-label.speciality')])
         specialityFilterHeader.addEventListener('click', function () {
             this.querySelector('.filter_open_close_arrow').classList.toggle('open')
-            toggleFilter('speciality-filter', this);
+            toggleFilter('filter-section-specialties', this);
         });
     }
 
@@ -131,21 +131,12 @@ function initCities(){
         success: function (response) {
             $('#additional_cities').append(`
             <div class="filters-inline-wrapper">
-                <div class="filter-section">
-                    <div class="filter-header" id="city-filter-header">
-                        <div class="filter_open_close_arrow search_filter_indicator">
-                            <span class="material-icons next">
-                                navigate_next
-                            </span>
-                        </div>
-                        <div class="filter-title">Дополнительные города</div>
-                    </div>
+                <div id="filter-section-cities" class="filter-section">
                     <div id="city-filter" class="filter-content">
                         <div class="search-container">
                             <img src="/static/img/lupa.svg">
                             <input type="text" id="citySearchInput" placeholder="Найти свой город..." class="search-input">
                         </div>
-                        
                         <div class="filter-list" id="city-list">
                             ${response.cities.map(city => 
                                 `<label for="city-${city.city_id}" class="checkbox-label city">
@@ -158,10 +149,7 @@ function initCities(){
                             ).join('')}
                         </div>
                     </div>
-                    <div class="selected_city">Выбранные города:</div>
-                    <ul class="selected cities">
-                       
-                    </ul>
+                 
                 </div>
             </div>
             `);
@@ -182,19 +170,11 @@ function initSpecialities(){
         success: function (response) {
             $('#additional_specialties').append(`
             <div class="filters-inline-wrapper">
-                <div class="filter-section">
-                    <div class="filter-header" id="speciality-filter-header">
-                        <div class="filter_open_close_arrow search_filter_indicator">
-                            <span class="material-icons next">
-                                navigate_next
-                            </span>
-                        </div>
-                        <div class="filter-title">Дополнительные специальности</div>
-                    </div>
+                <div id="filter-section-specialties" class="filter-section">
                     <div id="speciality-filter" class="filter-content">
                         <div class="search-container">
                             <img src="/static/img/lupa.svg">
-                            <input type="text" id="specialitySearchInput" placeholder="Найти свой город..." class="search-input">
+                            <input type="text" id="specialitySearchInput" placeholder="Найти свою специальность..." class="search-input">
                         </div>
                         
                         <div class="filter-list" id="speciality-list">
@@ -209,10 +189,7 @@ function initSpecialities(){
                             ).join('')}
                         </div>
                     </div>
-                    <div class="selected_speciality">Выбранные специальности:</div>
-                    <ul class="selected specialities">
-                       
-                    </ul>
+                 
                 </div>
             </div>
             `);

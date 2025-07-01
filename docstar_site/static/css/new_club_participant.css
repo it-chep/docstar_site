@@ -139,29 +139,19 @@
     height: auto;
     border-radius: 6px;
     background: #242424;
-    border: 2px solid #606060;
-    padding-top: 20px;
-    padding-bottom: 20px;
-    margin-top: 15px;
-
+    margin-top: 0px;
 }
 
 #additional_cities, #additional_specialties{
     width: 500px;
 }
 
-.filter-section {
-    width: 100%;
-    padding: 0 15px;
-    border-radius: 8px;
-
-    ul{
-        margin: 4px 0 0 0
-    }
+/*.filter-content.show {*/
+/*    max-height: 300px; !* Adjust this value as needed *!*/
+/*}*/
 
     .selected_city, .selected_speciality{
         margin-top: 10px;
-        text-align: start;
         display: none;
     }
 
@@ -179,8 +169,24 @@
         }
     }
 
+.filter-section {
+    width: 100%;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+
+    &.show {
+        max-height: 300px;
+    }
+
+    ul{
+        margin: 4px 0 0 0
+    }
+
+
+
     .search-container{
-        margin-top: 12px;
+        margin-top: 0;
         border: 2px solid transparent;
         transition: border-color 0.3s ease;
 
@@ -220,10 +226,14 @@
 }
 
 .filter-content {
-    max-height: 0;
     overflow: hidden;
     transition: max-height 0.3s ease;
     color: white;
+    border: 2px solid #606060;
+    background: #242424;
+    border-radius: 8px;
+    padding: 20px 15px;
+
 }
 
 p{
@@ -236,9 +246,9 @@ p{
     min-height: 20px;
 }
 
-.filter-content.show {
-    max-height: 300px; /* Adjust this value as needed */
-}
+/*.filter-content.show {*/
+/*    max-height: 300px; !* Adjust this value as needed *!*/
+/*}*/
 
 .filter-list {
     display: flex;
@@ -249,7 +259,7 @@ p{
     padding: 0;
     margin: 12px 0 0 0;
     overflow-y: scroll;
-    max-height: 130px;
+    max-height: 120px;
 
     .checkbox-label{
         font-size: 16px;

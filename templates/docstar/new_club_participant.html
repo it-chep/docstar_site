@@ -17,6 +17,8 @@
     <link type="text/css" rel="stylesheet" href="{% static "css/new_club_participant.css" %}"/>
     <link type="text/css" rel="stylesheet" href="{% static "css/mobile/mobile_new_club_participant.css" %}"/>
     <link type="text/css" rel="stylesheet" href="{% static "css/select2_custom/dark.css" %}"/>
+    <link type="text/css" rel="stylesheet" href="{% static "css/custom_inputs/custom_checkbox.css" %}"/>
+    <link type="text/css" rel="stylesheet" href="{% static "css/custom_inputs/custom_inputs.css" %}"/>
     <link type="text/css" rel="stylesheet" href="{% static "css/datepicker/dark.css" %}">
 
     <script src="{% static "js/jquery-3.6.0.min.js" %}"></script>
@@ -177,17 +179,7 @@
                         {{ form.city.help_text }}
                     </div>
                 </div>
-                <div class="form-group">
-                    <div class="label-wrapper">
-                        {{ form.additional_cities.label }}
-                    </div>
-                    <div class="input-wrapper">
-                        {{ form.additional_cities }}
-                    </div>
-                    <div class="help-wrapper">
-                        {{ form.additional_cities.help_text }}
-                    </div>
-                </div>
+                <div id="city"></div>
                 <div class="form-group">
                     <div class="label-wrapper">
                         {{ form.speciallity.label }}
@@ -199,17 +191,7 @@
                         {{ form.speciallity.help_text }}
                     </div>
                 </div>
-                <div class="form-group">
-                    <div class="label-wrapper">
-                        {{ form.additional_specialties.label }}
-                    </div>
-                    <div class="input-wrapper">
-                        {{ form.additional_specialties }}
-                    </div>
-                    <div class="help-wrapper">
-                        {{ form.additional_specialties.help_text }}
-                    </div>
-                </div>
+                <div id="speciality"></div>
                 <div class="form-group">
                     <div class="label-wrapper">
                         {{ form.main_blog_theme.label }}
@@ -233,16 +215,17 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <div class="label-wrapper">
-                        <p>Я ознакомлен (-а) <a
+                    <label class="checkbox-label politics">
+                        <input type="checkbox" name="agree_policy" id="id_agree_policy" class="checkbox">
+                        <span class="checkbox-view">
+                            <img class="checkbox-icon" src="{% static 'img/homepage/check_mark.svg' %}">
+                        </span>
+                        <p class="checkbox-text">Я ознакомлен (-а) <a
                                 href="https://docs.google.com/document/d/1gwotwzPEN-fYGmfrnhLP1KvnhTkHmw6IK3quQukhw_8/edit?tab=t.0"
                                 target="_blank">с политикой в отношении персональных данных</a> и даю согласие на <a
                                 href="https://docs.google.com/document/d/1OSUmseHGB625qlRPZ9Icfo7KY3Al_JfmdLkpjmnxFOA/edit?tab=t.0"
                                 target="_blank">обработку персональных данных.</a></p>
-                    </div>
-                    <div class="input-wrapper">
-                        {{ form.agree_policy }}
-                    </div>
+                    </label>
                     <div class="help-wrapper">
                         {{ form.agree_policy.help_text }}
                     </div>

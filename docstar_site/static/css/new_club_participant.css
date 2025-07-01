@@ -154,11 +154,17 @@
 
     .selected_city, .selected_speciality{
         margin-top: 10px;
+        text-align: start;
+
     }
 
     .search-container{
         margin-top: 12px;
     }
+}
+
+.selected {
+    text-align: start;
 }
 
 .filter-header {

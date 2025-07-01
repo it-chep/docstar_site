@@ -115,12 +115,21 @@ function initializeSearchFiltersInput() {
     });
 }
 
+function setInputBorder($target){
+    $target.focus(function (){
+        $(this).closest('.search-container').addClass('frame')
+    })
+    $target.blur(function (){
+        $(this).closest('.search-container').removeClass('frame')
+    })
+}
+
 function initCities(){
      $.ajax({
         url: "/api/v1/cities_list/",
         type: "GET",
         success: function (response) {
-            $('#city').append(`
+            $('#additional_cities').append(`
             <div class="filters-inline-wrapper">
                 <div class="filter-section">
                     <div class="filter-header" id="city-filter-header">
@@ -159,16 +168,19 @@ function initCities(){
             initializeSearchFiltersInput()
             initializeFilterClickAction(true)
             initCheckboxCity()
+            setInputBorder($('#citySearchInput'))
         }
     })
 }
+
+
 
 function initSpecialities(){
      $.ajax({
         url: "/api/v1/specialities_list/",
         type: "GET",
         success: function (response) {
-            $('#speciality').append(`
+            $('#additional_specialties').append(`
             <div class="filters-inline-wrapper">
                 <div class="filter-section">
                     <div class="filter-header" id="speciality-filter-header">
@@ -207,6 +219,7 @@ function initSpecialities(){
             initializeSearchFiltersInput()
             initializeFilterClickAction(false)
             initCheckboxSpeciality()
+            setInputBorder($('#specialitySearchInput'))
         }
     })
 }
@@ -227,6 +240,7 @@ function getCities(){
 }
 
 $(document).ready(function () {
+
 
     initCities()
     initSpecialities()

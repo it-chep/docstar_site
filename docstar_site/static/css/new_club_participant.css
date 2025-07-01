@@ -93,7 +93,7 @@
 
 .submit-button-container {
     cursor: pointer;
-    margin-top: 20px;
+    margin-top: 40px;
     margin-bottom: 50px;
 }
 
@@ -117,3 +117,139 @@
     margin: 15px auto;
     text-align: center;
 }
+
+
+
+
+.politics{
+    .checkbox-view{
+        display: flex;
+        align-self: start;
+        margin-top: 4px;
+    }
+    .checkbox-text{
+        line-height: 28px;
+    }
+}
+
+
+
+.filters-inline-wrapper {
+    width: 100%;
+    height: auto;
+    border-radius: 20px;
+    background: #161616;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    margin-top: 15px;
+}
+
+.filter-section {
+    padding: 0 15px;
+    border-radius: 8px;
+
+    ul{
+        margin: 4px 0 0 0
+    }
+
+    .selected_city, .selected_speciality{
+        margin-top: 10px;
+    }
+
+    .search-container{
+        margin-top: 12px;
+    }
+}
+
+.filter-header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.filter_open_close_arrow {
+    margin-right: 4px;
+    transition: transform 0.3s ease;
+    transform: rotate(0deg);
+}
+
+.filter_open_close_arrow.open {
+    transform: rotate(90deg);
+}
+
+.filter-title {
+    font-size: 18px;
+    font-weight: normal;
+    cursor: pointer;
+    color: white;
+}
+
+.filter-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+    color: white;
+}
+
+p{
+    margin-bottom: 0;
+}
+
+
+.checkbox-view{
+    min-width: 20px;
+    min-height: 20px;
+}
+
+.filter-content.show {
+    max-height: 300px; /* Adjust this value as needed */
+}
+
+.filter-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    position: relative;
+    list-style: none;
+    padding: 0;
+    margin: 12px 0 0 0;
+    overflow-y: scroll;
+    max-height: 120px;
+
+    &::-webkit-scrollbar {
+        width: 6px;
+    }
+    &::-webkit-scrollbar-track {
+        box-sizing: border-box;
+        background: #222;
+        border-radius: 50% / 3px;
+    }
+    &::-webkit-scrollbar-thumb{
+        background-color: #ccc;
+        border-radius: 50% / 3px;
+    }
+}
+
+.filter-list li {
+    margin-bottom: 5px;
+}
+
+.filter-list label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.filter-list input[type="checkbox"] {
+    margin-right: 8px;
+}
+
+.search_filter_indicator .material-icons {
+    display: flex;
+    align-items: center;
+    color: #2F9BFF;
+    padding: 0;
+}
+
+
+

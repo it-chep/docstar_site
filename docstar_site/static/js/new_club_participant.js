@@ -1,34 +1,235 @@
 let isLoading = false;
+
+function toggleFilter(filterId) {
+    let content = document.getElementById(filterId);
+    content.classList.toggle('show');
+}
+
+
+function initializeFilterClickAction(isCity) {
+    if(isCity){
+        const cityFilterHeader = document.getElementById('city-filter-header')
+        disableTextSelection([cityFilterHeader, ...document.querySelectorAll('.checkbox-label.city')])
+        cityFilterHeader.addEventListener('click', function () {
+            this.querySelector('.filter_open_close_arrow').classList.toggle('open')
+            toggleFilter('city-filter', this);
+        });
+    }
+    else{
+        const specialityFilterHeader = document.getElementById('speciality-filter-header')
+        disableTextSelection([specialityFilterHeader, ...document.querySelectorAll('.checkbox-label.speciality')])
+        specialityFilterHeader.addEventListener('click', function () {
+            this.querySelector('.filter_open_close_arrow').classList.toggle('open')
+            toggleFilter('speciality-filter', this);
+        });
+    }
+
+}
+
+function showFiltersBySearchText(object, searchText) {
+    const labelText = object.find('.checkbox-text').text().toLowerCase();
+    if (labelText.includes(searchText)) {
+        object.show();
+    } else {
+        object.hide();
+    }
+}
+
+function disableTextSelection(targets){
+    targets.forEach(target => {
+        target.addEventListener('mousedown', (e) => {
+            e.preventDefault()
+        })
+    })
+}
+
+function initCheckboxCity(){
+    $('.checkbox.city').click(function (e) {
+        const value = $(this).val();
+        const text = $(this).attr('text');
+        if($(this).prop('checked')){
+            $('.selected.cities').append(`
+                <li id="li-${value}">${text}</li>
+            `)
+        }
+        else{
+            $(`#li-${value}`).remove()
+        }
+
+    })
+}
+
+function initCheckboxSpeciality(){
+    $('.checkbox.speciality').click(function (e) {
+        const value = $(this).val();
+        const text = $(this).attr('text');
+        if($(this).prop('checked')){
+            $('.selected.specialities').append(`
+                <li id="li-${value}">${text}</li>
+            `)
+        }
+        else{
+            $(`#li-${value}`).remove()
+        }
+
+    })
+}
+
+
+function initializeSearchFiltersInput() {
+    const citySearchInput = $('#citySearchInput')
+    const cityList = $('#city-list .checkbox-label')
+
+    const specialitySearchInput = $('#specialitySearchInput')
+    const specialityList = $('#speciality-list .checkbox-label');
+
+    citySearchInput.on('input', function (event) {
+        const searchText = $(this).val().toLowerCase();
+        cityList.each(function () {
+            showFiltersBySearchText($(this), searchText)
+        });
+
+    })
+
+    specialitySearchInput.on('input', function () {
+        const searchText = $(this).val().toLowerCase();
+
+        specialityList.each(function () {
+            showFiltersBySearchText($(this), searchText)
+        });
+    });
+}
+
+function initCities(){
+     $.ajax({
+        url: "/api/v1/cities_list/",
+        type: "GET",
+        success: function (response) {
+            $('#city').append(`
+            <div class="filters-inline-wrapper">
+                <div class="filter-section">
+                    <div class="filter-header" id="city-filter-header">
+                        <div class="filter_open_close_arrow search_filter_indicator">
+                            <span class="material-icons next">
+                                navigate_next
+                            </span>
+                        </div>
+                        <div class="filter-title">Дополнительные города</div>
+                    </div>
+                    <div id="city-filter" class="filter-content">
+                        <div class="search-container">
+                            <img src="/static/img/lupa.svg">
+                            <input type="text" id="citySearchInput" placeholder="Найти свой город..." class="search-input">
+                        </div>
+                        
+                        <div class="filter-list" id="city-list">
+                            ${response.cities.map(city => 
+                                `<label for="city-${city.city_id}" class="checkbox-label city">
+                                    <input type="checkbox" name="cities[]" text="${city.city_name}" value="${city.city_id}" id="city-${city.city_id}" data-id="${city.city_id}" class="checkbox city">
+                                    <span class="checkbox-view">
+                                        <img class="checkbox-icon" src="/static/img/homepage/check_mark.svg">
+                                    </span>
+                                    <p class="checkbox-text">${city.city_name}</p>
+                                </label>`
+                            ).join('')}
+                        </div>
+                    </div>
+                    <div class="selected_city">Выбранные города:</div>
+                    <ul class="selected cities">
+                       
+                    </ul>
+                </div>
+            </div>
+            `);
+            initializeSearchFiltersInput()
+            initializeFilterClickAction(true)
+            initCheckboxCity()
+        }
+    })
+}
+
+function initSpecialities(){
+     $.ajax({
+        url: "/api/v1/specialities_list/",
+        type: "GET",
+        success: function (response) {
+            $('#speciality').append(`
+            <div class="filters-inline-wrapper">
+                <div class="filter-section">
+                    <div class="filter-header" id="speciality-filter-header">
+                        <div class="filter_open_close_arrow search_filter_indicator">
+                            <span class="material-icons next">
+                                navigate_next
+                            </span>
+                        </div>
+                        <div class="filter-title">Дополнительные специальности</div>
+                    </div>
+                    <div id="speciality-filter" class="filter-content">
+                        <div class="search-container">
+                            <img src="/static/img/lupa.svg">
+                            <input type="text" id="specialitySearchInput" placeholder="Найти свой город..." class="search-input">
+                        </div>
+                        
+                        <div class="filter-list" id="speciality-list">
+                            ${response.specialities.map(speciality => 
+                                `<label for="speciality-${speciality.speciality_id}" class="checkbox-label speciality">
+                                    <input type="checkbox" name="specialities[]" text="${speciality.speciality_name}" value="${speciality.speciality_id}" id="speciality-${speciality.speciality_id}" data-id="${speciality.speciality_id}" class="checkbox speciality">
+                                    <span class="checkbox-view">
+                                        <img class="checkbox-icon" src="/static/img/homepage/check_mark.svg">
+                                    </span>
+                                    <p class="checkbox-text">${speciality.speciality_name}</p>
+                                </label>`
+                            ).join('')}
+                        </div>
+                    </div>
+                    <div class="selected_speciality">Выбранные специальности:</div>
+                    <ul class="selected specialities">
+                       
+                    </ul>
+                </div>
+            </div>
+            `);
+            initializeSearchFiltersInput()
+            initializeFilterClickAction(false)
+            initCheckboxSpeciality()
+        }
+    })
+}
+
 $(document).ready(function () {
+
+    initCities()
+    initSpecialities()
+
     $(".submit-button-container").on("click", function () {
         if(isLoading){
             return
         }
         isLoading = true;
         const formData = $("#create-doctor-form").serialize();
-
-        $.ajax({
-            url: "/api/v1/create_new_doctor/",
-            type: "POST",
-            data: formData,
-            success: function (response) {
-                isLoading = false;
-                window.location.href = response.redirect_url;
-            },
-            error: function (response, status, error) {
-                isLoading = false;
-                const errors = response.responseJSON.errors;
-                if (errors) {
-                    displayErrors(errors);
-                    $('html, body').animate({scrollTop: 0}, 'slow');
-                }
-                const Alert = response.responseJSON.alert
-                if (Alert) {
-                    console.log(Alert);
-                }
-
-            },
-        });
+        console.log(formData)
+        // $.ajax({
+        //     url: "/api/v1/create_new_doctor/",
+        //     type: "POST",
+        //     data: formData,
+        //     success: function (response) {
+        //         isLoading = false;
+        //         window.location.href = response.redirect_url;
+        //     },
+        //     error: function (response, status, error) {
+        //         isLoading = false;
+        //         const errors = response.responseJSON.errors;
+        //         if (errors) {
+        //             displayErrors(errors);
+        //             $('html, body').animate({scrollTop: 0}, 'slow');
+        //         }
+        //         const Alert = response.responseJSON.alert
+        //         if (Alert) {
+        //             console.log(Alert);
+        //         }
+        //
+        //     },
+        // });
     });
 
     initSelect2Fields();

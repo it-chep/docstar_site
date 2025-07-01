@@ -152,10 +152,12 @@
 
     .selected_city, .selected_speciality{
         margin-top: 10px;
+        padding: 0 10px;
         display: none;
     }
 
     .selected_city{
+
         display: none;
         &.show{
             display: block;
@@ -232,8 +234,7 @@
     border: 2px solid #606060;
     background: #242424;
     border-radius: 8px;
-    padding: 20px 15px;
-
+    padding: 15px 10px;
 }
 
 p{

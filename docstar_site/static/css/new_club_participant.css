@@ -155,7 +155,21 @@
     .selected_city, .selected_speciality{
         margin-top: 10px;
         text-align: start;
+        display: none;
+    }
 
+    .selected_city{
+        display: none;
+        &.show{
+            display: block;
+        }
+    }
+
+    .selected_speciality{
+        display: none;
+        &.show{
+            display: block;
+        }
     }
 
     .search-container{
@@ -165,6 +179,8 @@
 
 .selected {
     text-align: start;
+
+
 }
 
 .filter-header {
@@ -220,7 +236,7 @@ p{
     padding: 0;
     margin: 12px 0 0 0;
     overflow-y: scroll;
-    max-height: 120px;
+    max-height: 130px;
 
     &::-webkit-scrollbar {
         width: 6px;

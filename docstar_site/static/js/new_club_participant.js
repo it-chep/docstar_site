@@ -45,14 +45,22 @@ function disableTextSelection(targets){
 
 function initCheckboxCity(){
     $('.checkbox.city').click(function (e) {
-        const value = $(this).val();
+        const value = $(this).attr('data-id');
         const text = $(this).attr('text');
+        const selectedCities = $('.selected.cities')
+
         if($(this).prop('checked')){
-            $('.selected.cities').append(`
-                <li id="li-city-${value}">${text}</li>
+            if(selectedCities.children().length === 0){
+                $('.selected_city').addClass('show')
+            }
+            selectedCities.append(`
+                <li id="li-city-${value}" value=${value}>${text}</li>
             `)
         }
         else{
+            if(selectedCities.children().length === 1){
+                $('.selected_city').removeClass('show')
+            }
             $(`#li-city-${value}`).remove()
         }
 
@@ -61,14 +69,21 @@ function initCheckboxCity(){
 
 function initCheckboxSpeciality(){
     $('.checkbox.speciality').click(function (e) {
-        const value = $(this).val();
+        const value = $(this).attr('data-id');
         const text = $(this).attr('text');
+        const selectedSpecialities = $('.selected.specialities')
         if($(this).prop('checked')){
-            $('.selected.specialities').append(`
-                <li id="li-speciality-${value}">${text}</li>
+            if(selectedSpecialities.children().length === 0){
+                $('.selected_speciality').addClass('show')
+            }
+            selectedSpecialities.append(`
+                <li id="li-speciality-${value}" value=${value}>${text}</li>
             `)
         }
         else{
+            if(selectedSpecialities.children().length === 1){
+                $('.selected_speciality').removeClass('show')
+            }
             $(`#li-speciality-${value}`).remove()
         }
 
@@ -125,7 +140,7 @@ function initCities(){
                         <div class="filter-list" id="city-list">
                             ${response.cities.map(city => 
                                 `<label for="city-${city.city_id}" class="checkbox-label city">
-                                    <input type="checkbox" name="cities[]" text="${city.city_name}" value="${city.city_id}" id="city-${city.city_id}" data-id="${city.city_id}" class="checkbox city">
+                                    <input type="checkbox" text="${city.city_name}"  id="city-${city.city_id}" data-id="${city.city_id}" class="checkbox city">
                                     <span class="checkbox-view">
                                         <img class="checkbox-icon" src="/static/img/homepage/check_mark.svg">
                                     </span>
@@ -173,7 +188,7 @@ function initSpecialities(){
                         <div class="filter-list" id="speciality-list">
                             ${response.specialities.map(speciality => 
                                 `<label for="speciality-${speciality.speciality_id}" class="checkbox-label speciality">
-                                    <input type="checkbox" name="specialities[]" text="${speciality.speciality_name}" value="${speciality.speciality_id}" id="speciality-${speciality.speciality_id}" data-id="${speciality.speciality_id}" class="checkbox speciality">
+                                    <input type="checkbox" text="${speciality.speciality_name}" id="speciality-${speciality.speciality_id}" data-id="${speciality.speciality_id}" class="checkbox speciality">
                                     <span class="checkbox-view">
                                         <img class="checkbox-icon" src="/static/img/homepage/check_mark.svg">
                                     </span>
@@ -196,40 +211,58 @@ function initSpecialities(){
     })
 }
 
+function getSpecialities(){
+    let specialities = []
+    $('.selected.specialities').children().each((ind, elem) => {
+            specialities.push($(elem).attr('value'))
+    })
+    return specialities.join(',')
+}
+function getCities(){
+    let cities = []
+    $('.selected.cities').children().each((ind, elem) => {
+            cities.push($(elem).attr('value'))
+    })
+    return cities.join(',')
+}
+
 $(document).ready(function () {
 
     initCities()
     initSpecialities()
+    disableTextSelection([document.querySelector('.checkbox-text')])
 
     $(".submit-button-container").on("click", function () {
         if(isLoading){
             return
         }
         isLoading = true;
-        const formData = $("#create-doctor-form").serialize();
-        console.log(formData)
-        // $.ajax({
-        //     url: "/api/v1/create_new_doctor/",
-        //     type: "POST",
-        //     data: formData,
-        //     success: function (response) {
-        //         isLoading = false;
-        //         window.location.href = response.redirect_url;
-        //     },
-        //     error: function (response, status, error) {
-        //         isLoading = false;
-        //         const errors = response.responseJSON.errors;
-        //         if (errors) {
-        //             displayErrors(errors);
-        //             $('html, body').animate({scrollTop: 0}, 'slow');
-        //         }
-        //         const Alert = response.responseJSON.alert
-        //         if (Alert) {
-        //             console.log(Alert);
-        //         }
-        //
-        //     },
-        // });
+        let formData = $("#create-doctor-form").serialize();
+        formData += '&additional_cities=' + getCities()
+        formData += '&additional_specialties=' + getSpecialities()
+
+        $.ajax({
+            url: "/api/v1/create_new_doctor/",
+            type: "POST",
+            data: formData,
+            success: function (response) {
+                isLoading = false;
+                window.location.href = response.redirect_url;
+            },
+            error: function (response, status, error) {
+                isLoading = false;
+                const errors = response.responseJSON.errors;
+                if (errors) {
+                    displayErrors(errors);
+                    $('html, body').animate({scrollTop: 0}, 'slow');
+                }
+                const Alert = response.responseJSON.alert
+                if (Alert) {
+                    console.log(Alert);
+                }
+
+            },
+        });
     });
 
     initSelect2Fields();

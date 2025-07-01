@@ -1,11 +1,13 @@
 .doctor_detail_card_container {
-    padding-left: 20px;
-    padding-right: 25px;
     width: 1200px;
-    max-width: 98%;
+    max-width: 95%;
     margin: 0 auto;
     color: white;
     overflow: hidden;
+}
+
+.material-icons{
+    padding: 12px;
 }
 
 .doctor_info_wrapper {
@@ -96,7 +98,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 20px;
+    gap: 12px;
     justify-content: center;
     width: 100%;
 }

@@ -55,9 +55,8 @@ class CreateDoctorForm(forms.Form):
         }),
     )
 
-    additional_cities = forms.ModelMultipleChoiceField(
+    additional_cities = forms.CharField(
         label='Дополнительные города',
-        queryset=City.objects.all(),
         required=False,
         widget=forms.SelectMultiple(attrs={
             'class': 'select-multiple',
@@ -65,9 +64,8 @@ class CreateDoctorForm(forms.Form):
         })
     )
 
-    additional_specialties = forms.ModelMultipleChoiceField(
+    additional_specialties = forms.CharField(
         label='Дополнительные специальности',
-        queryset=Speciallity.objects.all(),
         required=False,
         widget=forms.SelectMultiple(attrs={
             'class': 'select-multiple',
@@ -262,10 +260,19 @@ class CreateDoctorForm(forms.Form):
                 is_active=False,
             )
 
-            doctor.additional_cities.set(self.cleaned_data["city"])
-            doctor.additional_cities.set(self.cleaned_data["additional_cities"])
-            doctor.additional_specialties.set(self.cleaned_data["speciallity"])
-            doctor.additional_specialties.set(self.cleaned_data["additional_specialties"])
+            # дополнительные города
+            ids_str = self.cleaned_data["additional_cities"].strip("[]'\"")
+            ids_list = ids_str.split(',')
+            city_ids = [int(city_id.strip()) for city_id in ids_list if city_id.strip().isdigit()]
+            city_ids.append(self.cleaned_data["city"])
+            doctor.additional_cities.set(city_ids)
+
+            # дополнительные специальности
+            ids_str = self.cleaned_data["additional_specialties"].strip("[]'\"")
+            ids_list = ids_str.split(',')
+            specialties_ids = [int(city_id.strip()) for city_id in ids_list if city_id.strip().isdigit()]
+            specialties_ids.append(self.cleaned_data["speciallity"])
+            doctor.additional_specialties.set(specialties_ids)
 
             return doctor
         except City.DoesNotExist:
@@ -273,4 +280,5 @@ class CreateDoctorForm(forms.Form):
         except Speciallity.DoesNotExist:
             raise ValidationError('Указанная специальность не найдена.')
         except Exception as e:
+            print(e)
             raise ValidationError(f'Произошла ошибка: {e}')

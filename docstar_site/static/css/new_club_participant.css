@@ -144,7 +144,12 @@
     margin-top: 15px;
 }
 
+#city{
+    width: 500px;
+}
+
 .filter-section {
+    width: 100%;
     padding: 0 15px;
     border-radius: 8px;
 

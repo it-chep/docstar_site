@@ -49,11 +49,11 @@ function initCheckboxCity(){
         const text = $(this).attr('text');
         if($(this).prop('checked')){
             $('.selected.cities').append(`
-                <li id="li-${value}">${text}</li>
+                <li id="li-city-${value}">${text}</li>
             `)
         }
         else{
-            $(`#li-${value}`).remove()
+            $(`#li-city-${value}`).remove()
         }
 
     })
@@ -65,11 +65,11 @@ function initCheckboxSpeciality(){
         const text = $(this).attr('text');
         if($(this).prop('checked')){
             $('.selected.specialities').append(`
-                <li id="li-${value}">${text}</li>
+                <li id="li-speciality-${value}">${text}</li>
             `)
         }
         else{
-            $(`#li-${value}`).remove()
+            $(`#li-speciality-${value}`).remove()
         }
 
     })

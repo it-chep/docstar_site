@@ -19,7 +19,7 @@ function renderPagination(currentPage, totalPages) {
 
         navigationPrev.on('click', function () {
             setSelectedPageToUrl(currentPage - 1);
-            loadDoctors(currentPage - 1);
+            filterDoctors(getFilterQueryParams(), currentPage - 1);
         });
     }
     if (totalPages - currentPage < 3 && totalPages > 4) {
@@ -100,13 +100,13 @@ function renderPagination(currentPage, totalPages) {
 
         navigationNext.on('click', function () {
             setSelectedPageToUrl(currentPage + 1);
-            loadDoctors(currentPage + 1);
+            filterDoctors(getFilterQueryParams(), currentPage + 1);
         });
     }
     $('.pagination_button').on('click', function () {
         const page = $(this).data('page');
         setSelectedPageToUrl(page);
-        loadDoctors(page);
+        filterDoctors(getFilterQueryParams(), page);
     });
 }
 

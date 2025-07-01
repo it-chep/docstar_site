@@ -1,4 +1,30 @@
+is_detail_page = false;
+
+function checkUrl(){
+    const url = new URL(window.location.href);
+    const pathParts = url.pathname.split('/').filter(Boolean)
+    if (pathParts.length === 1) {
+        is_detail_page = true;
+    }
+}
+
+function redirect_main(name, val){
+    const url = new URL(window.location.href);
+    const searchParams_search_doctor = new URLSearchParams()
+    searchParams_search_doctor.set(name, val)
+    window.location.href = `${url.origin}?${searchParams_search_doctor.toString()}`
+}
+
+
+function loaderSearchModal(target){
+    target.empty();
+    const loader_spinner = `<div class="loader_spinner"></div>`
+    target.append(loader_spinner);
+}
+
 $(document).ready(function () {
+
+    checkUrl()
     const $searchDoctorContainer = $('.search-doctors-container')
     const $searchDoctorInput = $('.search-doctors-input')
     const $modalContent = $('.modal-content');
@@ -25,15 +51,15 @@ $(document).ready(function () {
     })
 
     let xhr = null;
-
     $searchDoctorInput.on('input', function () {
+
         const query = $(this).val().trim();
 
         if(xhr){
             xhr.abort()
             xhr = null;
         }else {
-            loader($modalContent)
+            loaderSearchModal($modalContent)
         }
 
         if (!query) {
@@ -175,7 +201,10 @@ function initSpecialitySearch($searchDoctorsModal) {
         const activeFilterWrapper = $('.active_filters_wrapper')
         const specialityID = $(this).data('id');
         const specialityCheckbox = $(`.checkbox-label.speciality input[data-id="${specialityID}"]`);
-
+        if(is_detail_page){
+            redirect_main('speciality', specialityID)
+            return
+        }
         if (specialityCheckbox.length) {
             $('.checkbox-label.city input[type="checkbox"]').prop('checked', false);
             $('.checkbox-label.speciality input[type="checkbox"]').prop('checked', false);
@@ -207,11 +236,15 @@ function initSpecialitySearch($searchDoctorsModal) {
 
 function initCitySearch($searchDoctorsModal) {
     $('.city-block').on('click', function (event) {
+
         event.preventDefault();
         const activeFilterWrapper = $('.active_filters_wrapper')
         const cityID = $(this).data('id');
         const cityCheckbox = $(`.checkbox-label.city input[data-id="${cityID}"]`);
-
+        if(is_detail_page){
+            redirect_main('city', cityID)
+            return
+        }
         if (cityCheckbox.length) {
             $('.checkbox-label.city input[type="checkbox"]').prop('checked', false);
             $('.checkbox-label.speciality input[type="checkbox"]').prop('checked', false);

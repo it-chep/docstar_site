@@ -69,13 +69,14 @@
 
 
 
+
+}
+
     .user_info_btn_container {
-        padding-left: 10px;
         margin-top: 10px;
         text-align: center;
     }
 
-}
 
 .doc_info {
     display: flex;

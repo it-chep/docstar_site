@@ -450,8 +450,8 @@ function filterDoctors(filters, page = 1) {
                                     
                                 </div>
                                 <div class="buttons_wrapper">
-                                    ${doctor.tg_subs_count > 0 ? `<div class="subscribers_link_wrapper miniatures">
-                                        <a class="subscribers_link" href="/" target="_blank" rel="noopener noreferrer">
+                                    ${doctor.tg_subs_count != 0 ? `<div class="subscribers_link_wrapper miniatures">
+                                        <a class="subscribers_link" href="${doctor.tg_channel_url}" target="_blank" rel="noopener noreferrer">
                                             <img class="social_icon" src="/static/img/logos/telegram_logo.png">
                                             <div class="subs_text">
                                                 <span class="subs_count">${doctor.tg_subs_count}</span>

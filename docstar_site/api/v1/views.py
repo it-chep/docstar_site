@@ -37,6 +37,7 @@ class BaseDoctorApiView:
                 'speciality': doctor.speciallity.name,
                 'doctor_url': doctor.get_absolute_url(),
                 'local_file': doctor.get_local_file,
+                'tg_channel_url': doctor.tg_channel_url,
             }
 
         return doctors_dict

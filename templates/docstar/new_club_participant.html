@@ -253,17 +253,20 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="checkbox-label politics">
-                        <input type="checkbox" name="agree_policy" required id="id_agree_policy" class="checkbox">
-                        <span class="checkbox-view">
-                            <img class="checkbox-icon" src="{% static 'img/homepage/check_mark.svg' %}">
-                        </span>
-                        <p class="checkbox-text">Я ознакомлен (-а) <a
-                                href="https://docs.google.com/document/d/1gwotwzPEN-fYGmfrnhLP1KvnhTkHmw6IK3quQukhw_8/edit?tab=t.0"
-                                target="_blank">с политикой в отношении персональных данных</a> и даю согласие на <a
-                                href="https://docs.google.com/document/d/1OSUmseHGB625qlRPZ9Icfo7KY3Al_JfmdLkpjmnxFOA/edit?tab=t.0"
-                                target="_blank">обработку персональных данных.</a></p>
-                    </label>
+                    <div id="checkbox_wrapper" class="input-wrapper">
+                        <label class="checkbox-label politics">
+                            <input type="checkbox" name="agree_policy" required id="id_agree_policy" class="checkbox">
+                            <span class="checkbox-view">
+                                <img class="checkbox-icon" src="{% static 'img/homepage/check_mark.svg' %}">
+                            </span>
+                            <p class="checkbox-text">Я ознакомлен (-а) <a
+                                    href="https://docs.google.com/document/d/1gwotwzPEN-fYGmfrnhLP1KvnhTkHmw6IK3quQukhw_8/edit?tab=t.0"
+                                    target="_blank">с политикой в отношении персональных данных</a> и даю согласие на <a
+                                    href="https://docs.google.com/document/d/1OSUmseHGB625qlRPZ9Icfo7KY3Al_JfmdLkpjmnxFOA/edit?tab=t.0"
+                                    target="_blank">обработку персональных данных.</a></p>
+                        </label>
+                    </div>
+
                     <div class="help-wrapper">
                         {{ form.agree_policy.help_text }}
                     </div>

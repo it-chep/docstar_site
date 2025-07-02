@@ -218,7 +218,6 @@ function getCities(){
 
 $(document).ready(function () {
 
-
     initCities()
     initSpecialities()
     disableTextSelection([document.querySelector('.checkbox-text')])
@@ -262,7 +261,6 @@ $(document).ready(function () {
 function displayErrors(errors) {
     $(".error-message").remove();
     $(".input-wrapper.error").removeClass('error');
-
     for (const [field, messages] of Object.entries(errors)) {
         const errorMessage = messages.join(", ");
         const inputElement = $(`[name=${field}]`);

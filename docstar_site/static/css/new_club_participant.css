@@ -150,26 +150,9 @@
 /*    max-height: 300px; !* Adjust this value as needed *!*/
 /*}*/
 
-    .selected_city, .selected_speciality{
-        margin-top: 10px;
-        padding: 0 10px;
-        display: none;
-    }
-
-    .selected_city{
-
-        display: none;
-        &.show{
-            display: block;
-        }
-    }
-
-    .selected_speciality{
-        display: none;
-        &.show{
-            display: block;
-        }
-    }
+ul{
+    margin-bottom: 0;
+}
 
 .filter-section {
     width: 100%;
@@ -179,13 +162,12 @@
 
     &.show {
         max-height: 300px;
+        margin-bottom: 10px;
     }
 
     ul{
         margin: 4px 0 0 0
     }
-
-
 
     .search-container{
         margin-top: 0;
@@ -235,6 +217,19 @@
     background: #242424;
     border-radius: 8px;
     padding: 15px 10px;
+}
+
+.selected_city_wrapper, .selected_speciality_wrapper{
+    width: 100%;
+    border: 2px solid #606060;
+    background: #242424;
+    border-radius: 8px;
+    padding: 15px 10px;
+    display: none;
+
+    &.show{
+        display: block;
+    }
 }
 
 p{

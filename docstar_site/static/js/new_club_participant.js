@@ -51,7 +51,7 @@ function initCheckboxCity(){
 
         if($(this).prop('checked')){
             if(selectedCities.children().length === 0){
-                $('.selected_city').addClass('show')
+                $('.selected_city_wrapper').addClass('show')
             }
             selectedCities.append(`
                 <li id="li-city-${value}" value=${value}>${text}</li>
@@ -59,7 +59,7 @@ function initCheckboxCity(){
         }
         else{
             if(selectedCities.children().length === 1){
-                $('.selected_city').removeClass('show')
+                $('.selected_city_wrapper').removeClass('show')
             }
             $(`#li-city-${value}`).remove()
         }
@@ -74,7 +74,7 @@ function initCheckboxSpeciality(){
         const selectedSpecialities = $('.selected.specialities')
         if($(this).prop('checked')){
             if(selectedSpecialities.children().length === 0){
-                $('.selected_speciality').addClass('show')
+                $('.selected_speciality_wrapper').addClass('show')
             }
             selectedSpecialities.append(`
                 <li id="li-speciality-${value}" value=${value}>${text}</li>
@@ -82,7 +82,7 @@ function initCheckboxSpeciality(){
         }
         else{
             if(selectedSpecialities.children().length === 1){
-                $('.selected_speciality').removeClass('show')
+                $('.selected_speciality_wrapper').removeClass('show')
             }
             $(`#li-speciality-${value}`).remove()
         }

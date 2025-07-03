@@ -32,3 +32,13 @@ class GetDoctorSubscribersResponse:
     inst_subs_count_text: str = ""
     # дата последнего обновления в сервисе
     inst_last_updated_date: str = ""
+
+
+@dataclass
+class DoctorMiniatureInfoResponse:
+    # ID доктора
+    doctor_id: int
+    # количество подписчиков
+    subs_count: str = "0"
+    # текст "подписчика", "подписчиков", "подписчик"
+    subs_count_text: str = ""

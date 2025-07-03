@@ -2,6 +2,8 @@
     color: white;
 }
 
+
+
 .doctors_list_container {
     max-width: 95%;
     background-color: #0E0F0F;
@@ -67,13 +69,14 @@
 
 
 
+
+}
+
     .user_info_btn_container {
-        padding-left: 10px;
         margin-top: 10px;
         text-align: center;
     }
 
-}
 
 .doc_info {
     display: flex;

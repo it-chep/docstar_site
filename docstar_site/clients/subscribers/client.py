@@ -6,7 +6,7 @@ import requests
 from django.conf import settings
 
 from docstar_site.clients.subscribers.dto import FilterDoctorsRequest, GetDoctorSubscribersResponse, \
-    DoctorMiniatureInfoResponse
+    DoctorMiniatureInfoResponse, FilterInfoResponse
 
 
 class SubscribersClient:
@@ -36,8 +36,10 @@ class SubscribersClient:
             for doctor in data['doctors']:
                 doctors.append(DoctorMiniatureInfoResponse(
                     doctor_id=doctor['id'],
-                    subs_count=doctor['telegram_short'],
-                    subs_count_text=doctor['telegram_text'],
+                    tg_subs_count=doctor['telegram_short'],
+                    tg_subs_count_text=doctor['telegram_text'],
+                    inst_subs_count=doctor['instagram_subs_count'],
+                    inst_subs_count_text=doctor['instagram_subs_text'],
                 ))
 
             return doctors
@@ -174,13 +176,40 @@ class SubscribersClient:
             for doctor_id, doctor_data in response_data['data'].items():
                 dict_response[int(doctor_id)] = DoctorMiniatureInfoResponse(
                     doctor_id=int(doctor_data['doctor_id']),
-                    subs_count=doctor_data['telegram_subs_count'],
-                    subs_count_text=str(doctor_data['telegram_subs_text']),
+                    tg_subs_count=doctor_data['telegram_subs_count'],
+                    tg_subs_count_text=str(doctor_data['telegram_subs_text']),
+                    inst_subs_count=doctor_data['instagram_subs_count'],
+                    inst_subs_count_text=doctor_data['instagram_subs_text'],
                 )
             return dict_response
 
         except (requests.exceptions.Timeout, requests.exceptions.HTTPError, ValueError, Exception) as e:
             return dict()
 
-    def filter_info(self):
-        ...
+    def filter_info(self) -> list[FilterInfoResponse]:
+        """
+        Получает информацию о доступных фильтрах
+        """
+        api_url = f'{self.url}/filter/info/'
+
+        try:
+            response = requests.get(
+                api_url,
+                timeout=3,
+                headers={'Content-Type': 'application/json'}
+            )
+
+            response.raise_for_status()
+            response_data = response.json()
+
+            response = list()
+            for _, messenger in response_data['messengers'].items():
+                response.append(
+                    FilterInfoResponse(
+                        name=messenger["name"],
+                        slug=messenger["slug"],
+                    )
+                )
+            return response
+        except (requests.exceptions.Timeout, requests.exceptions.HTTPError, ValueError, Exception) as e:
+            return list()

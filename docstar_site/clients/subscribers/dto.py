@@ -39,6 +39,18 @@ class DoctorMiniatureInfoResponse:
     # ID доктора
     doctor_id: int
     # количество подписчиков
-    subs_count: str = "0"
+    tg_subs_count: str = "0"
     # текст "подписчика", "подписчиков", "подписчик"
-    subs_count_text: str = ""
+    tg_subs_count_text: str = ""
+    # количество подписчиков
+    inst_subs_count: str = "0"
+    # текст "подписчика", "подписчиков", "подписчик"
+    inst_subs_count_text: str = ""
+
+
+@dataclass
+class FilterInfoResponse:
+    # Название для пользователя
+    name: str
+    # Для фильтрации в базе
+    slug: str

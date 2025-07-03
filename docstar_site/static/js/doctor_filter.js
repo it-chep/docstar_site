@@ -462,6 +462,18 @@ function filterDoctors(filters, page = 1) {
                                             </div>
                                         </a>
                                     </div>` : ''}
+                                    ${doctor.inst_subs_count != 0 ? `<div class="subscribers_link_wrapper miniatures">
+                                        <a class="subscribers_link" href="${doctor.inst_url}" target="_blank" rel="noopener noreferrer">
+                                            <img class="social_icon" src="/static/img/logos/Instagram_icon.png">
+                                            <div class="subs_text">
+                                                <span class="subs_count">${doctor.inst_subs_count}</span>
+                                                <span>${doctor.inst_subs_count_text}</span>
+                                            </div>
+                                            <div class="subs_ico_link">
+                                                <img src="/static/img/icons/doc_detail/subs_link_ico.svg">
+                                            </div>
+                                        </a>
+                                    </div>` : ''}
                                     <a class="user_info_btn_container" href="${doctor.doctor_url}">
                                         <div class="user_info_btn">
                                             <div class="user_info_btn_text">Подробнее</div>

@@ -3,7 +3,7 @@
 }
 
 .doctors_list_container {
-    max-width: 98%;
+    max-width: 95%;
     background-color: #0E0F0F;
 
     .doctors_wrapper {
@@ -14,20 +14,21 @@
 
 
         .doctors_container {
-
             width: 100%;
 
             .all_doctors {
+                position: relative;
+                min-height: 100vh;
                 width: 100%;
                 display: grid;
                 grid-template-columns: repeat(3, 1fr);
                 column-gap: 20px;
                 row-gap: 20px;
-                text-align: center;
+                align-content: start;
 
                 .user_card_wrapper {
                     overflow: hidden;
-                    height: auto;
+                    height: 100%;
                     padding: 10px 10px 20px 10px;
                     border-radius: 20px;
                     background: #1E1E1E;
@@ -45,6 +46,7 @@
     justify-content: space-between;
     align-items: flex-start;
     flex-wrap: nowrap;
+    height: 100%;
 
     .user_avatar {
         width: 100%;
@@ -68,6 +70,7 @@
     .user_info_btn_container {
         padding-left: 10px;
         margin-top: 10px;
+        text-align: center;
     }
 
 }

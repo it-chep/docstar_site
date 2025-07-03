@@ -54,7 +54,9 @@
 }
 
 .filter_open_close_arrow {
-    margin-right: 10px;
+    display: flex;
+    align-items: center;
+    margin-right: 8px;
     transition: transform 0.3s ease;
     transform: rotate(0deg);
 }
@@ -93,12 +95,28 @@
 }
 
 .filter-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
     position: relative;
     list-style: none;
     padding: 0;
-    margin: 0;
+    margin: 20px 0 0 0;
     overflow-y: scroll;
     max-height: 200px;
+
+    &::-webkit-scrollbar {
+        width: 6px;
+    }
+    &::-webkit-scrollbar-track {
+        box-sizing: border-box;
+        background: #222;
+        border-radius: 50% / 3px;
+    }
+    &::-webkit-scrollbar-thumb{
+        background-color: #ccc;
+        border-radius: 50% / 3px;
+    }
 
     .checkbox-view{
         min-width: 20px;
@@ -152,7 +170,7 @@
 
 .search_filter_indicator .material-icons {
     color: #2F9BFF;
-    padding: 5px 0 0;
+    padding: 0;
 }
 
 .active_filter_text {
@@ -187,7 +205,7 @@
     color: rgba(255, 255, 255, 0.5);
     border: 1px solid rgba(255, 255, 255, 0.5);
     border-radius: 8px;
-    margin: 20px 20px 0;
+    margin: 12px 20px 0;
     padding: 10px;
     text-align: center;
     cursor: pointer;

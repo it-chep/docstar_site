@@ -11,13 +11,24 @@ function showAll(listId) {
     }
 }
 
+function disableTextSelection(targets){
+    targets.forEach(target => {
+        target.addEventListener('mousedown', (e) => {
+            e.preventDefault()
+        })
+    })
+}
+
 // initializeFilterClickAction инициализация тоглов открывания фильтров "Города", "Специальности"
 function initializeFilterClickAction() {
     const cityFilterHeader = document.getElementById('city-filter-header')
     const specialityFilterHeader = document.getElementById('speciality-filter-header')
     const subscribersFilterHeader = document.getElementById('subscribers-filter-header')
 
-    cityFilterHeader.addEventListener('click', function () {
+    disableTextSelection([cityFilterHeader, specialityFilterHeader, subscribersFilterHeader, ...document.querySelectorAll('.checkbox-label')])
+
+    cityFilterHeader.addEventListener('click', function (e) {
+        e.preventDefault()
         this.querySelector('.filter_open_close_arrow').classList.toggle('open')
         toggleFilter('city-filter', this);
     });
@@ -193,6 +204,43 @@ function closeFilter(){
     body.style.overflow=''
 }
 
+function setFiltersInlineWrapper(){
+    const urlParams = new URLSearchParams(window.location.search);
+
+    const cities = urlParams.get('city')?.split(',')
+    cities?.forEach(paramCity => {
+        $(`#city-${paramCity}`).prop('checked', true)
+    })
+    const specialities = urlParams.get('speciality')?.split(',')
+    specialities?.forEach(paramSpeciality => {
+        $(`#speciality-${paramSpeciality}`).prop('checked', true)
+    })
+    const page = urlParams.get('page') || 1
+    setActiveFilters()
+    filterDoctors(getFilterQueryParams(), page);
+}
+
+
+function setActiveFilters(){
+    $('.filters-inline-wrapper input[type="checkbox"]:checked').each(function () {
+        const checkbox = $(this);
+        const labelText = checkbox.closest('.checkbox-label').find('.checkbox-text').text();
+        const className = checkbox.closest('.checkbox-label').hasClass('speciality') ? 'speciality' : 'city';
+        const ID = checkbox.closest('.checkbox-label').find('input').data('id')
+
+        // Добавляем фильтр в active_filters_wrapper
+        $('.active_filters_wrapper').append(`
+            <div class="active_filter" data-${className}="${ID}">
+                <p class="active_filter_text" >${labelText}</p>
+                <div class="active_filter_delete_btn">
+                    <span class="material-icons cancel">cancel</span>
+                </div>
+            </div>
+        `);
+    });
+}
+
+
 // initializeSubmitFilterBtn инициализация кнопки "Применить" фильтры
 function initializeSubmitFilterBtn() {
     const submitButton = $('.submit_button');
@@ -206,22 +254,8 @@ function initializeSubmitFilterBtn() {
         $('.active_filters_wrapper').empty();
 
         // Собираем все выбранные чекбоксы из filters-inline-wrapper
-        $('.filters-inline-wrapper input[type="checkbox"]:checked').each(function () {
-            const checkbox = $(this);
-            const labelText = checkbox.closest('.checkbox-label').find('.checkbox-text').text();
-            const className = checkbox.closest('.checkbox-label').hasClass('speciality') ? 'speciality' : 'city';
-            const ID = checkbox.closest('.checkbox-label').find('input').data('id')
+        setActiveFilters()
 
-            // Добавляем фильтр в active_filters_wrapper
-            $('.active_filters_wrapper').append(`
-            <div class="active_filter" data-${className}="${ID}">
-                <p class="active_filter_text" >${labelText}</p>
-                <div class="active_filter_delete_btn">
-                    <span class="material-icons cancel">cancel</span>
-                </div>
-            </div>
-        `);
-        });
         // пушим параметры в URL пользователя
         pushQueryParamsToURL()
 
@@ -260,6 +294,7 @@ function cleanFilterQueryParam(checkbox) {
 }
 
 $(document).ready(function () {
+    setFiltersInlineWrapper()
     // инициализация тоглов открывания фильтров "Города", "Специальности"
     initializeFilterClickAction();
     // инициализация поиска фильтров "Города", "Специальности"
@@ -274,11 +309,9 @@ $(document).ready(function () {
 
     $(document).on('click', '.active_filter_delete_btn', function (event) {
 
-
         const text = $(this).siblings('.active_filter_text').text();
         $(this).parent('.active_filter').remove();
         $(`.checkbox-label`).each(function () {
-
             if ($(this).find('.checkbox-text').text() === text) {
                 let checkbox = $(this).find('input[type="checkbox"]')
                 cleanFilterQueryParam(checkbox);
@@ -371,8 +404,26 @@ function handleFilterClick(event, className) {
     filterDoctors(getFilterQueryParams(), 1);
 }
 
+function pageUp(){
+     window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+    });
+}
+
+function loaderWrapper(target){
+    target.empty();
+    const loaderSpinnerWrapper = `<div class="wrapper_loader_spinner">
+        <div class="loader_spinner"></div>
+    </div>`
+    target.append(loaderSpinnerWrapper);
+}
+
 function filterDoctors(filters, page = 1) {
     const $doctorListContainer = $('.all_doctors');
+    pageUp()
+    renderPagination(0, 0);
+    loaderWrapper($doctorListContainer)
     $.ajax({
         url: `/api/v1/filter-doctor/?${filters}&page=${page}`, method: 'GET', success: function (response) {
             $doctorListContainer.empty();
@@ -382,18 +433,21 @@ function filterDoctors(filters, page = 1) {
                     const doctorCard = `
                         <div class="user_card_wrapper">
                             <div class="user_card">
-                                <div class="user_avatar">
-                                    ${doctor.avatar_url ? `<img class="avatar" src="${doctor.avatar_url}" />` : ''}
-                                </div>
-                                <div class="doc_info">
-                                    <div class="user_name doctor_name">
-                                        <p>${doctor.name}</p>
+                                <div class="user_info_wrap">
+                                    <div class="user_avatar">
+                                        ${doctor.avatar_url ? `<img class="avatar" src="${doctor.avatar_url}" />` : ''}
                                     </div>
-                                    <div class="user_additional_info">
-                                        <p>${doctor.speciality}</p>
-                                        <p>📍${doctor.city}</p>
+                                    <div class="doc_info">
+                                        <div class="user_name doctor_name">
+                                            <p>${doctor.name}</p>
+                                        </div>
+                                        <div class="user_additional_info">
+                                            <p>${doctor.speciality}</p>
+                                            <p>📍${doctor.city}</p>
+                                        </div>
                                     </div>
                                 </div>
+                                
                                 <a class="user_info_btn_container" href="${doctor.doctor_url}">
                                     <div class="user_info_btn">
                                         <div class="user_info_btn_text">Подробнее</div>

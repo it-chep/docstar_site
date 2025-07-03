@@ -1,7 +1,7 @@
 
 .header-container {
     width: 1200px;
-    max-width: 98%;
+    max-width: 95%;
     margin: 50px auto 40px;
     display: flex;
     flex-direction: row;
@@ -14,6 +14,12 @@
 .logo img {
     width: 268px;
     height: 75px;
+}
+
+.search_doctors_modal{
+    .loader_spinner{
+        margin: 24px;
+    }
 }
 
 .search-doctors-container {
@@ -50,7 +56,6 @@
 }
 
 .login-container {
-    padding-right: 30px;
     display: flex;
     justify-content: flex-end;
     align-items: center;

@@ -90,7 +90,7 @@ class DoctorDetail(DataMixin, DetailView):
 
         tg = tg.replace('@', "")
         if tg and "https" not in tg:
-            self.object.tg_url = f"https://t.me/{tg}"
+            self.object.tg_channel_url = f"https://t.me/{tg}"
 
     def prepare_doctor_link(self):
         doc_link = self.object.prodoctorov

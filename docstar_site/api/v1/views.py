@@ -54,8 +54,8 @@ class BaseDoctorApiView:
 
             if subscriber_data:
                 doctor_data.update({
-                    "tg_subs_count": subscriber_data.subs_count,
-                    "tg_subs_count_text": subscriber_data.subs_count_text,
+                    "tg_subs_count": subscriber_data.tg_subs_count,
+                    "tg_subs_count_text": subscriber_data.tg_subs_count_text,
                 })
             else:
                 doctor_data.update({
@@ -220,7 +220,7 @@ class BaseDoctorApiView:
 
         doctor_ids = []
         for doctor in doctors_with_subs:
-            doctor_ids.append(doctor['doctor_id'])
+            doctor_ids.append(doctor.doctor_id)
 
         q_args = city_query & speciality_query
         doctors = Doctor.objects.filter(
@@ -233,8 +233,9 @@ class BaseDoctorApiView:
 
         doctors_map = self.configure_doctors_map(doctors)
         for doctor in doctors_with_subs:
-            doctors_map[doctor['doctor_id']]["tg_subs_count"] = doctor['subs_count']
-            doctors_map[doctor['doctor_id']]["tg_subs_count_text"] = doctor['subs_count_text']
+            if doctors_map.get(doctor.doctor_id):
+                doctors_map[doctor.doctor_id]["tg_subs_count"] = doctor.tg_subs_count
+                doctors_map[doctor.doctor_id]["tg_subs_count_text"] = doctor.tg_subs_count_text
 
         doctors_list = self.enrich_photo_from_s3(doctors_map.values())
 

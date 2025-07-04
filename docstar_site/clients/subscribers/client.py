@@ -35,9 +35,9 @@ class SubscribersClient:
             doctors = []
             for doctor in data['doctors']:
                 doctors.append(DoctorMiniatureInfoResponse(
-                    doctor_id=doctor['id'],
-                    subs_count=doctor['telegram_short'],
-                    subs_count_text=doctor['telegram_text'],
+                    doctor_id=doctor["doctor"]['doctor_id'],
+                    tg_subs_count=doctor["doctor"]['telegram_short'],
+                    tg_subs_count_text=doctor["doctor"]['telegram_text'],
                 ))
 
             return doctors
@@ -61,9 +61,9 @@ class SubscribersClient:
                 raise ValueError("Неполные данные в ответе API")
 
             return GetDoctorSubscribersResponse(
-                subs_count=data['telegram_short'],
-                subs_count_text=data['telegram_text'],
-                last_updated_date=data['tg_last_updated_date'],
+                tg_subs_count=data['telegram_short'],
+                tg_subs_count_text=data['telegram_text'],
+                tg_last_updated_date=data['tg_last_updated_date'],
             )
 
         except (requests.exceptions.Timeout, requests.exceptions.HTTPError, ValueError, Exception) as e:
@@ -171,8 +171,8 @@ class SubscribersClient:
             for doctor_id, doctor_data in response_data['data'].items():
                 dict_response[int(doctor_id)] = DoctorMiniatureInfoResponse(
                     doctor_id=int(doctor_data['doctor_id']),
-                    subs_count=doctor_data['telegram_subs_count'],
-                    subs_count_text=str(doctor_data['telegram_subs_text']),
+                    tg_subs_count=doctor_data['telegram_subs_count'],
+                    tg_subs_count_text=str(doctor_data['telegram_subs_text']),
                 )
             return dict_response
 

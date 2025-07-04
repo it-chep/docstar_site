@@ -7,11 +7,6 @@
     padding-bottom: 20px;
 }
 
-.buttons_wrapper{
-    display: flex;
-    flex-direction: column;
-    padding: 9px;
-}
 
 .banner_new_doctor_mobile {
     display: none;

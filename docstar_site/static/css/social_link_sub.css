@@ -7,6 +7,7 @@
 }
 
 .subscribers_link {
+    width: 100%;
     background: #404040;
     color: white;
     display: flex;
@@ -20,6 +21,8 @@
 
 .subs_text {
     display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
     flex-direction: row;
     column-gap: 5px;
     align-items: center;
@@ -48,22 +51,24 @@
 
 .miniatures {
     &.subscribers_link_wrapper {
+        width: 100%;
         display: flex;
-        font-size: 15px;
+        font-size: 16px;
     }
     .subscribers_link{
-        column-gap: 8px;
+        column-gap: 4px;
         padding: 8px
     }
     .subs_count {
         min-width: auto;
     }
     .subs_ico_link{
+        display: flex;
+        align-self: start;
         min-width: 10px;
         min-height: 10px;
         width: 10px;
         height: 10px;
-        margin-left: 12px;
     }
     .social_icon {
         width: 24px;

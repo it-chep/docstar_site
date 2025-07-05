@@ -34,9 +34,9 @@ class BaseDoctorApiView:
 
             doctors_dict[doctor.id] = {
                 'name': doctor.name,
-                'city': doctor.city.name,
+                'city': ", ".join(doctor.additional_cities.all().values_list("name", flat=True)),
                 'slug': doctor.slug,
-                'speciality': doctor.speciallity.name,
+                'speciality': ", ".join(doctor.additional_specialties.all().values_list("name", flat=True)),
                 'doctor_url': doctor.get_absolute_url(),
                 'local_file': doctor.get_local_file,
                 'tg_channel_url': doctor.tg_channel_url,

@@ -129,10 +129,14 @@
 }
 
 .submit-button-container {
+    width: 100%;
+    max-width: 500px;
     cursor: pointer;
     margin-top: 40px;
     margin-bottom: 50px;
 }
+
+
 
 .input-wrapper.error .select2-container--dark .select2-selection--single {
     background: unset;
@@ -161,6 +165,8 @@
         display: flex;
         align-self: start;
         margin-top: 4px;
+        min-height: 20px;
+        min-width: 20px;
     }
     .checkbox-text{
         line-height: 28px;

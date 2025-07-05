@@ -260,6 +260,7 @@ function initializeSubmitFilterBtn() {
         pushQueryParamsToURL()
 
         // Применяем фильтры
+
         filterDoctors(getFilterQueryParams(), 1);
 
         // убираем на мобилке шторку
@@ -429,7 +430,7 @@ function filterDoctors(filters, page = 1) {
             $doctorListContainer.empty();
 
             if (response.data && response.data.length > 0) {
-                response.data.forEach(doctor => {
+                response.data.forEach((doctor, ind) => {
                     const doctorCard = `
                         <div class="user_card_wrapper">
                             <div class="user_card">
@@ -446,13 +447,27 @@ function filterDoctors(filters, page = 1) {
                                             <p>📍${doctor.city}</p>
                                         </div>
                                     </div>
+                                    
                                 </div>
-                                
-                                <a class="user_info_btn_container" href="${doctor.doctor_url}">
-                                    <div class="user_info_btn">
-                                        <div class="user_info_btn_text">Подробнее</div>
-                                    </div>
-                                </a>
+                                <div class="buttons_wrapper">
+                                    ${doctor.tg_subs_count != 0 ? `<div class="subscribers_link_wrapper miniatures">
+                                        <a class="subscribers_link" href="${doctor.tg_channel_url}" target="_blank" rel="noopener noreferrer">
+                                            <img class="social_icon" src="/static/img/logos/telegram_logo.png">
+                                            <div class="subs_text">
+                                                <span class="subs_count">${doctor.tg_subs_count}</span>
+                                                <span>${doctor.tg_subs_count_text}</span>
+                                            </div>
+                                            <div class="subs_ico_link">
+                                                <img src="/static/img/icons/doc_detail/subs_link_ico.svg">
+                                            </div>
+                                        </a>
+                                    </div>` : ''}
+                                    <a class="user_info_btn_container" href="${doctor.doctor_url}">
+                                        <div class="user_info_btn">
+                                            <div class="user_info_btn_text">Подробнее</div>
+                                        </div>
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     `;

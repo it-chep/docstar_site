@@ -116,12 +116,12 @@ class DoctorDetail(DataMixin, DetailView):
         subscribers_response: GetDoctorSubscribersResponse = settings.SUBSCRIBERS_CLIENT.get_doctor_subscribers(
             doctor_id
         )
-        if subscribers_response.subs_count == 0:
+        if subscribers_response.tg_subs_count == 0:
             return
 
-        self.object.subs_count = subscribers_response.subs_count
-        self.object.subs_count_text = subscribers_response.subs_count_text
-        self.object.last_updated_date = subscribers_response.last_updated_date
+        self.object.tg_subs_count = subscribers_response.tg_subs_count
+        self.object.tg_subs_count_text = subscribers_response.tg_subs_count_text
+        self.object.tg_last_updated_date = subscribers_response.tg_last_updated_date
         return
 
     def get(self, request, *args, **kwargs):

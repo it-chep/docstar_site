@@ -200,8 +200,6 @@ $(document).ready(function () {
         formData += '&additional_cities=' + getCities()
         formData += '&additional_specialties=' + getSpecialties()
 
-        console.log(formData)
-
         $.ajax({
             url: "/api/v1/create_new_doctor/",
             type: "POST",

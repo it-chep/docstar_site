@@ -49,6 +49,8 @@ class Doctors(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context['cities'] = City.objects.all()
+        context['specialities'] = Speciallity.objects.all()
         context["new_doctor_banner"] = True
         return context
 

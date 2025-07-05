@@ -1,39 +1,5 @@
 let isLoading = false;
 
-function toggleFilter(filterId) {
-    let content = document.getElementById(filterId);
-    content.classList.toggle('show');
-}
-
-
-function initializeFilterClickAction(isCity) {
-    if(isCity){
-        const cityFilterHeader = document.getElementById('city-filter-header')
-        disableTextSelection([cityFilterHeader, ...document.querySelectorAll('.checkbox-label.city')])
-        cityFilterHeader.addEventListener('click', function () {
-            this.querySelector('.filter_open_close_arrow').classList.toggle('open')
-            toggleFilter('filter-section-cities', this);
-        });
-    }
-    else{
-        const specialityFilterHeader = document.getElementById('speciality-filter-header')
-        disableTextSelection([specialityFilterHeader, ...document.querySelectorAll('.checkbox-label.speciality')])
-        specialityFilterHeader.addEventListener('click', function () {
-            this.querySelector('.filter_open_close_arrow').classList.toggle('open')
-            toggleFilter('filter-section-specialties', this);
-        });
-    }
-
-}
-
-function showFiltersBySearchText(object, searchText) {
-    const labelText = object.find('.checkbox-text').text().toLowerCase();
-    if (labelText.includes(searchText)) {
-        object.show();
-    } else {
-        object.hide();
-    }
-}
 
 function disableTextSelection(targets){
     targets.forEach(target => {
@@ -43,177 +9,180 @@ function disableTextSelection(targets){
     })
 }
 
-function initCheckboxCity(){
-    $('.checkbox.city').click(function (e) {
-        const value = $(this).attr('data-id');
-        const text = $(this).attr('text');
-        const selectedCities = $('.selected.cities')
 
-        if($(this).prop('checked')){
-            if(selectedCities.children().length === 0){
-                $('.selected_city_wrapper').addClass('show')
+function initTagsInput(options) {
+    const container = document.getElementById(options.containerId);
+    const tagsList = container.querySelector(`.${options.tagsListClass}`);
+    const input = container.querySelector(`.${options.inputClass}`);
+    const dropdown = container.querySelector(`.${options.dropdownClass}`);
+
+    if (!container || !tagsList || !input || !dropdown) {
+        console.error(`Не найден обязательный элемент для ${options.containerId}`);
+        return;
+    }
+
+    let allItems = [];
+    const selectedItems = [];
+
+    function loadItems() {
+        $.ajax({
+            url: options.apiUrl,
+            type: "GET",
+            success: function(response) {
+                allItems = response.cities || response.specialities || [];
+            },
+            error: function(xhr, status, error) {
+                console.error('Ошибка загрузки данных:', error);
+                allItems = [];
             }
-            selectedCities.append(`
-                <li id="li-city-${value}" value=${value}>${text}</li>
-            `)
-        }
-        else{
-            if(selectedCities.children().length === 1){
-                $('.selected_city_wrapper').removeClass('show')
+        });
+    }
+
+    function updatePlaceholder() {
+        input.placeholder = selectedItems.length > 0 ? '' : options.placeholder;
+    }
+
+       function addItem(item) {
+        if (selectedItems.some(i => options.getItemId(i) === options.getItemId(item))) return;
+
+        selectedItems.push(item);
+        renderTag(item);
+        updatePlaceholder();
+    }
+
+    function renderTag(item) {
+        const tagEl = document.createElement('div');
+        tagEl.className = 'tag-item';
+        tagEl.setAttribute(`data-${options.dataAttrName}`, options.getItemId(item));
+        tagEl.innerHTML = `
+            ${options.getItemName(item)}
+            <span class="tag-remove">×</span>
+        `;
+
+        tagEl.addEventListener('click', function(e) {
+            if (e.target.classList.contains('tag-remove')) {
+                e.stopPropagation();
+                removeItem(item);
             }
-            $(`#li-city-${value}`).remove()
-        }
-
-    })
-}
-
-function initCheckboxSpeciality(){
-    $('.checkbox.speciality').click(function (e) {
-        const value = $(this).attr('data-id');
-        const text = $(this).attr('text');
-        const selectedSpecialities = $('.selected.specialities')
-        if($(this).prop('checked')){
-            if(selectedSpecialities.children().length === 0){
-                $('.selected_speciality_wrapper').addClass('show')
-            }
-            selectedSpecialities.append(`
-                <li id="li-speciality-${value}" value=${value}>${text}</li>
-            `)
-        }
-        else{
-            if(selectedSpecialities.children().length === 1){
-                $('.selected_speciality_wrapper').removeClass('show')
-            }
-            $(`#li-speciality-${value}`).remove()
-        }
-
-    })
-}
-
-
-function initializeSearchFiltersInput() {
-    const citySearchInput = $('#citySearchInput')
-    const cityList = $('#city-list .checkbox-label')
-
-    const specialitySearchInput = $('#specialitySearchInput')
-    const specialityList = $('#speciality-list .checkbox-label');
-
-    citySearchInput.on('input', function (event) {
-        const searchText = $(this).val().toLowerCase();
-        cityList.each(function () {
-            showFiltersBySearchText($(this), searchText)
         });
 
-    })
+        tagsList.insertBefore(tagEl, input);
+    }
 
-    specialitySearchInput.on('input', function () {
-        const searchText = $(this).val().toLowerCase();
+    function removeItem(item) {
+        selectedItems.splice(selectedItems.findIndex(
+            i => options.getItemId(i) === options.getItemId(item)
+        ), 1);
 
-        specialityList.each(function () {
-            showFiltersBySearchText($(this), searchText)
-        });
+        const tagEl = tagsList.querySelector(
+            `.tag-item[data-${options.dataAttrName}="${options.getItemId(item)}"]`
+        );
+        if (tagEl) tagEl.remove();
+
+        input.focus();
+        updatePlaceholder();
+    }
+
+    input.addEventListener('keydown', function(e) {
+        if (e.key === 'Backspace' && this.value === '' && selectedItems.length > 0) {
+            removeItem(selectedItems[selectedItems.length - 1]);
+            e.preventDefault();
+        }
     });
-}
 
-function setInputBorder($target){
-    $target.focus(function (){
-        $(this).closest('.search-container').addClass('frame')
-    })
-    $target.blur(function (){
-        $(this).closest('.search-container').removeClass('frame')
-    })
-}
-
-function initCities(){
-     $.ajax({
-        url: "/api/v1/cities_list/",
-        type: "GET",
-        success: function (response) {
-            $('#additional_cities').append(`
-            <div class="filters-inline-wrapper">
-                <div id="filter-section-cities" class="filter-section">
-                    <div id="city-filter" class="filter-content">
-                        <div class="search-container">
-                            <img src="/static/img/lupa.svg">
-                            <input type="text" id="citySearchInput" placeholder="Найти свой город..." class="search-input">
-                        </div>
-                        <div class="filter-list" id="city-list">
-                            ${response.cities.map(city => 
-                                `<label for="city-${city.city_id}" class="checkbox-label city">
-                                    <input type="checkbox" text="${city.city_name}"  id="city-${city.city_id}" data-id="${city.city_id}" class="checkbox city">
-                                    <span class="checkbox-view">
-                                        <img class="checkbox-icon" src="/static/img/homepage/check_mark.svg">
-                                    </span>
-                                    <p class="checkbox-text">${city.city_name}</p>
-                                </label>`
-                            ).join('')}
-                        </div>
-                    </div>
-                 
-                </div>
-            </div>
-            `);
-            initializeSearchFiltersInput()
-            initializeFilterClickAction(true)
-            initCheckboxCity()
-            setInputBorder($('#citySearchInput'))
+    function showAutocomplete(items) {
+        dropdown.innerHTML = '';
+        if (items.length === 0) {
+            dropdown.style.display = 'none';
+            return;
         }
-    })
-}
 
+        items.forEach(item => {
+            const div = document.createElement('div');
+            div.className = 'autocomplete-item';
+            div.textContent = options.getItemName(item);
+            div.dataset[options.dataAttrName] = options.getItemId(item);
 
+            div.addEventListener('click', () => {
+                addItem(item);
+                input.value = '';
+                dropdown.style.display = 'none';
+                input.focus();
+            });
 
-function initSpecialities(){
-     $.ajax({
-        url: "/api/v1/specialities_list/",
-        type: "GET",
-        success: function (response) {
-            $('#additional_specialties').append(`
-            <div class="filters-inline-wrapper">
-                <div id="filter-section-specialties" class="filter-section">
-                    <div id="speciality-filter" class="filter-content">
-                        <div class="search-container">
-                            <img src="/static/img/lupa.svg">
-                            <input type="text" id="specialitySearchInput" placeholder="Найти свою специальность..." class="search-input">
-                        </div>
-                        
-                        <div class="filter-list" id="speciality-list">
-                            ${response.specialities.map(speciality => 
-                                `<label for="speciality-${speciality.speciality_id}" class="checkbox-label speciality">
-                                    <input type="checkbox" text="${speciality.speciality_name}" id="speciality-${speciality.speciality_id}" data-id="${speciality.speciality_id}" class="checkbox speciality">
-                                    <span class="checkbox-view">
-                                        <img class="checkbox-icon" src="/static/img/homepage/check_mark.svg">
-                                    </span>
-                                    <p class="checkbox-text">${speciality.speciality_name}</p>
-                                </label>`
-                            ).join('')}
-                        </div>
-                    </div>
-                 
-                </div>
-            </div>
-            `);
-            initializeSearchFiltersInput()
-            initializeFilterClickAction(false)
-            initCheckboxSpeciality()
-            setInputBorder($('#specialitySearchInput'))
+            dropdown.appendChild(div);
+        });
+
+        dropdown.style.display = 'block';
+    }
+
+    input.addEventListener('input', function() {
+        const searchText = this.value.toLowerCase();
+        if (!searchText) {
+            dropdown.style.display = 'none';
+            return;
         }
-    })
+
+        const filtered = allItems.filter(item =>
+            options.getItemName(item).toLowerCase().includes(searchText) &&
+            !selectedItems.some(i => options.getItemId(i) === options.getItemId(item))
+        );
+
+        showAutocomplete(filtered);
+    });
+
+    document.addEventListener('click', (e) => {
+        if (!container.contains(e.target)) {
+            dropdown.style.display = 'none';
+        }
+    });
+
+    loadItems();
+    updatePlaceholder();
 }
 
-function getSpecialities(){
-    let specialities = []
-    $('.selected.specialities').children().each((ind, elem) => {
-            specialities.push($(elem).attr('value'))
+function getSpecialties(){
+    let specialties = []
+    $('.tags-list.specialties-list [data-specialtyid]').each(function () {
+        specialties.push($(this).data('specialtyid'))
     })
-    return specialities.join(',')
+    return specialties.join(',')
 }
+
 function getCities(){
     let cities = []
-    $('.selected.cities').children().each((ind, elem) => {
-            cities.push($(elem).attr('value'))
+    $('.tags-list.cities-list [data-cityid]').each(function () {
+        cities.push($(this).data('cityid'))
     })
     return cities.join(',')
+}
+
+
+function initCities() {
+    initTagsInput({
+        containerId: 'additional_cities',
+        apiUrl: '/api/v1/cities_list/',
+        inputClass: 'city-input',
+        dropdownClass: 'city-dropdown',
+        tagsListClass: 'cities-list',
+        placeholder: 'Введите название города...',
+        getItemName: city => city.city_name,
+        getItemId: city => city.city_id,
+        dataAttrName: 'cityId'
+    });
+}
+function initSpecialities() {
+    initTagsInput({
+        containerId: 'additional_specialties',
+        apiUrl: '/api/v1/specialities_list/',
+        inputClass: 'specialty-input',
+        dropdownClass: 'specialty-dropdown',
+        tagsListClass: 'specialties-list',
+        placeholder: 'Введите название специальности...',
+        getItemName: specialty => specialty.speciality_name,  // с бека слово с i
+        getItemId: specialty => specialty.speciality_id, // с бека слово с i
+        dataAttrName: 'specialtyId'
+    });
 }
 
 $(document).ready(function () {
@@ -229,7 +198,9 @@ $(document).ready(function () {
         isLoading = true;
         let formData = $("#create-doctor-form").serialize();
         formData += '&additional_cities=' + getCities()
-        formData += '&additional_specialties=' + getSpecialities()
+        formData += '&additional_specialties=' + getSpecialties()
+
+        console.log(formData)
 
         $.ajax({
             url: "/api/v1/create_new_doctor/",
@@ -350,3 +321,126 @@ function initDatePickerField() {
         endDate: '0d'         // Запрет выбора будущих дат
     });
 }
+
+
+
+
+document.addEventListener('DOMContentLoaded', function() {
+  const container = document.querySelector('.tags-input-container');
+  const tagsList = document.querySelector('.tags-list');
+  const input = document.querySelector('.tags-input');
+  const dropdown = document.querySelector('.autocomplete-dropdown');
+
+  if (!container || !tagsList || !input || !dropdown) {
+    console.error('Required elements not found');
+    return;
+  }
+
+  const allOptions = ['JavaScript', 'TTTTTT', 'SSSSSSSSSS', 'BBBBBBBBBBB', 'Python', 'Java', 'C#', 'PHP', 'Ruby', 'Go', 'GGGGGGG', 'HHHHHHHHHH'];
+  const selectedTags = [];
+
+  function showAutocomplete(items) {
+    dropdown.innerHTML = '';
+
+    if (items.length === 0) {
+      dropdown.style.display = 'none';
+      return;
+    }
+
+    items.forEach(item => {
+      const div = document.createElement('div');
+      div.className = 'autocomplete-item';
+      div.textContent = item;
+
+      div.addEventListener('click', () => {
+        addTag(item);
+        input.value = '';
+        dropdown.style.display = 'none';
+        input.focus();
+      });
+
+      dropdown.appendChild(div);
+    });
+
+    dropdown.style.display = 'block';
+  }
+
+
+  function updatePlaceholder() {
+    if (selectedTags.length > 0) {
+      input.placeholder = '';
+    } else {
+      input.placeholder = 'Поиск...';
+    }
+  }
+
+  function addTag(tag) {
+    if (selectedTags.includes(tag)) return;
+
+    selectedTags.push(tag);
+
+    const tagEl = document.createElement('div');
+    tagEl.className = 'tag-item';
+    tagEl.innerHTML = `
+      ${tag}
+      <span class="tag-remove" data-tag="${tag}">×</span>
+    `;
+
+    tagEl.addEventListener('click', function(e) {
+      if (e.target.classList.contains('tag-remove')) {
+        removeTag(e.target.dataset.tag);
+      }
+    });
+
+    tagsList.insertBefore(tagEl, input);
+     updatePlaceholder(); // Обновляем placeholder после добавления
+  }
+
+  function removeTag(tag) {
+    const index = selectedTags.indexOf(tag);
+    if (index !== -1) {
+      selectedTags.splice(index, 1);
+      const tagEl = tagsList.querySelector(`.tag-item [data-tag="${tag}"]`)?.parentNode;
+      if (tagEl) {
+        tagEl.remove();
+      }
+    }
+    input.focus();
+     updatePlaceholder(); // Обновляем placeholder после удаления
+  }
+
+  input.addEventListener('input', function() {
+      if (this.value === '' && selectedTags.length === 0) {
+      this.placeholder = 'Поиск...';
+      }
+
+    const searchText = this.value.toLowerCase();
+
+    if (!searchText) {
+      dropdown.style.display = 'none';
+      return;
+    }
+
+    const filtered = allOptions.filter(option =>
+      option.toLowerCase().includes(searchText) &&
+      !selectedTags.includes(option)
+    );
+
+    showAutocomplete(filtered);
+  });
+
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Backspace' && !input.value && selectedTags.length > 0) {
+      removeTag(selectedTags[selectedTags.length - 1]);
+    }
+    if (e.key === 'Escape') {
+      dropdown.style.display = 'none';
+    }
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!container.contains(e.target)) {
+      dropdown.style.display = 'none';
+    }
+  });
+});

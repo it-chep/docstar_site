@@ -1,0 +1,17 @@
+{% load static %}
+
+<div class="subscribers_link_wrapper">
+    <a class="subscribers_link" href="{{ url }}" target="_blank"
+       rel="noopener noreferrer">
+        <img class="social_icon" src="{% static img_url %}">
+        <div class="subs_text">
+            <span class="subs_count">{{ subs_count }}</span>
+            <span>{{ subs_count_text }}</span>
+        </div>
+        <div class="subs_ico_link">
+            <img src="{% static "img/icons/doc_detail/subs_link_ico.svg" %}">
+        </div>
+    </a>
+    <div class="last_updated_date">Дата последнего
+        обновления: {{ last_updated_date }}</div>
+</div>

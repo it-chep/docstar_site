@@ -47,11 +47,6 @@ class CreateDoctorForm(forms.Form):
         max_length=100,
         widget=forms.TextInput(attrs={'class': 'input-field'}),
     )
-
-    age = forms.IntegerField(
-        label='Сколько вам лет',
-        min_value=0,
-    )
     birth_date = forms.DateField(
         label='Ваш день рождения',
         widget=forms.TextInput(attrs={
@@ -60,18 +55,28 @@ class CreateDoctorForm(forms.Form):
         }),
     )
 
+    additional_cities = forms.CharField(
+        label='Дополнительные города',
+        required=False,
+        widget=forms.SelectMultiple(attrs={
+            'class': 'select-multiple',
+            'placeholder': 'Выберите города'
+        })
+    )
+
+    additional_specialties = forms.CharField(
+        label='Дополнительные специальности',
+        required=False,
+        widget=forms.SelectMultiple(attrs={
+            'class': 'select-multiple',
+            'placeholder': 'Выберите специальность'
+        })
+    )
+
     instagram_username = forms.CharField(
         label='Ваш никнейм в инстаграм',
         required=False,
         widget=forms.TextInput(attrs={
-            'placeholder': 'Можете оставить пустым'
-        }),
-    )
-    instagram_subscribers = forms.IntegerField(
-        label='Количество подписчиков в Инстаграм (целое число)',
-        required=False,
-        min_value=0,
-        widget=forms.NumberInput(attrs={
             'placeholder': 'Можете оставить пустым'
         }),
     )
@@ -86,7 +91,7 @@ class CreateDoctorForm(forms.Form):
         label='Ваш никнейм в Telegram (не канал, а личный никнейм, через @)',
         required=True,
         widget=forms.TextInput(attrs={
-            'placeholder': 'Пример: readydoc'
+            'placeholder': 'Пример: @readydoc'
         }),
     )
     dzen_username = forms.CharField(
@@ -122,29 +127,21 @@ class CreateDoctorForm(forms.Form):
         required=True,
         choices=[(None, None)] + [(spec.id, spec.name) for spec in Speciallity.objects.all()]
     )
-
-    additional_speciallity = forms.CharField(
-        label='Дополнительная специальность',
-        widget=forms.TextInput(attrs={
-            'placeholder': 'Если нет, можете не указывать'
-        }),
-        required=False,
-    )
     main_blog_theme = forms.CharField(
-        label='Основная тематика блога',
+        label='ТОП-5 заболеваний/тем про которые пишете в блоге',
         required=False,
     )
     prodoctorov = forms.CharField(
-        label='Ссылка, куда записываться к вам на прием?',
+        label='Ваш сайт/таплинк',
         widget=forms.TextInput(attrs={
             'placeholder': 'Пример: https://taplink.cc/readydoc'
         }),
         required=False,
     )
 
-    # agree_policy = forms.BooleanField(
-    #     label='Согласен с политикой обработки данных', required=True
-    # )
+    agree_policy = forms.BooleanField(
+        label='Согласен с политикой обработки данных', required=True
+    )
 
     def clean(self):
         if all([
@@ -163,24 +160,6 @@ class CreateDoctorForm(forms.Form):
         if self.cleaned_data.get('last_name') and self.cleaned_data.get('first_name') and self.cleaned_data.get(
                 'middle_name'):
             self.name = f"{self.cleaned_data.get('last_name').strip()} {self.cleaned_data.get('first_name').strip()} {self.cleaned_data.get('middle_name').strip()}"
-
-    def clean_birth_date(self):
-        birth_date = self.cleaned_data.get('birth_date')
-
-        if not birth_date:
-            raise ValidationError('Дата рождения обязательна.')
-
-        if not re.match(r'^\d{2}\.\d{2}\.\d{4}$', birth_date.strftime('%d.%m.%Y')):
-            raise ValidationError('Неверный формат даты. Ожидается ДД.ММ.ГГГГ.')
-
-        if birth_date > datetime.date.today():
-            raise ValidationError('Дата рождения не может быть в будущем.')
-
-        max_age_date = datetime.date.today().replace(year=datetime.date.today().year - 120)
-        if birth_date < max_age_date:
-            raise ValidationError('Дата рождения не должна быть старше 120 лет.')
-
-        return birth_date
 
     def clean_city(self):
         city_id = self.cleaned_data.get('city')
@@ -242,6 +221,24 @@ class CreateDoctorForm(forms.Form):
             raise ValidationError("Пожалуйста, укажите ссылку на сайт или соц.сеть, ссылка должна содержать http")
         return self._clean_social_link(data, "")
 
+    def clean_birth_date(self):
+        birth_date = self.cleaned_data.get('birth_date')
+
+        if not birth_date:
+            raise ValidationError('Дата рождения обязательна.')
+
+        if not re.match(r'^\d{2}\.\d{2}\.\d{4}$', birth_date.strftime('%d.%m.%Y')):
+            raise ValidationError('Неверный формат даты. Ожидается ДД.ММ.ГГГГ.')
+
+        if birth_date > datetime.date.today():
+            raise ValidationError('Дата рождения не может быть в будущем.')
+
+        max_age_date = datetime.date.today().replace(year=datetime.date.today().year - 120)
+        if birth_date < max_age_date:
+            raise ValidationError('Дата рождения не должна быть старше 120 лет.')
+
+        return birth_date
+
     def save(self, commit=True):
         try:
             slug = get_eng_slug(self.name)
@@ -257,18 +254,31 @@ class CreateDoctorForm(forms.Form):
                 youtube_url=self.cleaned_data["youtube_username"],
                 city_id=self.cleaned_data["city"],
                 speciallity_id=self.cleaned_data["speciallity"],
-                additional_speciallity=self.cleaned_data["additional_speciallity"],
                 main_blog_theme=self.cleaned_data["main_blog_theme"],
-                age=self.cleaned_data["age"],
                 birth_date=self.cleaned_data["birth_date"],
                 prodoctorov=self.cleaned_data["prodoctorov"],
-                subscribers_inst=self.cleaned_data["instagram_subscribers"],
                 is_active=False,
             )
+
+            # дополнительные города
+            ids_str = self.cleaned_data["additional_cities"].strip("[]'\"")
+            ids_list = ids_str.split(',')
+            city_ids = [int(city_id.strip()) for city_id in ids_list if city_id.strip().isdigit()]
+            city_ids.append(self.cleaned_data["city"])
+            doctor.additional_cities.set(city_ids)
+
+            # дополнительные специальности
+            ids_str = self.cleaned_data["additional_specialties"].strip("[]'\"")
+            ids_list = ids_str.split(',')
+            specialties_ids = [int(city_id.strip()) for city_id in ids_list if city_id.strip().isdigit()]
+            specialties_ids.append(self.cleaned_data["speciallity"])
+            doctor.additional_specialties.set(specialties_ids)
+
             return doctor
         except City.DoesNotExist:
             raise ValidationError('Указанный город не найден.')
         except Speciallity.DoesNotExist:
             raise ValidationError('Указанная специальность не найдена.')
         except Exception as e:
+            print(e)
             raise ValidationError(f'Произошла ошибка: {e}')

@@ -1,9 +1,11 @@
 import math
+from typing import List
+
 import requests
-from django.db.models import Count
+from django.db import connection
+from django.db.models import Count, Q, F, QuerySet, Subquery, OuterRef, IntegerField
 
 from django.http import JsonResponse
-from django.db.models import Q, QuerySet
 from django.conf import settings
 from django.urls import reverse, NoReverseMatch
 from rest_framework import views, status
@@ -32,9 +34,9 @@ class BaseDoctorApiView:
 
             doctors_dict[doctor.id] = {
                 'name': doctor.name,
-                'city': doctor.city.name,
+                'city': ", ".join(doctor.additional_cities.all().values_list("name", flat=True)),
                 'slug': doctor.slug,
-                'speciality': doctor.speciallity.name,
+                'speciality': ", ".join(doctor.additional_specialties.all().values_list("name", flat=True)),
                 'doctor_url': doctor.get_absolute_url(),
                 'local_file': doctor.get_local_file,
                 'tg_channel_url': doctor.tg_channel_url,
@@ -127,28 +129,48 @@ class BaseDoctorApiView:
         return enriched_photos
 
     @staticmethod
-    def prepare_cities_data(cities: QuerySet) -> list[dict]:
+    def prepare_cities_data(cities: List[dict]) -> list[dict]:
         cities_list = []
         for city in cities:
             cities_list.append({
-                'id': city.id,
-                'name': city.name,
-                'doctors_count': city.doctors_count,
+                'id': city["city_id"],
+                'name': city["city_name"],
+                'doctors_count': city["doctors_count"],
             })
 
         return cities_list
 
     @staticmethod
-    def prepare_specialities_data(specialities: QuerySet) -> list[dict]:
+    def prepare_specialities_data(specialities: List[dict]) -> list[dict]:
         specialities_list = []
         for speciality in specialities:
             specialities_list.append({
-                'id': speciality.id,
-                'name': speciality.name,
-                'doctors_count': speciality.doctors_count,
+                'id': speciality["speciality_id"],
+                'name': speciality["speciality_name"],
+                'doctors_count': speciality["doctors_count"],
             })
 
         return specialities_list
+
+    @staticmethod
+    def get_city_speciality_query_args(city_list, speciality_list):
+        city_query = Q()
+        speciality_query = Q()
+
+        if city_list:
+            city_query = Q(
+                additional_cities__id__in=city_list.split(',')
+            ) | Q(
+                city__id__in=city_list.split(',')
+            )
+        if speciality_list:
+            speciality_query = Q(
+                additional_specialties__id__in=speciality_list.split(',')
+            ) | Q(
+                speciallity__id__in=speciality_list.split(',')
+            )
+
+        return city_query & speciality_query
 
     def get_pages_and_doctors_with_offset(self, current_page: int, doctors):
 
@@ -165,11 +187,16 @@ class BaseDoctorApiView:
 
     def get_doctors(self, request, *args, **kwargs):
         city_list = request.GET.get('city')
-        speciallity_list = request.GET.get('speciality')
+        speciality_list = request.GET.get('speciality')
         current_page = int(request.GET.get('page', 1))
 
-        if not city_list and not speciallity_list:
-            doctors = Doctor.objects.filter(is_active=True).order_by('name').select_related('city', 'speciallity')
+        if not city_list and not speciality_list:
+            doctors = (
+                Doctor.objects.filter(is_active=True).
+                order_by('name').
+                select_related('city', 'speciallity').
+                prefetch_related('additional_cities', 'additional_specialties')
+            )
             pages, doctors = self.get_pages_and_doctors_with_offset(current_page, doctors)
             doctors_ids = [doctor.id for doctor in doctors]
             subscribers_map = settings.SUBSCRIBERS_CLIENT.get_subscribers_by_doctors_ids(doctors_ids)
@@ -180,19 +207,18 @@ class BaseDoctorApiView:
 
             return JsonResponse({'data': doctors_list, 'pages': pages, 'page': current_page}, status=status.HTTP_200_OK)
 
-        city_query = Q()
-        speciallity_query = Q()
+        q_args = self.get_city_speciality_query_args(city_list, speciality_list)
 
-        if city_list:
-            city_query = Q(city__id__in=city_list.split(','))
-        if speciallity_list:
-            speciallity_query = Q(speciallity__id__in=speciallity_list.split(','))
-
-        q_args = city_query & speciallity_query
-        doctors = Doctor.objects.filter(
-            q_args,
-            is_active=True,
-        ).order_by('name').select_related('city', 'speciallity')
+        doctors = (
+            Doctor.objects.filter(
+                q_args,
+                is_active=True,
+            ).
+            order_by('name').
+            select_related('city', 'speciallity').
+            prefetch_related('additional_cities', 'additional_specialties').
+            distinct()
+        )
 
         pages, doctors = self.get_pages_and_doctors_with_offset(current_page, doctors)
 
@@ -210,24 +236,23 @@ class BaseDoctorApiView:
         speciality_list = request.GET.get('speciality')
         current_page = int(request.GET.get('page', 1))
 
-        city_query = Q()
-        speciality_query = Q()
-
-        if city_list:
-            city_query = Q(city__id__in=city_list.split(','))
-        if speciality_list:
-            speciality_query = Q(speciallity__id__in=speciality_list.split(','))
+        q_args = self.get_city_speciality_query_args(city_list, speciality_list)
 
         doctor_ids = []
         for doctor in doctors_with_subs:
             doctor_ids.append(doctor.doctor_id)
 
-        q_args = city_query & speciality_query
-        doctors = Doctor.objects.filter(
-            q_args,
-            is_active=True,
-            id__in=doctor_ids,
-        ).order_by('name').select_related('city', 'speciallity')
+        doctors = (
+            Doctor.objects.filter(
+                q_args,
+                is_active=True,
+                id__in=doctor_ids,
+            ).
+            order_by('name').
+            select_related('city', 'speciallity').
+            prefetch_related('additional_cities', 'additional_specialties').
+            distinct()
+        )
 
         pages, doctors = self.get_pages_and_doctors_with_offset(current_page, doctors)
 
@@ -262,30 +287,62 @@ class BaseDoctorApiView:
 
 class SearchDoctorApiView(BaseDoctorApiView, views.APIView):
 
+    def get_cities_with_doctors(self, query) -> List[dict]:
+        with connection.cursor() as cursor:
+            cursor.execute(f"""
+                            select c.id                      as city_id,
+                                   c.name                    as city_name,
+                                   count(distinct doctor_id) as doctors_count
+                            from docstar_site_city c
+                                     left join (select dc.city_id, dc.doctor_id
+                                                from docstar_site_doctor_additional_cities dc
+                                                         join docstar_site_doctor d on dc.doctor_id = d.id
+                                                where d.is_active = true) as combined on c.id = combined.city_id
+                            where c.name ilike %s                   
+                            group by c.id, c.name
+                            order by c.name
+                            limit %s;
+                           """, [f'%{query}%', self.search_city_limit])
+
+            columns = [col[0] for col in cursor.description]
+            return [dict(zip(columns, row)) for row in cursor.fetchall()]
+
+    def get_specialities_with_doctors(self, query) -> List[dict]:
+        with connection.cursor() as cursor:
+            cursor.execute(f"""
+                            select s.id                      as speciality_id,
+                                   s.name                    as speciality_name,
+                                   count(distinct doctor_id) as doctors_count
+                            from docstar_site_speciallity s
+                                     left join (select dc.speciallity_id, dc.doctor_id
+                                                from docstar_site_doctor_additional_specialties dc
+                                                         join docstar_site_doctor d on dc.doctor_id = d.id
+                                                where d.is_active = true) as combined on s.id = combined.speciallity_id
+                            where s.name ilike %s                   
+                            group by s.id, s.name
+                            order by s.name
+                            limit %s;
+                           """, [f'%{query}%', self.search_speciality_limit])
+
+            columns = [col[0] for col in cursor.description]
+            return [dict(zip(columns, row)) for row in cursor.fetchall()]
+
     def get(self, request, *args, **kwargs):
         query = request.GET.get('query')
         if not query:
             return JsonResponse({'data': []}, status=status.HTTP_200_OK)
 
         # Специальности
-        specialities = Speciallity.objects.filter(
-            name__icontains=query,
-        ).annotate(
-            doctors_count=Count('doctor', filter=Q(doctor__is_active=True))
-        ).order_by('name')[:self.search_speciality_limit]
+        specialities = self.get_specialities_with_doctors(query)
 
         # Города
-        cities = City.objects.filter(
-            name__icontains=query,
-        ).annotate(
-            doctors_count=Count('doctor', filter=Q(doctor__is_active=True))
-        ).order_by('name')[:self.search_city_limit]
+        cities = self.get_cities_with_doctors(query)
 
         # Доктора
         doctors = Doctor.objects.filter(
             name__icontains=query,
             is_active=True,
-        ).order_by('name')[:self.limit].select_related('city', 'speciallity')
+        ).order_by('name')[:self.limit].prefetch_related('additional_cities', 'additional_specialties')
 
         # ковертация в json
         doctors_list = self.enrich_photo_from_s3(self.prepare_doctors_data(doctors))
@@ -311,6 +368,28 @@ class DoctorListApiView(BaseDoctorApiView, views.APIView):
 
     def get(self, request, *args, **kwargs):
         return self.filter_doctors(request, *args, **kwargs)
+
+
+class CitiesListApiView(views.APIView):
+
+    def get(self, request, *args, **kwargs):
+        cities = City.objects.all().order_by('name')
+        data = [{"city_id": city.id, "city_name": city.name} for city in cities]
+        return JsonResponse(
+            {"cities": data},
+            status=status.HTTP_200_OK
+        )
+
+
+class SpecialityListApiView(views.APIView):
+
+    def get(self, request, *args, **kwargs):
+        specialities = Speciallity.objects.all().order_by('name')
+        data = [{"speciality_id": spec.id, "speciality_name": spec.name} for spec in specialities]
+        return JsonResponse(
+            {"specialities": data},
+            status=status.HTTP_200_OK
+        )
 
 
 class CreateNewDoctorApiView(views.APIView):

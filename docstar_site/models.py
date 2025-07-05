@@ -24,9 +24,40 @@ class Doctor(models.Model):
     youtube_url = models.CharField(verbose_name='Аккаунт YOUTUBE', max_length=100, null=True, blank=True)
     tiktok_url = models.CharField(verbose_name='Аккаунт TikTok', max_length=100, null=True, blank=True)
 
-    city = models.ForeignKey('City', on_delete=models.PROTECT, null=True, blank=True, verbose_name="Город")
     medical_directions = models.CharField(verbose_name='Направление медицины', max_length=255, null=True, blank=True)
-    speciallity = models.ForeignKey('Speciallity', on_delete=models.PROTECT, null=True, verbose_name="Специальность")
+
+    city = models.ForeignKey(
+        'City',
+        on_delete=models.PROTECT,
+        null=True,
+        blank=True,
+        verbose_name="Город",
+        related_name='doctors_primary',
+    )
+
+    additional_cities = models.ManyToManyField(
+        'City',
+        blank=True,
+        verbose_name="Дополнительные города",
+        related_name='doctors_additional'
+    ) # + содержит основной город
+
+    speciallity = models.ForeignKey(
+        'Speciallity',
+        on_delete=models.PROTECT,
+        null=True,
+        blank=True,
+        verbose_name="Специальность",
+        related_name='doctors_primary',
+    )
+
+    additional_specialties = models.ManyToManyField(
+        'Speciallity',
+        blank=True,
+        verbose_name="Дополнительные специальности",
+        related_name='doctors_additional'
+    ) # + содержит основную специальность
+
     additional_speciallity = models.CharField('Доп специальность', max_length=255, null=True, blank=True)
     main_blog_theme = models.TextField(verbose_name='Тематика блога', null=True, blank=True)
 

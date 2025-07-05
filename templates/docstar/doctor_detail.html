@@ -31,30 +31,34 @@
                         </div>
 
                         <div class="doctor_city_speciallity_wrapper">
-                            <div class="doctor_city_wrapper">
-                                <div class="doctor_city">
-                                    <p>{{ doctor.city }}</p>
+                            <div class="doctor_all_specialties_wrapper">
+                                <div class="doctor_city_wrapper">
+                                    <div class="doctor_city">
+                                        <span>{{ city_help_text }}: </span><span>{{ additional_doctor_cities_str }}</span>
+                                    </div>
                                 </div>
                             </div>
-
-                            <div class="doctor_speciallity_wrapper">
-                                <div class="doctor_speciallity">
-                                    <p>{{ doctor.speciallity }}</p>
+                            <div class="doctor_all_specialties_wrapper">
+                                <div class="doctor_speciallity_wrapper">
+                                    <a href="{% url 'homepage' %}?speciality={{ doctor.speciallity.id }}">
+                                        <div class="doctor_speciallity">
+                                            <p>{{ doctor.speciallity }}</p>
+                                        </div>
+                                    </a>
                                 </div>
-
+                                {% for speciality in additional_doctor_specialities %}
+                                    <div class="doctor_additional_speciallity_wrapper">
+                                        <a href="{% url 'homepage' %}?speciality={{ speciality.id }}">
+                                            <div class="doctor_additional_speciallity">
+                                                <p>{{ speciality }}</p>
+                                            </div>
+                                        </a>
+                                    </div>
+                                {% endfor %}
                             </div>
                         </div>
                     </div>
                     <div class="additional_information">
-                        {% if doctor.additional_speciallity %}
-                            <div class="additional_block">
-                                <p class="additional_specialities">
-                                    <span>Доп.специальность:</span>
-                                    {{ doctor.additional_speciallity }}
-                                </p>
-                            </div>
-                        {% endif %}
-
                         {% if doctor.main_blog_theme %}
                             <div class="additional_block">
                                 <p class="theme">
@@ -64,8 +68,9 @@
                             </div>
                         {% endif %}
                     </div>
-                    {% if doctor.prodoctorov %}
-                        <a class="prodoc_btn_wrapper" href="{{ doctor.prodoctorov }}" target="_blank" rel="noopener noreferrer">
+                    {% if doctor.tg_url %}
+                        <a class="prodoc_btn_wrapper" href="{{ doctor.tg_url }}" target="_blank"
+                           rel="noopener noreferrer">
                             <div class="prodoc_btn">
                                 <p class="prodoc_btn_text">Связаться</p>
                             </div>
@@ -75,7 +80,8 @@
                 <div class="doctor_actions">
                     {% if doctor.tg_subs_count and doctor.tg_subs_count != 0 and doctor.tg_channel_url %}
                         <div class="subscribers_link_wrapper">
-                            <a class="subscribers_link" href="{{ doctor.tg_channel_url }}" target="_blank" rel="noopener noreferrer">
+                            <a class="subscribers_link" href="{{ doctor.tg_channel_url }}" target="_blank"
+                               rel="noopener noreferrer">
                                 <img class="social_icon" src="{% static "img/logos/telegram_logo.png" %}">
                                 <div class="subs_text">
                                     <span class="subs_count">{{ doctor.tg_subs_count }}</span>
@@ -90,7 +96,7 @@
                     {% endif %}
                     <div class="society_block">
                         {% if doctor.inst_url %}
-                          {% include "../includes/social_link.html" with url=doctor.inst_url img_url="img/logos/Instagram_icon.png" label="Профиль в Instagram" %}
+                            {% include "../includes/social_link.html" with url=doctor.inst_url img_url="img/logos/Instagram_icon.png" label="Профиль в Instagram" %}
                         {% endif %}
 
                         {% if doctor.vk_url %}

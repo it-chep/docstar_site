@@ -48,7 +48,6 @@ function initializeFiltersFromQuery() {
         $range.css('left', (minSubscribers / maxAllowed) * 100 + '%');
     }
 
-
     // Устанавливаем максимальное количество подписчиков
     const maxSubscribers = urlParams.get('max_subscribers');
     if (maxSubscribers) {

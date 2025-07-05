@@ -6,7 +6,7 @@ import requests
 from django.conf import settings
 
 from docstar_site.clients.subscribers.dto import FilterDoctorsRequest, GetDoctorSubscribersResponse, \
-    DoctorMiniatureInfoResponse
+    GetAllSubscribersInfoResponse,DoctorMiniatureInfoResponse
 
 
 class SubscribersClient:
@@ -181,3 +181,26 @@ class SubscribersClient:
 
     def filter_info(self):
         ...
+
+    def get_all_subscribers_info(self) -> GetAllSubscribersInfoResponse:
+        api_url = f'{self.url}/subscribers/count/'
+        try:
+            response = requests.get(
+                api_url,
+                timeout=3,
+                headers={'Content-Type': 'application/json'}
+            )
+            response.raise_for_status()
+
+            data = response.json()
+            if not all(key in data for key in ["subscribers_count", "subscribers_count_text", "last_updated"]):
+                raise ValueError("Неполные данные в ответе API")
+
+            return GetAllSubscribersInfoResponse(
+                subscribers_count=data['subscribers_count'],
+                subscribers_count_text=data['subscribers_count_text'],
+                last_updated=data['last_updated'],
+            )
+
+        except (requests.exceptions.Timeout, requests.exceptions.HTTPError, ValueError, Exception) as e:
+            return GetAllSubscribersInfoResponse("0", "", "")

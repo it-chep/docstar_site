@@ -142,7 +142,7 @@
 }
 
 .additional_block span {
-    color: #717171;
+    color: #aeaeae;
 }
 
 .additional_specialities {
@@ -230,7 +230,7 @@ a {
 
 .last_updated_date {
     font-size: 12px;
-    color: #ffffff80;
+    color: #aeaeae;
     margin-top: 5px;
     text-align: center;
     text-wrap: nowrap;

@@ -10,6 +10,16 @@ from docstar_site.clients.s3.client import DEFAULT_DOCTOR_IMAGE
 User = settings.AUTH_USER_MODEL
 
 
+class CooperationType(models.IntegerChoices):
+    """Типы размещения врачей"""
+    UNKNOWN = 0, "Неизвестно"
+    CLUB_6_PLUS = 1, "Клуб 6+ месяцев"
+    ADVERTISING_BARTER = 2, "Бартер по рекламе"
+    PAID_FOREVER = 3, "Платно навсегда"
+    SUBSCRIPTION = 4, "Подписка"
+    READYDOC_PARDON = 5, "Помилование от READYDOC"
+
+
 class Doctor(models.Model):
     """User Docstar"""
     name = models.CharField(verbose_name='ФИО', max_length=100)
@@ -40,7 +50,7 @@ class Doctor(models.Model):
         blank=True,
         verbose_name="Дополнительные города",
         related_name='doctors_additional'
-    ) # + содержит основной город
+    )  # + содержит основной город
 
     speciallity = models.ForeignKey(
         'Speciallity',
@@ -56,12 +66,11 @@ class Doctor(models.Model):
         blank=True,
         verbose_name="Дополнительные специальности",
         related_name='doctors_additional'
-    ) # + содержит основную специальность
+    )  # + содержит основную специальность
 
     additional_speciallity = models.CharField('Доп специальность', max_length=255, null=True, blank=True)
-    main_blog_theme = models.TextField(verbose_name='Тематика блога', null=True, blank=True)
+    main_blog_theme = models.TextField(verbose_name='Тематика блога', null=True, blank=True, max_length=500)
 
-    status_club = models.BooleanField(verbose_name='Подписка на клуб', null=True)
     avatar = models.ImageField(
         verbose_name="Личное фото",
         upload_to="user_photos/",
@@ -79,9 +88,17 @@ class Doctor(models.Model):
     birth_date = models.DateField(verbose_name="Дата рождения", null=True, blank=True)
 
     is_active = models.BooleanField(verbose_name='Показывать доктора', default=True)
-    date_created = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    date_created = models.DateTimeField(verbose_name="Дата создания", auto_now_add=True, null=True, blank=True)
 
     s3_image = models.CharField(max_length=255, null=True, blank=True)
+
+    cooperation_type = models.SmallIntegerField(
+        verbose_name="Тип размещения",
+        choices=CooperationType.choices,
+        default=CooperationType.UNKNOWN,
+        null=True,
+        blank=True
+    )
 
     def __str__(self):
         return self.name
@@ -91,6 +108,10 @@ class Doctor(models.Model):
 
     def get_absolute_edit(self):
         return reverse('edit', kwargs={'slug': self.slug})
+
+    def get_cooperation_display(self) -> str:
+        """Возвращает читаемое название типа сотрудничества"""
+        return self.get_cooperation_type_display()
 
     @property
     def avatar_url(self) -> str:
@@ -151,31 +172,6 @@ class Doctor(models.Model):
         ordering = ["name"]
 
 
-class Lection(models.Model):
-    """Docstar Lection"""
-    lection_name = models.CharField(verbose_name='Название лекции', max_length=100)
-    slug = models.SlugField(verbose_name="URL", max_length=225, unique=True, db_index=True)
-    youtube_url = models.CharField(verbose_name='Cсылка на лекцию', max_length=100)
-    pre_photo = models.ImageField(verbose_name='Превью к лекции', upload_to="photos/", null=True)
-    lector_inst = models.CharField(verbose_name='Ссылка на инст лектора', max_length=100, null=True)
-
-    def __str__(self):
-        return self.lection_name
-
-    def yt_link(self):
-        if self.youtube_url and hasattr(self.youtube_url, 'url'):
-            return self.youtube_url.url
-        return None
-
-    def get_absolute_url(self):
-        return reverse('lection_card', kwargs={'lection_id': self.pk})
-
-    class Meta:
-        verbose_name = 'Лекция'
-        verbose_name_plural = 'Лекции'
-        ordering = ["lection_name"]
-
-
 class Speciallity(models.Model):
     """Users Speciallity"""
     name = models.CharField("Название специальности", max_length=100, db_index=True)
@@ -200,22 +196,6 @@ class City(models.Model):
     class Meta:
         verbose_name = 'Город'
         verbose_name_plural = 'Города'
-        ordering = ["name"]
-
-
-class Knowledge(models.Model):
-    """Knowlrdge base"""
-
-    name = models.CharField(verbose_name="Насзвание поста", max_length=100)
-    tg_link = models.CharField(verbose_name="Ссылка на тг", max_length=100)
-    slug = models.SlugField(verbose_name="URL", max_length=225, unique=True, db_index=True)
-
-    def __str__(self):
-        return self.name
-
-    class Meta:
-        verbose_name = 'База знаний'
-        verbose_name_plural = 'База знаний'
         ordering = ["name"]
 
 

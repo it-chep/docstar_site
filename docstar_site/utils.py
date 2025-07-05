@@ -2,8 +2,8 @@ import re
 
 
 class DataMixin:
-
-    def get_user_context(self, **kwargs):
+    @staticmethod
+    def get_user_context(**kwargs):
         context = kwargs
         return context
 

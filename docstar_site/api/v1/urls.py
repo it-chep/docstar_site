@@ -7,6 +7,7 @@ from .views import (
     CreateNewDoctorApiView,
     CitiesListApiView,
     SpecialityListApiView,
+    SettingsApiView,
 )
 
 urlpatterns = [
@@ -41,5 +42,10 @@ urlpatterns = [
         "specialities_list/",
         SpecialityListApiView.as_view(),
         name="specialities-list"
-    )
+    ),
+    path(
+        "settings/",
+        SettingsApiView.as_view(),
+        name="settings"
+    ),
 ]

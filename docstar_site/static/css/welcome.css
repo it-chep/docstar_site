@@ -87,7 +87,7 @@
         .welcome_wrapper {
             .welcome_header {
                 h1{
-                    font-size: 1.8rem;
+                    font-size: 2rem;
                 }
             }
         }
@@ -97,7 +97,7 @@
 @media (max-width: 520px) {
     .main_container {
         .welcome_wrapper {
-            font-size: 15px;
+            font-size: 18px;
             .welcome_header {
                 h1{
                     font-size: 1.6rem;

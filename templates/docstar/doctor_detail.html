@@ -31,30 +31,34 @@
                         </div>
 
                         <div class="doctor_city_speciallity_wrapper">
-                            <div class="doctor_city_wrapper">
-                                <div class="doctor_city">
-                                    <p>{{ doctor.city }}</p>
+                            <div class="doctor_all_specialties_wrapper">
+                                <div class="doctor_city_wrapper">
+                                    <div class="doctor_city">
+                                        <span>{{ city_help_text }}: </span><span>{{ additional_doctor_cities_str }}</span>
+                                    </div>
                                 </div>
                             </div>
-
-                            <div class="doctor_speciallity_wrapper">
-                                <div class="doctor_speciallity">
-                                    <p>{{ doctor.speciallity }}</p>
+                            <div class="doctor_all_specialties_wrapper">
+                                <div class="doctor_speciallity_wrapper">
+                                    <a href="{% url 'homepage' %}?speciality={{ doctor.speciallity.id }}">
+                                        <div class="doctor_speciallity">
+                                            <p>{{ doctor.speciallity }}</p>
+                                        </div>
+                                    </a>
                                 </div>
-
+                                {% for speciality in additional_doctor_specialities %}
+                                    <div class="doctor_additional_speciallity_wrapper">
+                                        <a href="{% url 'homepage' %}?speciality={{ speciality.id }}">
+                                            <div class="doctor_additional_speciallity">
+                                                <p>{{ speciality }}</p>
+                                            </div>
+                                        </a>
+                                    </div>
+                                {% endfor %}
                             </div>
                         </div>
                     </div>
                     <div class="additional_information">
-                        {% if doctor.additional_speciallity %}
-                            <div class="additional_block">
-                                <p class="additional_specialities">
-                                    <span>Доп.специальность:</span>
-                                    {{ doctor.additional_speciallity }}
-                                </p>
-                            </div>
-                        {% endif %}
-
                         {% if doctor.main_blog_theme %}
                             <div class="additional_block">
                                 <p class="theme">
@@ -64,8 +68,8 @@
                             </div>
                         {% endif %}
                     </div>
-                    {% if doctor.prodoctorov %}
-                        <a class="prodoc_btn_wrapper" href="{{ doctor.prodoctorov }}" target="_blank"
+                    {% if doctor.tg_url %}
+                        <a class="prodoc_btn_wrapper" href="{{ doctor.tg_url }}" target="_blank"
                            rel="noopener noreferrer">
                             <div class="prodoc_btn">
                                 <p class="prodoc_btn_text">Связаться</p>

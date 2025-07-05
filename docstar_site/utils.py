@@ -23,6 +23,9 @@ def validate_url(url: str) -> str:
     if not url:
         return ''
 
+    if "https://t.me/+" in url:
+        return url
+
     patterns = [
         r'https?://t\.me/([a-zA-Z0-9_]+)',  # https://t.me/username
         r't\.me/([a-zA-Z0-9_]+)',  # t.me/username

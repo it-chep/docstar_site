@@ -46,6 +46,23 @@
     font-style: normal;
 }
 
+/* Proxima Nova SemiBold */
+@font-face {
+    font-family: 'Proxima Nova';
+    src:    url('../fonts/Proxima Nova/proximanova-semibold.woff2') format('woff2'),
+            url('../fonts/Proxima Nova/proximanova-semibold.ttf') format('truetype');
+    font-weight: 600;
+    font-style: normal;
+}
+
+/* Proxima Nova medium */
+@font-face {
+    font-family: 'Proxima Nova';
+    src:    url('../fonts/Proxima Nova/proximanova-medium.otf') format('opentype');
+    font-weight: 500;
+    font-style: normal;
+}
+
 /* Proxima Nova Bold Italic */
 @font-face {
     font-family: 'Proxima Nova';

@@ -75,7 +75,7 @@ class DoctorAdmin(admin.ModelAdmin):
         super().save_related(request, form, formsets, change)
 
     def save_model(self, request, obj, form, change):
-        if change and 'tg_channel_url' in form.changed_data:
+        if change and ('tg_channel_url' in form.changed_data or 'instagram_url' in form.changed_data):
             success = self._handle_tg_channel_url_change(request, obj.id, obj.tg_channel_url)
             if not success:
                 return
@@ -122,9 +122,9 @@ class DoctorAdmin(admin.ModelAdmin):
         doctor_admin_url = reverse('admin:docstar_site_doctor_change', args=[doctor_id])
 
         try:
-            created = client.create_doctor(doctor_id, username, "")
-            if not created:
-                messages.set_level(request, messages.ERROR)
+            # todo сделать валидацию и отправку инстаграмма
+            status = client.update_doctor(doctor_id, username, "")
+            if status > 400:
                 messages.error(request,
                                format_html(
                                    'Не удалось обновить данные в сервисе подписчиков.'
@@ -132,7 +132,10 @@ class DoctorAdmin(admin.ModelAdmin):
                                    doctor_admin_url)
                                )
                 return False
-            messages.success(request, "Данные телеграм-канала успешно обновлены в сервисе подписчиков")
+            if status == 200:
+                messages.success(request, "Данные телеграм-канала успешно обновлены в сервисе подписчиков")
+            if status == 201:
+                messages.success(request, "Успешно создал новую запись в сервисе подписчиков")
             return True
         except Exception as e:
             messages.set_level(request, messages.ERROR)

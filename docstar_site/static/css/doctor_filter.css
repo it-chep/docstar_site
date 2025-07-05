@@ -7,6 +7,7 @@
     padding-bottom: 20px;
 }
 
+
 .banner_new_doctor_mobile {
     display: none;
 }
@@ -54,7 +55,9 @@
 }
 
 .filter_open_close_arrow {
-    margin-right: 10px;
+    display: flex;
+    align-items: center;
+    margin-right: 8px;
     transition: transform 0.3s ease;
     transform: rotate(0deg);
 }
@@ -168,7 +171,7 @@
 
 .search_filter_indicator .material-icons {
     color: #2F9BFF;
-    padding: 5px 0 0;
+    padding: 0;
 }
 
 .active_filter_text {
@@ -203,7 +206,7 @@
     color: rgba(255, 255, 255, 0.5);
     border: 1px solid rgba(255, 255, 255, 0.5);
     border-radius: 8px;
-    margin: 20px 20px 0;
+    margin: 12px 20px 0;
     padding: 10px;
     text-align: center;
     cursor: pointer;

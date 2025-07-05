@@ -1,18 +1,215 @@
-$(document).ready(function () {
-    $(".submit-button-container").on("click", function () {
-        const $button = $(this);
-        $button.prop("disabled", true);
+let isLoading = false;
 
-        const formData = $("#create-doctor-form").serialize();
+
+function disableTextSelection(targets){
+    targets.forEach(target => {
+        target.addEventListener('mousedown', (e) => {
+            e.preventDefault()
+        })
+    })
+}
+
+
+function initTagsInput(options) {
+    const container = document.getElementById(options.containerId);
+    const tagsList = container.querySelector(`.${options.tagsListClass}`);
+    const input = container.querySelector(`.${options.inputClass}`);
+    const dropdown = container.querySelector(`.${options.dropdownClass}`);
+
+    if (!container || !tagsList || !input || !dropdown) {
+        console.error(`Не найден обязательный элемент для ${options.containerId}`);
+        return;
+    }
+
+    let allItems = [];
+    const selectedItems = [];
+
+    function loadItems() {
+        $.ajax({
+            url: options.apiUrl,
+            type: "GET",
+            success: function(response) {
+                allItems = response.cities || response.specialities || [];
+            },
+            error: function(xhr, status, error) {
+                console.error('Ошибка загрузки данных:', error);
+                allItems = [];
+            }
+        });
+    }
+
+    function updatePlaceholder() {
+        input.placeholder = selectedItems.length > 0 ? '' : options.placeholder;
+    }
+
+       function addItem(item) {
+        if (selectedItems.some(i => options.getItemId(i) === options.getItemId(item))) return;
+
+        selectedItems.push(item);
+        renderTag(item);
+        updatePlaceholder();
+    }
+
+    function renderTag(item) {
+        const tagEl = document.createElement('div');
+        tagEl.className = 'tag-item';
+        tagEl.setAttribute(`data-${options.dataAttrName}`, options.getItemId(item));
+        tagEl.innerHTML = `
+            ${options.getItemName(item)}
+            <span class="tag-remove">×</span>
+        `;
+
+        tagEl.addEventListener('click', function(e) {
+            if (e.target.classList.contains('tag-remove')) {
+                e.stopPropagation();
+                removeItem(item);
+            }
+        });
+
+        tagsList.insertBefore(tagEl, input);
+    }
+
+    function removeItem(item) {
+        selectedItems.splice(selectedItems.findIndex(
+            i => options.getItemId(i) === options.getItemId(item)
+        ), 1);
+
+        const tagEl = tagsList.querySelector(
+            `.tag-item[data-${options.dataAttrName}="${options.getItemId(item)}"]`
+        );
+        if (tagEl) tagEl.remove();
+
+        input.focus();
+        updatePlaceholder();
+    }
+
+    input.addEventListener('keydown', function(e) {
+        if (e.key === 'Backspace' && this.value === '' && selectedItems.length > 0) {
+            removeItem(selectedItems[selectedItems.length - 1]);
+            e.preventDefault();
+        }
+    });
+
+    function showAutocomplete(items) {
+        dropdown.innerHTML = '';
+        if (items.length === 0) {
+            dropdown.style.display = 'none';
+            return;
+        }
+
+        items.forEach(item => {
+            const div = document.createElement('div');
+            div.className = 'autocomplete-item';
+            div.textContent = options.getItemName(item);
+            div.dataset[options.dataAttrName] = options.getItemId(item);
+
+            div.addEventListener('click', () => {
+                addItem(item);
+                input.value = '';
+                dropdown.style.display = 'none';
+                input.focus();
+            });
+
+            dropdown.appendChild(div);
+        });
+
+        dropdown.style.display = 'block';
+    }
+
+    input.addEventListener('input', function() {
+        const searchText = this.value.toLowerCase();
+        if (!searchText) {
+            dropdown.style.display = 'none';
+            return;
+        }
+
+        const filtered = allItems.filter(item =>
+            options.getItemName(item).toLowerCase().includes(searchText) &&
+            !selectedItems.some(i => options.getItemId(i) === options.getItemId(item))
+        );
+
+        showAutocomplete(filtered);
+    });
+
+    document.addEventListener('click', (e) => {
+        if (!container.contains(e.target)) {
+            dropdown.style.display = 'none';
+        }
+    });
+
+    loadItems();
+    updatePlaceholder();
+}
+
+function getSpecialties(){
+    let specialties = []
+    $('.tags-list.specialties-list [data-specialtyid]').each(function () {
+        specialties.push($(this).data('specialtyid'))
+    })
+    return specialties.join(',')
+}
+
+function getCities(){
+    let cities = []
+    $('.tags-list.cities-list [data-cityid]').each(function () {
+        cities.push($(this).data('cityid'))
+    })
+    return cities.join(',')
+}
+
+
+function initCities() {
+    initTagsInput({
+        containerId: 'additional_cities',
+        apiUrl: '/api/v1/cities_list/',
+        inputClass: 'city-input',
+        dropdownClass: 'city-dropdown',
+        tagsListClass: 'cities-list',
+        placeholder: 'Введите название города...',
+        getItemName: city => city.city_name,
+        getItemId: city => city.city_id,
+        dataAttrName: 'cityId'
+    });
+}
+function initSpecialities() {
+    initTagsInput({
+        containerId: 'additional_specialties',
+        apiUrl: '/api/v1/specialities_list/',
+        inputClass: 'specialty-input',
+        dropdownClass: 'specialty-dropdown',
+        tagsListClass: 'specialties-list',
+        placeholder: 'Введите название специальности...',
+        getItemName: specialty => specialty.speciality_name,  // с бека слово с i
+        getItemId: specialty => specialty.speciality_id, // с бека слово с i
+        dataAttrName: 'specialtyId'
+    });
+}
+
+$(document).ready(function () {
+
+    initCities()
+    initSpecialities()
+    disableTextSelection([document.querySelector('.checkbox-text')])
+
+    $(".submit-button-container").on("click", function () {
+        if(isLoading){
+            return
+        }
+        isLoading = true;
+        let formData = $("#create-doctor-form").serialize();
+        formData += '&additional_cities=' + getCities()
+        formData += '&additional_specialties=' + getSpecialties()
 
         $.ajax({
             url: "/api/v1/create_new_doctor/",
             type: "POST",
             data: formData,
             success: function (response) {
+                isLoading = false;
                 window.location.href = response.redirect_url;
             },
             error: function (response, status, error) {
+                isLoading = false;
                 const errors = response.responseJSON.errors;
                 if (errors) {
                     displayErrors(errors);
@@ -20,10 +217,9 @@ $(document).ready(function () {
                 }
                 const Alert = response.responseJSON.alert
                 if (Alert) {
-                    alert(Alert);
+                    console.log(Alert);
                 }
 
-                $button.prop("disabled", false);
             },
         });
     });
@@ -34,7 +230,6 @@ $(document).ready(function () {
 function displayErrors(errors) {
     $(".error-message").remove();
     $(".input-wrapper.error").removeClass('error');
-
     for (const [field, messages] of Object.entries(errors)) {
         const errorMessage = messages.join(", ");
         const inputElement = $(`[name=${field}]`);
@@ -124,3 +319,4 @@ function initDatePickerField() {
         endDate: '0d'         // Запрет выбора будущих дат
     });
 }
+

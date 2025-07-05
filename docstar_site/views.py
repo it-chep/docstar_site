@@ -91,7 +91,7 @@ class DoctorDetail(DataMixin, DetailView):
 
         tg = tg.replace('@', "")
         if tg and "https" not in tg:
-            self.object.tg_url = f"https://t.me/{tg}"
+            self.object.tg_channel_url = f"https://t.me/{tg}"
 
     def prepare_doctor_link(self):
         doc_link = self.object.prodoctorov
@@ -104,12 +104,12 @@ class DoctorDetail(DataMixin, DetailView):
         subscribers_response: GetDoctorSubscribersResponse = settings.SUBSCRIBERS_CLIENT.get_doctor_subscribers(
             doctor_id
         )
-        if subscribers_response.subs_count == 0:
+        if subscribers_response.tg_subs_count == 0:
             return
 
-        self.object.subs_count = subscribers_response.subs_count
-        self.object.subs_count_text = subscribers_response.subs_count_text
-        self.object.last_updated_date = subscribers_response.last_updated_date
+        self.object.tg_subs_count = subscribers_response.tg_subs_count
+        self.object.tg_subs_count_text = subscribers_response.tg_subs_count_text
+        self.object.tg_last_updated_date = subscribers_response.tg_last_updated_date
         return
 
     def get(self, request, *args, **kwargs):

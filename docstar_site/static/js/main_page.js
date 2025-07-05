@@ -104,14 +104,16 @@ function initMobileFilterAction() {
     });
 }
 
+
 function loadDoctors(page) {
-    pageUp()
-    loader()
     const $doctorListContainer = $('.all_doctors');
+    pageUp()
+    loaderWrapper($doctorListContainer)
+
     const filterParams = getFilterQueryParams()
 
     if (filterParams.length !== 0) {
-        filterDoctors(filterParams, page)
+        // filterDoctors(filterParams, page)  // логика перенесена в doctor_filter
         return
     }
     $.ajax({

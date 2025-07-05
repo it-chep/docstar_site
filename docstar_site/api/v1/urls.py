@@ -5,6 +5,8 @@ from .views import (
     FilterDoctorApiView,
     DoctorListApiView,
     CreateNewDoctorApiView,
+    CitiesListApiView,
+    SpecialityListApiView,
     SettingsApiView,
 )
 
@@ -30,6 +32,16 @@ urlpatterns = [
         "create_new_doctor/",
         CreateNewDoctorApiView.as_view(),
         name="create_new_doctor"
+    ),
+    path(
+        "cities_list/",
+        CitiesListApiView.as_view(),
+        name="cities-list"
+    ),
+    path(
+        "specialities_list/",
+        SpecialityListApiView.as_view(),
+        name="specialities-list"
     ),
     path(
         "settings/",

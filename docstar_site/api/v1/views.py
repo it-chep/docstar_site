@@ -13,7 +13,7 @@ from rest_framework import views, status
 from docstar_site.clients.s3.client import DEFAULT_DOCTOR_IMAGE
 from docstar_site.clients.subscribers.dto import FilterDoctorsRequest
 
-from docstar_site.models import Doctor
+from docstar_site.models import Doctor, Speciallity, City
 from docstar_site.forms import CreateDoctorForm
 from docstar_site.utils import get_site_url, validate_url
 
@@ -52,6 +52,50 @@ class BaseDoctorApiView(CitySpecialityMixin):
     search_city_limit = settings.LIMIT_CITY_ON_SEARCH
 
     @staticmethod
+    def configure_doctors_map(doctors):
+        doctors_dict = dict()
+        for doctor in doctors:
+            try:
+                reverse('doctor_card', kwargs={'slug': doctor.slug})
+            except NoReverseMatch as e:
+                continue
+
+            doctors_dict[doctor.id] = {
+                'name': doctor.name,
+                'city': ", ".join(doctor.additional_cities.all().values_list("name", flat=True)),
+                'slug': doctor.slug,
+                'speciality': ", ".join(doctor.additional_specialties.all().values_list("name", flat=True)),
+                'doctor_url': doctor.get_absolute_url(),
+                'local_file': doctor.get_local_file,
+                'tg_channel_url': doctor.tg_channel_url,
+            }
+
+        return doctors_dict
+
+    @staticmethod
+    def enrich_subscribers(doctors_dict, subscribers_dict) -> dict:
+        for doctor_id, doctor_data in doctors_dict.items():
+            # Проверяем, что doctor_data является словарем
+            if not isinstance(doctor_data, dict):
+                continue
+
+            # Получаем данные о подписчиках
+            subscriber_data = subscribers_dict.get(doctor_id)
+
+            if subscriber_data:
+                doctor_data.update({
+                    "tg_subs_count": subscriber_data.tg_subs_count,
+                    "tg_subs_count_text": subscriber_data.tg_subs_count_text,
+                })
+            else:
+                doctor_data.update({
+                    "tg_subs_count": 0,
+                    "tg_subs_count_text": "подписчиков",
+                })
+
+        return doctors_dict
+
+    @staticmethod
     def prepare_doctors_data(doctors) -> list[dict]:
         """Сериализация queryset докторов"""
         doctors_list = []
@@ -63,13 +107,34 @@ class BaseDoctorApiView(CitySpecialityMixin):
 
             doctors_list.append({
                 'name': doctor.name,
-                'city': ", ".join(doctor.additional_cities.all().values_list("name", flat=True)),
+                'city': doctor.city.name,
                 'slug': doctor.slug,
-                'speciality': ", ".join(doctor.additional_specialties.all().values_list("name", flat=True)),
+                'speciality': doctor.speciallity.name,
                 'doctor_url': doctor.get_absolute_url(),
                 'local_file': doctor.get_local_file,
             })
         return doctors_list
+
+    @staticmethod
+    def enrich_photo_from_s3_map(doctors_map: dict) -> list:
+        photos_map = settings.S3_CLIENT.get_user_photos()
+        enriched_photos = []
+
+        for _, doctor in doctors_map.items():
+            # Дефолтно s3
+            doctor['avatar_url'] = photos_map.get(doctor['slug'], None)
+
+            # Если нет ни в s3 ни на серваке, то ставим заглушку
+            if not doctor['avatar_url']:
+                doctor['avatar_url'] = DEFAULT_DOCTOR_IMAGE
+
+                # Если фотка на серваке, то отображаем ее для обратной совместимости
+                if doctor['local_file']:
+                    doctor['avatar_url'] = doctor['local_file']
+
+            enriched_photos.append(doctor)
+
+        return enriched_photos
 
     @staticmethod
     def enrich_photo_from_s3(doctors_list) -> list:
@@ -164,7 +229,13 @@ class BaseDoctorApiView(CitySpecialityMixin):
                 prefetch_related('additional_cities', 'additional_specialties')
             )
             pages, doctors = self.get_pages_and_doctors_with_offset(current_page, doctors)
-            doctors_list = self.enrich_photo_from_s3(self.prepare_doctors_data(doctors))
+            doctors_ids = [doctor.id for doctor in doctors]
+            subscribers_map = settings.SUBSCRIBERS_CLIENT.get_subscribers_by_doctors_ids(doctors_ids)
+
+            doctors_map = self.configure_doctors_map(doctors)
+            enriched_by_subscribers_map = self.enrich_subscribers(doctors_map, subscribers_map)
+            doctors_list = self.enrich_photo_from_s3_map(enriched_by_subscribers_map)
+
             return JsonResponse({'data': doctors_list, 'pages': pages, 'page': current_page}, status=status.HTTP_200_OK)
 
         q_args = self.get_city_speciality_query_args(city_list, speciality_list)
@@ -182,17 +253,25 @@ class BaseDoctorApiView(CitySpecialityMixin):
 
         pages, doctors = self.get_pages_and_doctors_with_offset(current_page, doctors)
 
-        doctors_list = self.enrich_photo_from_s3(self.prepare_doctors_data(doctors))
+        doctors_ids = [doctor.id for doctor in doctors]
+        subscribers_map = settings.SUBSCRIBERS_CLIENT.get_subscribers_by_doctors_ids(doctors_ids)
+
+        doctors_map = self.configure_doctors_map(doctors)
+        enriched_by_subscribers_map = self.enrich_subscribers(doctors_map, subscribers_map)
+        doctors_list = self.enrich_photo_from_s3_map(enriched_by_subscribers_map)
 
         return JsonResponse({'data': doctors_list, 'pages': pages, 'page': current_page}, status=status.HTTP_200_OK)
 
-    def get_doctors_by_ids(self, request, doctor_ids, *args, **kwargs):
-        """Фильтрация докторов по QUERY параметрам и ID"""
+    def get_doctors_by_ids_with_subs(self, request, doctors_with_subs, *args, **kwargs):
         city_list = request.GET.get('city')
         speciality_list = request.GET.get('speciality')
         current_page = int(request.GET.get('page', 1))
 
         q_args = self.get_city_speciality_query_args(city_list, speciality_list)
+
+        doctor_ids = []
+        for doctor in doctors_with_subs:
+            doctor_ids.append(doctor.doctor_id)
 
         doctors = (
             Doctor.objects.filter(
@@ -202,12 +281,19 @@ class BaseDoctorApiView(CitySpecialityMixin):
             ).
             order_by('name').
             select_related('city', 'speciallity').
-            prefetch_related('additional_cities', 'additional_specialties')
+            prefetch_related('additional_cities', 'additional_specialties').
+            distinct()
         )
 
         pages, doctors = self.get_pages_and_doctors_with_offset(current_page, doctors)
 
-        doctors_list = self.enrich_photo_from_s3(self.prepare_doctors_data(doctors))
+        doctors_map = self.configure_doctors_map(doctors)
+        for doctor in doctors_with_subs:
+            if doctors_map.get(doctor.doctor_id):
+                doctors_map[doctor.doctor_id]["tg_subs_count"] = doctor.tg_subs_count
+                doctors_map[doctor.doctor_id]["tg_subs_count_text"] = doctor.tg_subs_count_text
+
+        doctors_list = self.enrich_photo_from_s3(doctors_map.values())
 
         return JsonResponse({'data': doctors_list, 'pages': pages, 'page': current_page}, status=status.HTTP_200_OK)
 
@@ -217,7 +303,7 @@ class BaseDoctorApiView(CitySpecialityMixin):
         min_subscribers = request.GET.get('min_subscribers', 300)
 
         if (max_subscribers or min_subscribers) and (int(max_subscribers) != 100_000 or int(min_subscribers) != 300):
-            doctor_ids = settings.SUBSCRIBERS_CLIENT.filter_doctors_ids(
+            doctors = settings.SUBSCRIBERS_CLIENT.filter_doctors_ids(
                 FilterDoctorsRequest(
                     social_media="tg",
                     offset=0,
@@ -225,8 +311,8 @@ class BaseDoctorApiView(CitySpecialityMixin):
                     min_subscribers=min_subscribers,
                 )
             )
-            if len(doctor_ids) != 0:
-                return self.get_doctors_by_ids(request, doctor_ids, *args, **kwargs)
+            if len(doctors) != 0:
+                return self.get_doctors_by_ids_with_subs(request, doctors, *args, **kwargs)
 
         return self.get_doctors(request, *args, **kwargs)
 
@@ -314,6 +400,28 @@ class DoctorListApiView(BaseDoctorApiView, views.APIView):
 
     def get(self, request, *args, **kwargs):
         return self.filter_doctors(request, *args, **kwargs)
+
+
+class CitiesListApiView(views.APIView):
+
+    def get(self, request, *args, **kwargs):
+        cities = City.objects.all().order_by('name')
+        data = [{"city_id": city.id, "city_name": city.name} for city in cities]
+        return JsonResponse(
+            {"cities": data},
+            status=status.HTTP_200_OK
+        )
+
+
+class SpecialityListApiView(views.APIView):
+
+    def get(self, request, *args, **kwargs):
+        specialities = Speciallity.objects.all().order_by('name')
+        data = [{"speciality_id": spec.id, "speciality_name": spec.name} for spec in specialities]
+        return JsonResponse(
+            {"specialities": data},
+            status=status.HTTP_200_OK
+        )
 
 
 class CreateNewDoctorApiView(views.APIView):

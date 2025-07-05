@@ -78,21 +78,20 @@
                     {% endif %}
                 </div>
                 <div class="doctor_actions">
-                    {% if doctor.subs_count and doctor.tg_channel_url %}
+                    {% if doctor.tg_subs_count and doctor.tg_subs_count != 0 and doctor.tg_channel_url %}
                         <div class="subscribers_link_wrapper">
                             <a class="subscribers_link" href="{{ doctor.tg_channel_url }}" target="_blank"
                                rel="noopener noreferrer">
                                 <img class="social_icon" src="{% static "img/logos/telegram_logo.png" %}">
                                 <div class="subs_text">
-                                    <span class="subs_count">{{ doctor.subs_count }}</span>
-                                    <span>{{ doctor.subs_count_text }}</span>
+                                    <span class="subs_count">{{ doctor.tg_subs_count }}</span>
+                                    <span>{{ doctor.tg_subs_count_text }}</span>
                                 </div>
                                 <div class="subs_ico_link">
                                     <img src="{% static "img/icons/doc_detail/subs_link_ico.svg" %}">
                                 </div>
                             </a>
-                            <div class="last_updated_date">Дата последнего
-                                обновления: {{ doctor.last_updated_date }}</div>
+                            <div class="last_updated_date">Дата последнего обновления: {{ doctor.tg_last_updated_date }}</div>
                         </div>
                     {% endif %}
                     <div class="society_block">

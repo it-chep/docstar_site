@@ -242,15 +242,17 @@ class BaseDoctorApiView:
         for doctor in doctors_with_subs:
             doctor_ids.append(doctor.doctor_id)
 
-        doctors = (Doctor.objects.filter(
-            q_args,
-            is_active=True,
-            id__in=doctor_ids,
-        ).
-                   order_by('name').
-                   select_related('city', 'speciallity').
-                   prefetch_related('additional_cities', 'additional_specialties')
-                   )
+        doctors = (
+            Doctor.objects.filter(
+                q_args,
+                is_active=True,
+                id__in=doctor_ids,
+            ).
+            order_by('name').
+            select_related('city', 'speciallity').
+            prefetch_related('additional_cities', 'additional_specialties').
+            distinct()
+        )
 
         pages, doctors = self.get_pages_and_doctors_with_offset(current_page, doctors)
 

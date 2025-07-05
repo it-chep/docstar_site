@@ -78,9 +78,9 @@ class BaseDoctorApiView:
 
             doctors_list.append({
                 'name': doctor.name,
-                'city': ", ".join(doctor.additional_cities.all().values_list("name", flat=True)),
+                'city': doctor.city.name,
                 'slug': doctor.slug,
-                'speciality': ", ".join(doctor.additional_specialties.all().values_list("name", flat=True)),
+                'speciality': doctor.speciallity.name,
                 'doctor_url': doctor.get_absolute_url(),
                 'local_file': doctor.get_local_file,
             })
@@ -250,7 +250,7 @@ class BaseDoctorApiView:
                    order_by('name').
                    select_related('city', 'speciallity').
                    prefetch_related('additional_cities', 'additional_specialties')
-        )
+                   )
 
         pages, doctors = self.get_pages_and_doctors_with_offset(current_page, doctors)
 

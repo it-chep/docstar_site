@@ -80,7 +80,7 @@ class DoctorAdmin(admin.ModelAdmin):
         """Обработка изменения ссылки на канал телеграм"""
         client = settings.SUBSCRIBERS_CLIENT
         username = validate_url(tg_channel_url)
-        doctor_admin_url = reverse('admin:docstar_site_doctor_change', args=[obj.id])
+        doctor_admin_url = reverse('admin:docstar_site_doctor_change', args=[doctor_id])
 
         try:
             # todo сделать валидацию и отправку инстаграмма

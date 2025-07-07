@@ -40,7 +40,7 @@
                             <span class="checkbox-view">
                                 <img class="checkbox-icon" src="{% static 'img/homepage/check_mark.svg' %}">
                             </span>
-                            <p class="checkbox-text">{{ city.name }}</p>
+                            <p class="checkbox-text">{{ city.name }} ({{ city.doctors_count }})</p>
                         </label>
                     {% endfor %}
                 </div>
@@ -72,7 +72,7 @@
                             <span class="checkbox-view">
                                 <img class="checkbox-icon" src="{% static 'img/homepage/check_mark.svg' %}">
                             </span>
-                            <p class="checkbox-text">{{ speciality.name }}</p>
+                            <p class="checkbox-text">{{ speciality.name }} ({{ speciality.doctors_count }})</p>
                         </label>
                     {% endfor %}
                 </div>

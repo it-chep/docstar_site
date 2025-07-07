@@ -69,6 +69,9 @@
 }
 
 @media (max-width: 830px) {
+    #statistics_wrapper{
+        font-size: 17px;
+    }
     .doctors_list_container {
         .doctors_wrapper {
             .doctors_container {
@@ -130,6 +133,9 @@
 }
 
 @media (max-width: 510px) {
+    #statistics_wrapper{
+        font-size: 16px;
+    }
     .doctors_list_container {
         padding: 0 10px;
         .doctors_wrapper {
@@ -165,7 +171,9 @@
     .doctors_list_header {
         line-height: 40px;
     }
-
+    #statistics_wrapper{
+        font-size: 15px;
+    }
     .doctors_list_header_description {
         width: 90%;
         margin: 20px auto 0;

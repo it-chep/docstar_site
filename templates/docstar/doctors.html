@@ -32,9 +32,12 @@
 
             {% include "includes/doctor_filter.html" %}
             <div class="doctors_container" data-component="list">
-             <div id="statistics">
-                 <div>Врачей в базе: <span class="statistics_badge" id="number_of_doctors">423</span></div>
-                 <div>Общее количество подписчиков у врачей: <span class="statistics_badge" id="number_of_subs_tg">2 273 482</span></div>
+             <div id="statistics_wrapper">
+                 <div class="statistics_loader"></div>
+                 <div class="statistics">
+                     <div>Врачей в базе: <span class="statistics_badge" id="number_of_doctors"></span></div>
+                     <div>Общее количество подписчиков <span class="block_nowrap">у врачей: <span class="statistics_badge" id="number_of_subs_tg"></span></span></div>
+                 </div>
              </div>
 
             <div class="search-doctors-wrapper">

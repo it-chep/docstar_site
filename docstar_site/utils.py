@@ -16,7 +16,7 @@ def get_site_url():
     return "{}://{}".format(scheme, domain)
 
 
-def validate_url(url: str) -> str:
+def validate_tg_channel_url(url: str) -> str:
     """
     Извлекает username из URL Telegram
     """
@@ -38,3 +38,29 @@ def validate_url(url: str) -> str:
             return match.group(1)
 
     return url.strip()
+
+def validate_inst_url(url: str) -> str:
+    """
+    Извлекает username из URL INSTAGRAM
+    """
+    if not url:
+        return ''
+
+    # Удаляем параметры запроса (все что после ?)
+    base_url = url.split('?')[0].strip()
+
+    patterns = [
+        r'https?://(?:www\.)?instagram\.com/([a-zA-Z0-9_.]+)/?',  # https://instagram.com/username/
+        r'(?:www\.)?instagram\.com/([a-zA-Z0-9_.]+)/?',  # instagram.com/username
+        r'@?([a-zA-Z0-9_.]+)',  # @username или username
+        r'([a-zA-Z0-9_.]+)'  # username как последний fallback
+    ]
+
+    for pattern in patterns:
+        match = re.fullmatch(pattern, base_url)
+        if match:
+            username = match.group(1)
+            # Удаляем возможные слеши в конце
+            return username.rstrip('/')
+
+    return base_url

@@ -236,3 +236,37 @@ class SubscribersClient:
 
         except (requests.exceptions.Timeout, requests.exceptions.HTTPError, ValueError, Exception) as e:
             return GetAllSubscribersInfoResponse("0", "", "")
+
+    def migrate_instagram(self, doctor_id, inst_url) -> int:
+        """Миграция инсты в сервис подписчиков"""
+
+        api_url = f'{self.url}/migrate_instagram/'
+
+        if not doctor_id or not inst_url:
+            return 0
+
+        # Подготовка данных для запроса
+        body = {
+            'doctor_id': doctor_id,
+            'instagram': inst_url,
+        }
+
+        # Удаляем None значения из payload
+        payload = {k: v for k, v in body.items() if v is not None}
+
+        headers = {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        }
+
+        try:
+            response = requests.post(
+                api_url,
+                json=payload,
+                headers=headers,
+                timeout=10
+            )
+            return response.status_code
+
+        except (requests.exceptions.Timeout, requests.exceptions.HTTPError, ValueError, Exception) as e:
+            return 0

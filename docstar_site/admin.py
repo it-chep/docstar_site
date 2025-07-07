@@ -3,7 +3,7 @@ from django.utils.html import format_html
 from django.template.response import TemplateResponse
 
 from docstar_site.models import *
-from docstar_site.utils import validate_url
+from docstar_site.utils import validate_tg_channel_url
 from django.utils import timezone
 
 def custom_admin_index_wrapper(original_index):
@@ -118,7 +118,7 @@ class DoctorAdmin(admin.ModelAdmin):
     def _handle_tg_channel_url_change(request, doctor_id, tg_channel_url):
         """Обработка изменения ссылки на канал телеграм"""
         client = settings.SUBSCRIBERS_CLIENT
-        username = validate_url(tg_channel_url)
+        username = validate_tg_channel_url(tg_channel_url)
         doctor_admin_url = reverse('admin:docstar_site_doctor_change', args=[doctor_id])
 
         try:

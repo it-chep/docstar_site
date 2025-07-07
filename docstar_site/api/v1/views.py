@@ -15,7 +15,7 @@ from docstar_site.clients.subscribers.dto import FilterDoctorsRequest
 
 from docstar_site.models import Doctor, Speciallity, City
 from docstar_site.forms import CreateDoctorForm
-from docstar_site.utils import get_site_url, validate_url
+from docstar_site.utils import get_site_url, validate_tg_channel_url
 
 
 class CitySpecialityMixin:
@@ -470,7 +470,7 @@ class CreateNewDoctorApiView(views.APIView):
         if not doctor.tg_channel_url:
             return None
 
-        tg_username = validate_url(doctor.tg_channel_url)
+        tg_username = validate_tg_channel_url(doctor.tg_channel_url)
 
         return client.create_doctor(doctor.id, tg_username, doctor.inst_url)
 

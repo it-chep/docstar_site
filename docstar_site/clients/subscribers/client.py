@@ -16,6 +16,9 @@ class SubscribersClient:
         self.limit = settings.LIMIT_DOCTORS_ON_PAGE
 
     def filter_doctors_ids(self, request: FilterDoctorsRequest, *args, **kwargs) -> list[DoctorMiniatureInfoResponse]:
+        """
+        Фильтрует докторов в подписчиках
+        """
         # пока хардкодим ТГ, тк только с тг есть интеграшка
         api_url = f'{self.url}/doctors/filter?social_media=tg&max_subscribers={request.max_subscribers}&min_subscribers={request.min_subscribers}&offset={request.offset}'
 
@@ -47,6 +50,9 @@ class SubscribersClient:
             return []
 
     def get_doctor_subscribers(self, doctor_id: int, *args, **kwargs) -> GetDoctorSubscribersResponse:
+        """
+        Получает количество подписчиков у доктора
+        """
         api_url = f'{self.url}/subscribers/{doctor_id}/'
 
         try:
@@ -215,6 +221,7 @@ class SubscribersClient:
             return list()
 
     def get_all_subscribers_info(self) -> GetAllSubscribersInfoResponse:
+        """Получает информацию об общем количестве подписчиков в сервисе"""
         api_url = f'{self.url}/subscribers/count/'
         try:
             response = requests.get(
@@ -238,7 +245,9 @@ class SubscribersClient:
             return GetAllSubscribersInfoResponse("0", "", "")
 
     def migrate_instagram(self, doctor_id, inst_url) -> int:
-        """Миграция инсты в сервис подписчиков"""
+        """
+        Миграция инсты в сервис подписчиков
+        """
 
         api_url = f'{self.url}/migrate_instagram/'
 

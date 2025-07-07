@@ -15,7 +15,7 @@ from docstar_site.clients.subscribers.dto import FilterDoctorsRequest
 
 from docstar_site.models import Doctor, Speciallity, City
 from docstar_site.forms import CreateDoctorForm
-from docstar_site.utils import get_site_url, validate_tg_channel_url
+from docstar_site.utils import get_site_url, validate_tg_channel_url, validate_inst_url
 
 
 class CitySpecialityMixin:
@@ -471,8 +471,9 @@ class CreateNewDoctorApiView(views.APIView):
             return None
 
         tg_username = validate_tg_channel_url(doctor.tg_channel_url)
+        inst_username = validate_inst_url(doctor.instagram_url)
 
-        return client.create_doctor(doctor.id, tg_username, doctor.inst_url)
+        return client.create_doctor(doctor.id, tg_username, inst_username)
 
     @staticmethod
     def send_data_to_google_script(doctor):

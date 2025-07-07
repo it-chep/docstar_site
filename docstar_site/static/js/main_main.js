@@ -86,7 +86,7 @@ function initMobileBurgerAction() {
 
 function appendBurgerMenu($burgerMenu) {
     const windowWidth = $(window).width();
-    if (windowWidth <= 800) {
+    if (windowWidth <= 900) {
         $('.logo-wrapper').append($burgerMenu);
     } else {
         $('.login-container').append($burgerMenu);

@@ -5,34 +5,7 @@ $(document).ready(function () {
     initializeFiltersFromQuery();
     loadDoctors(getStartPage());
     initMobileFilterAction();
-    resizeMainTitle();
 });
-
-function resizeMainTitle() {
-    const $mainTitle = $('.main-title');
-    relocateMainTitle($mainTitle);
-    $(window).resize(function () {
-        relocateMainTitle($mainTitle);
-    });
-}
-
-function relocateMainTitle($mainTitle) {
-    const windowWidth = $(window).width();
-    const $targetElement = $mainTitle.find('.doctors_list_header .single-base');
-
-    if (windowWidth <= 450) {
-        $mainTitle.detach().insertAfter('.banner_new_doctor_mobile');
-
-        // Проверяем, есть ли уже <br> в элементе
-        if ($targetElement.find('br').length === 0) {
-            $targetElement.append('<br>');
-        }
-    } else {
-        // Удаляем <br> при возврате на десктоп
-        $targetElement.find('br').remove();
-        $mainTitle.detach().prependTo('.doctors_container');
-    }
-}
 
 function initializeFiltersFromQuery() {
     const urlParams = new URLSearchParams(window.location.search);

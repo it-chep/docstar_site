@@ -35,7 +35,20 @@
 
 
 
+@media (max-width: 900px) {
+    .doctors_list_container{
+        margin-top: 20px
+    }
 
+    .doctors_list_header {
+        font-size: 5.2vw;
+    }
+
+    .doctors_list_header_description{
+        font-size: 1.9vw;
+    }
+
+}
 
 
 
@@ -84,6 +97,19 @@
                 }
             }
         }
+    }
+
+    .main-title{
+        text-align: center;
+    }
+
+    .doctors_list_header {
+        font-size: 8vw;
+    }
+
+    .doctors_list_header_description{
+        font-size: 3vw;
+        margin-top: 10px;
     }
 }
 
@@ -137,24 +163,23 @@
 
 @media (max-width: 450px) {
     .doctors_list_header {
-        font-size: 30px;
         line-height: 40px;
-        margin-top: 20px;
     }
 
     .doctors_list_header_description {
         width: 90%;
         margin: 20px auto 0;
-        font-size: 19px;
+        font-size: 4.4vw;
     }
 
+
     .doctors-blogers {
-        font-size: 40px;
+        font-size: 9.4vw;
         letter-spacing: 2px;
     }
 
     .single-base {
-        font-size: 57px;
+        font-size: 13.5vw;
         letter-spacing: 2px;
     }
 
@@ -229,20 +254,13 @@
 }
 
 @media (max-width: 350px) {
+
     .doctors_list_header {
-        font-size: 26px;
         line-height: 35px;
-        margin-top: 20px;
     }
 
-    .doctors-blogers {
-        font-size: 33px;
-        letter-spacing: 2px;
-    }
-
-    .single-base {
-        font-size: 48px;
-        letter-spacing: 2px;
+    .doctors_list_header_description{
+        font-size: 4.8vw;
     }
 
     .user_card_wrapper {
@@ -301,12 +319,6 @@
     }
 
     .navigation_btn .material-icons {
-        font-size: 16px;
-    }
-
-    .doctors_list_header_description {
-        width: 90%;
-        margin: 20px auto 0;
         font-size: 16px;
     }
 

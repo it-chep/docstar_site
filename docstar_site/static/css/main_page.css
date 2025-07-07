@@ -207,3 +207,29 @@ a {
 .user_info_btn:hover {
     background: #2E99FC
 }
+
+
+
+#statistics{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    min-height: 44px;
+    gap: 6px;
+    color: #FFFFFF;
+    font-weight: 500;
+    line-height: 28px;
+    font-size: 19px;
+
+    >:first-child{
+        margin-right: 40px;
+    }
+
+    .statistics_badge{
+        font-weight: 800;
+        background-color: #01284B;
+        padding: 4px 10px;
+        border-radius: 100px;
+        text-wrap: nowrap;
+    }
+}

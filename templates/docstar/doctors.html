@@ -16,6 +16,7 @@
     <link type="text/css" rel="stylesheet" href="{% static 'css/mobile/mobile_main_page.css' %}">
     <link type="text/css" rel="stylesheet" href="{% static 'css/mobile/mobile_search_header.css' %}">
 
+    <script src="{% static "js/statistics_main_page.js" %}"></script>
     <script src="{% static "js/pagination.js" %}"></script>
     <script src="{% static 'js/subscribers_slider.js' %}"></script>
     <script src="{% static "js/main_page.js" %}"></script>
@@ -28,9 +29,13 @@
     <div class="container doctors_list_container">
         <div class="doctors_wrapper">
 
+
             {% include "includes/doctor_filter.html" %}
             <div class="doctors_container" data-component="list">
-
+             <div id="statistics">
+                 <div>Врачей в базе: <span class="statistics_badge" id="number_of_doctors">423</span></div>
+                 <div>Общее количество подписчиков у врачей: <span class="statistics_badge" id="number_of_subs_tg">2 273 482</span></div>
+             </div>
 
             <div class="search-doctors-wrapper">
                 <div class="search-doctors-container">

@@ -163,6 +163,7 @@ html, body {
     gap: 20px;
     width: 100%;
     overflow: visible;
+    margin-top: 8px;
 }
 
 .mobile_burger span {

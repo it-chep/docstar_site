@@ -111,6 +111,10 @@
                             {% include "../includes/social_link.html" with url=doctor.tg_url img_url="img/logos/telegram_logo.png" label="Профиль в Telegram" %}
                         {% endif %}
 
+                        {% if doctor.tiktok_url %}
+                            {% include "../includes/social_link.html" with url=doctor.tiktok_url img_url="img/logos/tiktok_logo.svg" label="Профиль в TikTok" %}
+                        {% endif %}
+
                         {% if doctor.youtube_url %}
                             {% include "../includes/social_link.html" with url=doctor.youtube_url img_url="img/logos/Youtube_logo.png" label="Профиль в YouTube" %}
                         {% endif %}

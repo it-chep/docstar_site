@@ -203,7 +203,7 @@ class SubscribersClient:
             response_data = response.json()
 
             response = list()
-            for _, messenger in response_data['messengers'].items():
+            for messenger in response_data['messengers']:
                 response.append(
                     FilterInfoResponse(
                         name=messenger["name"],

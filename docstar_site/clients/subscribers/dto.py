@@ -54,3 +54,12 @@ class FilterInfoResponse:
     name: str
     # Для фильтрации в базе
     slug: str
+
+@dataclass
+class GetAllSubscribersInfoResponse:
+    # количество подписчиков
+    subscribers_count: str = ""
+    # текст "подписчика", "подписчиков", "подписчик"
+    subscribers_count_text: str = ""
+    # дата последнего обновления в сервисе
+    last_updated: str = ""

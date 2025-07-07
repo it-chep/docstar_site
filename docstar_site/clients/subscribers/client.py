@@ -6,7 +6,7 @@ import requests
 from django.conf import settings
 
 from docstar_site.clients.subscribers.dto import FilterDoctorsRequest, GetDoctorSubscribersResponse, \
-    DoctorMiniatureInfoResponse, FilterInfoResponse
+    DoctorMiniatureInfoResponse, FilterInfoResponse, GetAllSubscribersInfoResponse
 
 
 class SubscribersClient:
@@ -35,11 +35,11 @@ class SubscribersClient:
             doctors = []
             for doctor in data['doctors']:
                 doctors.append(DoctorMiniatureInfoResponse(
-                    doctor_id=doctor['id'],
-                    tg_subs_count=doctor['telegram_short'],
-                    tg_subs_count_text=doctor['telegram_text'],
-                    inst_subs_count=doctor['instagram_subs_count'],
-                    inst_subs_count_text=doctor['instagram_subs_text'],
+                    doctor_id=doctor["doctor"]['doctor_id'],
+                    tg_subs_count=doctor["doctor"]['telegram_short'],
+                    tg_subs_count_text=doctor["doctor"]['telegram_text'],
+                    inst_subs_count=doctor["doctor"]['instagram_subs_count'],
+                    inst_subs_count_text=doctor["doctor"]['instagram_subs_text'],
                 ))
 
             return doctors
@@ -213,3 +213,26 @@ class SubscribersClient:
             return response
         except (requests.exceptions.Timeout, requests.exceptions.HTTPError, ValueError, Exception) as e:
             return list()
+
+    def get_all_subscribers_info(self) -> GetAllSubscribersInfoResponse:
+        api_url = f'{self.url}/subscribers/count/'
+        try:
+            response = requests.get(
+                api_url,
+                timeout=3,
+                headers={'Content-Type': 'application/json'}
+            )
+            response.raise_for_status()
+
+            data = response.json()
+            if not all(key in data for key in ["subscribers_count", "subscribers_count_text", "last_updated"]):
+                raise ValueError("Неполные данные в ответе API")
+
+            return GetAllSubscribersInfoResponse(
+                subscribers_count=data['subscribers_count'],
+                subscribers_count_text=data['subscribers_count_text'],
+                last_updated=data['last_updated'],
+            )
+
+        except (requests.exceptions.Timeout, requests.exceptions.HTTPError, ValueError, Exception) as e:
+            return GetAllSubscribersInfoResponse("0", "", "")

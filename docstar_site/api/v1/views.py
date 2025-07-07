@@ -581,7 +581,7 @@ class SettingsApiView(CitySpecialityMixin, views.APIView):
                 'doctors_count': self._serialize_doctors_count(self._get_doctors_count()),
                 'subscribers_count': subscribers_info.subscribers_count,
                 'subscribers_count_text': subscribers_info.subscribers_count_text,
-                'subscribers_last_updated': subscribers_info.subscribers_last_updated,
+                'subscribers_last_updated': subscribers_info.last_updated,
                 'cities': self._prepare_cities_data(self._get_cities()),
                 'specialities': self._prepare_specialities_data(self._get_specialities()),
                 'new_doctor_banner': True,

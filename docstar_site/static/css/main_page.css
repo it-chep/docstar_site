@@ -1,7 +1,7 @@
 .doctors_list_header {
     color: white;
     font-weight: 900;
-    font-size: clamp(20px, 3.8vw, 48px);
+    font-size: clamp(20px, 3.2vw, 41px);
     line-height: 100%;
     letter-spacing: 0;
 

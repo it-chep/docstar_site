@@ -27,9 +27,10 @@
     overflow: hidden;
     width: 100%;
     text-align: center;
-    font-weight: 600;
-    font-size: 35px;
-    font-family: 'DrukCyr', 'sans-serif';
+    font-weight: 800;
+    font-size: 28px;
+    line-height: 130%;
+    font-family: 'Proxima Nova', 'sans-serif';
 }
 
 .banner_new_doctor_button {
@@ -192,6 +193,10 @@
     background: #FF3737;
 }
 
+.block_nowrap{
+    text-wrap: nowrap;
+}
+
 .submit_button {
     background: #2F9BFF;
     color: #fff;
@@ -232,7 +237,7 @@
         flex-direction: column;
         align-items: center;
         min-width: 0px;
-        width: 80%;
+        width: 85%;
     }
 }
 

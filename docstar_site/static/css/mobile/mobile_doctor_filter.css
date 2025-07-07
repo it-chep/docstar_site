@@ -82,7 +82,7 @@
     }
 
     .banner_new_doctor_header {
-        font-size: 50px;
+        font-size: 7.5vw;
     }
 
     .banner_new_doctor_button {
@@ -175,10 +175,6 @@
 
     .banner_new_doctor {
         display: none;
-    }
-
-    .banner_new_doctor_header {
-        font-size: 40px;
     }
 
     .banner_new_doctor_button {

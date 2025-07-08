@@ -28,33 +28,51 @@
 {% block content %}
     <div class="container doctors_list_container">
         <div class="doctors_wrapper">
-
-
             {% include "includes/doctor_filter.html" %}
             <div class="doctors_container" data-component="list">
-             <div id="statistics_wrapper">
-                 <div class="statistics_loader"></div>
-                 <div class="statistics">
-                     <div>Врачей в базе: <span class="statistics_badge" id="number_of_doctors"></span></div>
-                     <div>Общее количество подписчиков <span class="block_nowrap">у врачей: <span class="statistics_badge" id="number_of_subs_tg"></span></span></div>
-                 </div>
-             </div>
+                <div id="statistics_wrapper">
+                    <div class="statistics_loader"></div>
+                    <div class="statistics">
+                        <div class="statistic_wrap">
+                            <span class="statistic_text">Врачей в базе<span class="colon">:</span></span>
+                            <div class="number_wrap">
+                                <img src="/static/img/check_mark.png" />
+                                <span class="statistics_badge" id="number_of_doctors"></span>
+                            </div>
+                        </div>
+                        <div class="statistic_wrap">
+                            <span class="statistic_text">Общее количество подписчиков у врачей<span class="colon">:</span></span>
+                            <div class="number_wrap">
+                                <img src="/static/img/check_mark.png" />
+                                <span class="statistics_badge" id="number_of_subs_tg"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="banner_new_doctor_mobile">
+                    <a href="{% url "welcome" %}" target="_blank">
+                        <div class="banner_new_doctor_inline">
+                            <p class="banner_new_doctor_header">РАЗМЕЩЕНИЕ <span class="block_nowrap">НА САЙТЕ</span></p>
+                            <div class="banner_new_doctor_button">Подать заявку</div>
+                        </div>
+                    </a>
+                </div>
 
-            <div class="search-doctors-wrapper">
-                <div class="search-doctors-container">
-                    <img class="lupa" src="{% static "img/lupa.svg" %}">
-                    <input class="search-doctors-input" type="text" placeholder="Найдем для вас врача...">
-                    <div class="dark-substrate"></div>
+                <div class="search-doctors-wrapper">
+                    <div class="search-doctors-container">
+                        <img class="lupa" src="{% static "img/lupa.svg" %}">
+                        <input class="search-doctors-input" type="text" placeholder="Найдем для вас врача...">
+                        <div class="dark-substrate"></div>
+                    </div>
+                    <div class="settings_icon_wrapper">
+                        <span class="material-icons">
+                            tune
+                        </span>
+                    </div>
+                    <div class="modal search_doctors_modal">
+                        <div class="modal-content"></div>
+                    </div>
                 </div>
-                <div class="settings_icon_wrapper">
-                    <span class="material-icons">
-                        tune
-                    </span>
-                </div>
-                 <div class="modal search_doctors_modal">
-                     <div class="modal-content"></div>
-                 </div>
-            </div>
 
 
 

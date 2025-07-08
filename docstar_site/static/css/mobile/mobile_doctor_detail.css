@@ -57,7 +57,7 @@
     }
 
     .doctor_detail_card_container{
-        padding: 10px;
+        margin: 40px auto;
     }
 }
 
@@ -93,7 +93,7 @@
 
 
 
-@media (max-width: 450px) {
+@media (max-width: 480px) {
     .doctor_info_wrapper {
         flex-direction: column;
     }
@@ -102,9 +102,6 @@
         display: none;
     }
 
-    .doctor_detail_card_container {
-        margin-top: 20px;
-    }
 
     .doctor_city_speciallity_wrapper {
         display: flex;

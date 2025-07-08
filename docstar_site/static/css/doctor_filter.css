@@ -44,11 +44,6 @@
     border: 2px solid var(--blue);
     background: var(--blue);
     border-radius: 8px;
-    transition: background-color 0.5s ease;
-
-    &:hover {
-        background: var(--dark-blue);
-    }
 }
 
 .filter-section {

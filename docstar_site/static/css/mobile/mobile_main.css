@@ -16,7 +16,7 @@
     }
 }
 
-@media (max-width: 450px) {
+@media (max-width: 480px) {
     .container {
         width: 100%;
     }
@@ -27,7 +27,7 @@
 
     .search-doctors-wrapper {
         gap: 10px;
-        margin-top: 16px;
+        margin-top: 40px;
     }
 
     .logo-wrapper {

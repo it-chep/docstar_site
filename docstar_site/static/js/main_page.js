@@ -151,7 +151,7 @@ function checkResizeDesctop() {
         const $close_mobile_filter_btn = $('.close_mobile_filter_btn')
         const body = document.querySelector('body')
         const windowWidth = $(window).width();
-        if (windowWidth > 450) {
+        if (windowWidth > 480) {
             $target.show()
             $close_mobile_filter_btn.hide()
             body.style.overflow = ''
@@ -170,7 +170,7 @@ function checkResize(){
     const $target = $('.filters_wrapper')
     const body = document.querySelector('body')
     const windowWidth = $(window).width();
-    if(windowWidth <= 450){
+    if(windowWidth <= 480){
         if(filter_wrapper_mobile_open){
             $target.show()
             body.style.overflow = 'hidden'

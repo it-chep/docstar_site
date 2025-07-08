@@ -60,7 +60,7 @@ function initMobileBurgerAction() {
         burgerWrapper_open=true;
         checkScrollForBurgerWrapper()
         const windowWidth = $(window).width();
-        if (windowWidth <= 450) {
+        if (windowWidth <= 480) {
             body.style.overflow='hidden';
         }
         if ($burgerContainer.length > 0) {
@@ -96,7 +96,7 @@ function appendBurgerMenu($burgerMenu) {
 function checkResizeForBurgerWrapper(){
     const body = document.querySelector('body')
     const windowWidth = $(window).width();
-    if(windowWidth <= 450 && burgerWrapper_open){
+    if(windowWidth <= 480 && burgerWrapper_open){
         body.style.overflow = 'hidden'
     }
     else{

@@ -1,4 +1,4 @@
-@media (max-width: 800px) {
+@media (max-width: 900px) {
     .logo-wrapper {
         display: flex;
         width: 100%;
@@ -11,12 +11,12 @@
     .mobile_filter_header {
         margin-top: 14px;
         .close_mobile_burger_btn{
-            margin-right: calc(2.5vw - 20px + 6px);
+            margin-right: 6px;
         }
     }
 }
 
-@media (max-width: 450px) {
+@media (max-width: 480px) {
     .container {
         width: 100%;
     }
@@ -27,7 +27,7 @@
 
     .search-doctors-wrapper {
         gap: 10px;
-        padding: 0 10px;
+        margin-top: 40px;
     }
 
     .logo-wrapper {
@@ -132,7 +132,7 @@
     .mobile_filter_header {
         margin-top: 20px;
         .close_mobile_burger_btn{
-            margin-right: calc(2.5vw - 20px + 1px);
+            margin-right: 1px;
         }
     }
 

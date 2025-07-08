@@ -36,3 +36,12 @@ class DoctorMiniatureInfoResponse:
     tg_subs_count: str = "0"
     # текст "подписчика", "подписчиков", "подписчик"
     tg_subs_count_text: str = ""
+
+@dataclass
+class GetAllSubscribersInfoResponse:
+    # количество подписчиков
+    subscribers_count: str = ""
+    # текст "подписчика", "подписчиков", "подписчик"
+    subscribers_count_text: str = ""
+    # дата последнего обновления в сервисе
+    last_updated: str = ""

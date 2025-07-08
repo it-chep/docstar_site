@@ -1,19 +1,46 @@
-@media (max-width: 800px) {
+@media (max-width: 900px) {
     .header-container {
         width: 100%;
         flex-direction: column;
         margin: 20px auto 0;
-        gap: 20px;
+        gap: 10px;
+        align-items: start;
+    }
+
+}
+
+@media (max-width: 650px) {
+    .main-title {
+        text-align: center;
+    }
+    .doctors_list_header {
+        margin-top: 40px;
+        line-height: 110%;
+        font-size: 8.4vw;
+    }
+
+    .doctors_list_header_description{
+        font-size: 3.9vw;
+        line-height: 100%;
+        font-weight: 400;
+        width: 85%;
+        margin: 14px auto 0 auto;
     }
 }
 
-@media (max-width: 450px) {
+@media (max-width: 400px) {
+    .doctors_list_header_description {
+        width: 90%;
+    }
+}
+
+@media (max-width: 480px) {
 
     .header-container {
         width: 100%;
         flex-direction: column;
         margin: 20px auto 0;
-        gap: 20px;
+        gap: 0;
     }
 
     .logo {

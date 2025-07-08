@@ -5,34 +5,7 @@ $(document).ready(function () {
     initializeFiltersFromQuery();
     loadDoctors(getStartPage());
     initMobileFilterAction();
-    resizeMainTitle();
 });
-
-function resizeMainTitle() {
-    const $mainTitle = $('.main-title');
-    relocateMainTitle($mainTitle);
-    $(window).resize(function () {
-        relocateMainTitle($mainTitle);
-    });
-}
-
-function relocateMainTitle($mainTitle) {
-    const windowWidth = $(window).width();
-    const $targetElement = $mainTitle.find('.doctors_list_header .single-base');
-
-    if (windowWidth <= 450) {
-        $mainTitle.detach().insertAfter('.banner_new_doctor_mobile');
-
-        // Проверяем, есть ли уже <br> в элементе
-        if ($targetElement.find('br').length === 0) {
-            $targetElement.append('<br>');
-        }
-    } else {
-        // Удаляем <br> при возврате на десктоп
-        $targetElement.find('br').remove();
-        $mainTitle.detach().prependTo('.doctors_container');
-    }
-}
 
 function initializeFiltersFromQuery() {
     const urlParams = new URLSearchParams(window.location.search);
@@ -178,7 +151,7 @@ function checkResizeDesctop() {
         const $close_mobile_filter_btn = $('.close_mobile_filter_btn')
         const body = document.querySelector('body')
         const windowWidth = $(window).width();
-        if (windowWidth > 450) {
+        if (windowWidth > 480) {
             $target.show()
             $close_mobile_filter_btn.hide()
             body.style.overflow = ''
@@ -197,7 +170,7 @@ function checkResize(){
     const $target = $('.filters_wrapper')
     const body = document.querySelector('body')
     const windowWidth = $(window).width();
-    if(windowWidth <= 450){
+    if(windowWidth <= 480){
         if(filter_wrapper_mobile_open){
             $target.show()
             body.style.overflow = 'hidden'

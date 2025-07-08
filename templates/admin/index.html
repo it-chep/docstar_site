@@ -1,0 +1,57 @@
+<!-- templates/admin/index.html -->
+{% extends "admin/index.html" %}
+
+
+{% block content %}
+    {{ block.super }}  {# Оставляем стандартное содержимое #}
+
+    <div class="stats-container">
+        <h2>Статистика врачей по типам сотрудничества</h2>
+        <table class="stats-table">
+            <thead>
+            <tr>
+                <th>Тип размещения</th>
+                <th>За год</th>
+                <th>За 6 месяцев</th>
+                <th>За месяц</th>
+                <th>За неделю</th>
+                <th>За день</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for stat in stats %}
+                <tr>
+                    <td>{{ stat.type_name }}</td>
+                    <td>{{ stat.year }}</td>
+                    <td>{{ stat.month_6 }}</td>
+                    <td>{{ stat.month }}</td>
+                    <td>{{ stat.week }}</td>
+                    <td>{{ stat.day }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <style>
+        .stats-container {
+            width: 50%;
+            margin-bottom: 20px;
+        }
+
+        .stats-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .stats-table th, .stats-table td {
+            padding: 8px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+
+        .stats-table th {
+            background-color: #f5f5f5;
+        }
+    </style>
+{% endblock %}

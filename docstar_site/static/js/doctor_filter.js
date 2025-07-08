@@ -83,7 +83,7 @@ function initializeSearchFiltersInput() {
 function closeMobileFilterSidebar() {
 
     const windowWidth = $(window).width();
-    if (windowWidth < 450) {
+    if (windowWidth <= 480) {
         $('.filters_wrapper').fadeOut(300);
     }
 }

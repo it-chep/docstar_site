@@ -1,3 +1,5 @@
+from typing import List
+
 from asgiref.sync import sync_to_async
 
 from django.contrib.sites import requests
@@ -5,15 +7,16 @@ from django.core.exceptions import ObjectDoesNotExist
 
 from django.http import HttpResponse, JsonResponse
 from django.forms import model_to_dict
+from django.db import connection
 from django.shortcuts import render
 from django.views.decorators.cache import cache_page
-from django.views.generic import ListView, DetailView, TemplateView
+from django.views.generic import DetailView, TemplateView
 from rest_framework.response import Response
 from rest_framework.views import APIView
 import requests
 
 from docstar_site.clients.subscribers.dto import GetDoctorSubscribersResponse
-from docstar_site.forms import DoctorSearchForm, CreateDoctorForm
+from docstar_site.forms import CreateDoctorForm
 from docstar_site.utils import *
 from docstar_site.functions import *
 
@@ -44,23 +47,79 @@ class CitySpeciallity:
         return Speciallity.objects.all()
 
 
-class Doctors(DataMixin, ListView):
-    model = Doctor
+class Doctors(TemplateView):
     template_name = "docstar/doctors.html"
-    context_object_name = 'doctors'
-    form_class = DoctorSearchForm
 
-    def get(self, request, *args, **kwargs):
-        form = DoctorSearchForm(self.request.GET or None)
-        self.object_list = self.get_queryset()
-        context = self.get_context_data(form=form, object_list=self.object_list)
-        return self.render_to_response(context)
+    @staticmethod
+    def _prepare_cities_data(cities: List[dict]) -> list[dict]:
+        """Сериализация города из базы"""
+        cities_list = []
+        for city in cities:
+            cities_list.append({
+                'id': city["city_id"],
+                'name': city["city_name"],
+                'doctors_count': city["doctors_count"],
+            })
+
+        return cities_list
+
+    @staticmethod
+    def _prepare_specialities_data(specialities: List[dict]) -> list[dict]:
+        """Сериализация специальности из базы"""
+        specialities_list = []
+        for speciality in specialities:
+            specialities_list.append({
+                'id': speciality["speciality_id"],
+                'name': speciality["speciality_name"],
+                'doctors_count': speciality["doctors_count"],
+            })
+
+        return specialities_list
+
+    @staticmethod
+    def _get_cities() -> List[dict]:
+        """Возвращает список городов с количеством врачей в каждом"""
+        with connection.cursor() as cursor:
+            cursor.execute(f"""
+                            select c.id                      as city_id,
+                                   c.name                    as city_name,
+                                   count(distinct doctor_id) as doctors_count
+                            from docstar_site_city c
+                                     left join (select dc.city_id, dc.doctor_id
+                                                from docstar_site_doctor_additional_cities dc
+                                                         join docstar_site_doctor d on dc.doctor_id = d.id
+                                                where d.is_active = true) as combined on c.id = combined.city_id
+                            group by c.id, c.name
+                            order by c.name
+                           """, )
+
+            columns = [col[0] for col in cursor.description]
+            return [dict(zip(columns, row)) for row in cursor.fetchall()]
+
+    @staticmethod
+    def _get_specialities() -> List[dict]:
+        """Возвращает список специализаций с количеством врачей в каждой"""
+        with connection.cursor() as cursor:
+            cursor.execute(f"""
+                            select s.id                      as speciality_id,
+                                   s.name                    as speciality_name,
+                                   count(distinct doctor_id) as doctors_count
+                            from docstar_site_speciallity s
+                                     left join (select dc.speciallity_id, dc.doctor_id
+                                                from docstar_site_doctor_additional_specialties dc
+                                                         join docstar_site_doctor d on dc.doctor_id = d.id
+                                                where d.is_active = true) as combined on s.id = combined.speciallity_id
+                            group by s.id, s.name
+                            order by s.name
+                           """)
+
+            columns = [col[0] for col in cursor.description]
+            return [dict(zip(columns, row)) for row in cursor.fetchall()]
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['cities'] = City.objects.all()
-        context['specialities'] = Speciallity.objects.all()
-        context["title"] = "Врачи MEDBLOGERS"
+        context['cities'] = self._prepare_cities_data(self._get_cities())
+        context['specialities'] = self._prepare_specialities_data(self._get_specialities())
         context["new_doctor_banner"] = True
         return context
 
@@ -83,7 +142,8 @@ class DoctorDetail(DataMixin, DetailView):
             [city['name'] for city in cities if city["id"] != primary_city_id]
         )
 
-        context["additional_doctor_specialities"] = self.object.additional_specialties.all().exclude(id=self.object.speciallity.id)
+        context["additional_doctor_specialities"] = self.object.additional_specialties.all().exclude(
+            id=self.object.speciallity.id)
 
         return context
 
@@ -148,6 +208,7 @@ class NewClubParticipantView(TemplateView):
 
 class WelcomeView(TemplateView):
     template_name = "docstar/welcome_to_base.html"
+
 
 class SpasiboClubParticipantView(TemplateView):
     template_name = "docstar/spasibo_club_participant.html"

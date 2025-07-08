@@ -2,10 +2,10 @@ import math
 from typing import List
 
 import requests
-from django.db import connection
-from django.db.models import Count, Q, F, QuerySet, Subquery, OuterRef, IntegerField
 
 from django.http import JsonResponse
+from django.db import connection
+from django.db.models import Q
 from django.conf import settings
 from django.urls import reverse, NoReverseMatch
 from rest_framework import views, status
@@ -18,7 +18,35 @@ from docstar_site.forms import CreateDoctorForm
 from docstar_site.utils import get_site_url, validate_url
 
 
-class BaseDoctorApiView:
+class CitySpecialityMixin:
+    @staticmethod
+    def _prepare_cities_data(cities: List[dict]) -> list[dict]:
+        """Сериализация города из базы"""
+        cities_list = []
+        for city in cities:
+            cities_list.append({
+                'id': city["city_id"],
+                'name': city["city_name"],
+                'doctors_count': city["doctors_count"],
+            })
+
+        return cities_list
+
+    @staticmethod
+    def _prepare_specialities_data(specialities: List[dict]) -> list[dict]:
+        """Сериализация специальности из базы"""
+        specialities_list = []
+        for speciality in specialities:
+            specialities_list.append({
+                'id': speciality["speciality_id"],
+                'name': speciality["speciality_name"],
+                'doctors_count': speciality["doctors_count"],
+            })
+
+        return specialities_list
+
+
+class BaseDoctorApiView(CitySpecialityMixin):
     limit = settings.LIMIT_DOCTORS_ON_PAGE
     search_speciality_limit = settings.LIMIT_SPECIALITY_ON_SEARCH
     search_city_limit = settings.LIMIT_CITY_ON_SEARCH
@@ -69,6 +97,7 @@ class BaseDoctorApiView:
 
     @staticmethod
     def prepare_doctors_data(doctors) -> list[dict]:
+        """Сериализация queryset докторов"""
         doctors_list = []
         for doctor in doctors:
             try:
@@ -109,6 +138,7 @@ class BaseDoctorApiView:
 
     @staticmethod
     def enrich_photo_from_s3(doctors_list) -> list:
+        """Обогащение карточек докторов фотографиями с S3"""
         photos_map = settings.S3_CLIENT.get_user_photos()
         enriched_photos = []
 
@@ -173,7 +203,7 @@ class BaseDoctorApiView:
         return city_query & speciality_query
 
     def get_pages_and_doctors_with_offset(self, current_page: int, doctors):
-
+        """Получение данных для пагинации, отрезание по лимиту"""
         pages = max(math.ceil(len(doctors) / settings.LIMIT_DOCTORS_ON_PAGE), 1)
 
         if current_page == 1:
@@ -186,6 +216,7 @@ class BaseDoctorApiView:
         return pages, doctors
 
     def get_doctors(self, request, *args, **kwargs):
+        """Фильтрация докторов по QUERY параметрам"""
         city_list = request.GET.get('city')
         speciality_list = request.GET.get('speciality')
         current_page = int(request.GET.get('page', 1))
@@ -267,6 +298,7 @@ class BaseDoctorApiView:
         return JsonResponse({'data': doctors_list, 'pages': pages, 'page': current_page}, status=status.HTTP_200_OK)
 
     def filter_doctors(self, request, *args, **kwargs):
+        """Мини фасад либо отдает докторов по фильтрам либо ходит в сервис subscriber и фильтрует по ID"""
         max_subscribers = request.GET.get('max_subscribers', 100_000)
         min_subscribers = request.GET.get('min_subscribers', 300)
 
@@ -346,8 +378,8 @@ class SearchDoctorApiView(BaseDoctorApiView, views.APIView):
 
         # ковертация в json
         doctors_list = self.enrich_photo_from_s3(self.prepare_doctors_data(doctors))
-        cities_list = self.prepare_cities_data(cities)
-        specialities_list = self.prepare_specialities_data(specialities)
+        cities_list = self._prepare_cities_data(cities)
+        specialities_list = self._prepare_specialities_data(specialities)
 
         return JsonResponse(
             {
@@ -426,6 +458,7 @@ class CreateNewDoctorApiView(views.APIView):
 
     @staticmethod
     def save_to_subscribers(doctor):
+        """Сохраняет пользователя в сервисе subscriber"""
         # todo негативные кейсы отработать
         client = settings.SUBSCRIBERS_CLIENT
         if not doctor.tg_channel_url:
@@ -437,6 +470,7 @@ class CreateNewDoctorApiView(views.APIView):
 
     @staticmethod
     def send_data_to_google_script(doctor):
+        """Отправляет данные в гугл таблицу"""
         data = {
             "name": doctor.name,
             "age": doctor.age,
@@ -461,6 +495,7 @@ class CreateNewDoctorApiView(views.APIView):
 
     @staticmethod
     def notificator_bot(doctor):
+        """Уведомляет в бот о заполненной анкете в базе"""
         data = {
             "url": get_site_url() + reverse('doctor_card', kwargs={'slug': doctor.slug}),
             "name": doctor.name,
@@ -474,3 +509,82 @@ class CreateNewDoctorApiView(views.APIView):
             response.raise_for_status()
         except requests.exceptions.RequestException as e:
             raise Exception(e)
+
+
+class SettingsApiView(CitySpecialityMixin, views.APIView):
+    @staticmethod
+    def _get_doctors_count():
+        """Возвращает количество активных врачей"""
+        with connection.cursor() as cursor:
+            cursor.execute(f"""
+                            select count(*) as doctors_count
+                            from docstar_site_doctor d
+                            where d.is_active = true
+                           """, )
+
+            columns = [col[0] for col in cursor.description]
+            return [dict(zip(columns, row)) for row in cursor.fetchall()]
+
+    @staticmethod
+    def _get_cities() -> List[dict]:
+        """Возвращает список городов с количеством врачей в каждом"""
+        with connection.cursor() as cursor:
+            cursor.execute(f"""
+                            select c.id                      as city_id,
+                                   c.name                    as city_name,
+                                   count(distinct doctor_id) as doctors_count
+                            from docstar_site_city c
+                                     left join (select dc.city_id, dc.doctor_id
+                                                from docstar_site_doctor_additional_cities dc
+                                                         join docstar_site_doctor d on dc.doctor_id = d.id
+                                                where d.is_active = true) as combined on c.id = combined.city_id
+                            group by c.id, c.name
+                            order by c.name
+                           """, )
+
+            columns = [col[0] for col in cursor.description]
+            return [dict(zip(columns, row)) for row in cursor.fetchall()]
+
+    @staticmethod
+    def _get_specialities() -> List[dict]:
+        """Возвращает список специализаций с количеством врачей в каждой"""
+        with connection.cursor() as cursor:
+            cursor.execute(f"""
+                            select s.id                      as speciality_id,
+                                   s.name                    as speciality_name,
+                                   count(distinct doctor_id) as doctors_count
+                            from docstar_site_speciallity s
+                                     left join (select dc.speciallity_id, dc.doctor_id
+                                                from docstar_site_doctor_additional_specialties dc
+                                                         join docstar_site_doctor d on dc.doctor_id = d.id
+                                                where d.is_active = true) as combined on s.id = combined.speciallity_id
+                            group by s.id, s.name
+                            order by s.name
+                           """)
+
+            columns = [col[0] for col in cursor.description]
+            return [dict(zip(columns, row)) for row in cursor.fetchall()]
+
+    @staticmethod
+    def _serialize_doctors_count(data: List[dict]) -> int:
+        """Сериализует данные о количестве врачей"""
+        return data[0]['doctors_count'] if data else 0
+
+    @staticmethod
+    def _get_subscribers_info():
+        return settings.SUBSCRIBERS_CLIENT.get_all_subscribers_info()
+
+    def get(self, request, *args, **kwargs):
+        subscribers_info = self._get_subscribers_info()
+        return JsonResponse(
+            {
+                'doctors_count': self._serialize_doctors_count(self._get_doctors_count()),
+                'subscribers_count': subscribers_info.subscribers_count,
+                'subscribers_count_text': subscribers_info.subscribers_count_text,
+                'subscribers_last_updated': subscribers_info.last_updated,
+                'cities': self._prepare_cities_data(self._get_cities()),
+                'specialities': self._prepare_specialities_data(self._get_specialities()),
+                'new_doctor_banner': True,
+            },
+            status=status.HTTP_200_OK
+        )

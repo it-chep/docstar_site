@@ -1,12 +1,13 @@
 
 .header-container {
     width: 1200px;
-    max-width: 95%;
+    max-width: 100%;
+    padding: 0 20px;
     margin: 50px auto 40px;
     display: flex;
     flex-direction: row;
     align-items: center;
-    gap: 42px;
+    gap: 20px;
     justify-content: space-between;
     overflow: visible;
 }
@@ -22,11 +23,29 @@
     }
 }
 
+.doctors_list_header {
+    color: white;
+    font-weight: 900;
+    font-size: clamp(20px, 3.2vw, 41px);
+    line-height: 100%;
+    letter-spacing: 0;
+
+
+    .doctors-blogers{
+        text-wrap: nowrap;
+    }
+}
+
+.doctors_list_header_description{
+    font-size: clamp(12.5px, 1.4vw, 18px);
+    opacity: 0.7;
+    font-weight: 500;
+}
+
 .search-doctors-container {
     position: relative;
     display: flex;
     z-index: 1001;
-    max-width: 600px;
     width: 100%;
     padding: 10px 25px;
     align-items: center;
@@ -62,6 +81,7 @@
     gap: 10px;
     flex-direction: row;
     color: white;
+    margin-left: auto;
 }
 
 .login-container span {
@@ -72,7 +92,7 @@
 }
 
 .search-doctors-container:hover {
-    border: 2px solid #2E99FC;
+    border: 2px solid var(--blue);
 }
 
 .search-doctors-container input:focus {
@@ -80,7 +100,7 @@
 }
 
 .search-doctors-container:focus-within {
-    border: 2px solid #2E99FC;
+    border: 2px solid var(--blue);
 }
 
 .search-doctors-container input::placeholder {

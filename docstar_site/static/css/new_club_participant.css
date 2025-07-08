@@ -143,14 +143,19 @@
 }
 
 .submit-button {
-    background: radial-gradient(
-            closest-side,
-            rgba(47, 155, 255, 1) 0%,
-            rgba(21, 109, 189, 1) 100%
-    );
-    border-radius: 10px;
+
+    border-radius: 8px;
     padding: 16px 24px 16px 24px;
     font-size: 18px;
+    border: 2px solid var(--blue);
+    background: var(--blue);
+    transition: background-color 0.5s ease;
+
+
+
+    &:hover{
+        background: var(--dark-blue);
+    }
 }
 
 .main_title_description {

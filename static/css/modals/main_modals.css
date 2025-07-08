@@ -50,7 +50,6 @@
 }
 
 .search_doctors_modal {
-    max-width: 600px;  /* должно совпадать с input */
     margin-top: 60px;
     position: absolute;
     z-index: 9999;
@@ -81,7 +80,7 @@
 
 .mini_user_card:hover {
     cursor: pointer;
-    background-color: #2E99FC;
+    background-color: var(--blue);
 }
 
 .mini_user_avatar {
@@ -161,12 +160,12 @@
 
 .city-block:hover {
     cursor: pointer;
-    background-color: #2E99FC;
+    background-color: var(--blue);
 }
 
 .speciality-block:hover {
     cursor: pointer;
-    background-color: #2E99FC;
+    background-color: var(--blue);
 }
 
 .search-title {

@@ -35,7 +35,20 @@
 
 
 
+@media (max-width: 900px) {
+    .doctors_list_container{
+        margin-top: 20px
+    }
 
+    .doctors_list_header {
+        font-size: 5.2vw;
+    }
+
+    .doctors_list_header_description{
+        font-size: 2.2vw;
+    }
+
+}
 
 
 
@@ -56,6 +69,9 @@
 }
 
 @media (max-width: 830px) {
+    #statistics_wrapper{
+        font-size: 17px;
+    }
     .doctors_list_container {
         .doctors_wrapper {
             .doctors_container {
@@ -85,6 +101,8 @@
             }
         }
     }
+
+
 }
 
 @media (max-width: 550px) {
@@ -104,8 +122,10 @@
 }
 
 @media (max-width: 510px) {
+    #statistics_wrapper{
+        font-size: 16px;
+    }
     .doctors_list_container {
-        padding: 0 10px;
         .doctors_wrapper {
             .doctors_container {
                 .all_doctors {
@@ -135,27 +155,58 @@
 }
 
 
-@media (max-width: 450px) {
-    .doctors_list_header {
-        font-size: 30px;
-        line-height: 40px;
-        margin-top: 20px;
-    }
+@media (max-width: 480px) {
+    #statistics_wrapper{
+        justify-content: center;
 
-    .doctors_list_header_description {
-        width: 90%;
-        margin: 20px auto 0;
-        font-size: 19px;
-    }
+        .statistics_badge{
+            background-color: transparent;
+            padding: 0;
+            font-weight: 600;
+            margin-left: 0;
+        }
+        .statistics {
+            gap: 20px;
+            img {
+                display: block;
+                width: 5vw;
+                height: 5vw;
+            }
 
-    .doctors-blogers {
-        font-size: 40px;
-        letter-spacing: 2px;
-    }
+            >:first-child {
+                margin-right: 0px;
+            }
 
-    .single-base {
-        font-size: 57px;
-        letter-spacing: 2px;
+            flex-direction: column;
+            align-items: center;
+            .statistic_wrap{
+                display: flex;
+                flex-direction: column-reverse;
+                justify-content: center;
+
+                .number_wrap{
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 10px;
+                    color: var(--blue);
+                    font-size: 5vw;
+                    line-height: 100%;
+                }
+
+                .statistic_text{
+                    font-weight: 400;
+                    font-size: 3.9vw;
+                    opacity: 0.6;
+                    line-height: 100%;
+                    margin-top: 8px;
+
+                    .colon{
+                        display: none;
+                    }
+                }
+            }
+        }
     }
 
     .doctors_wrapper {
@@ -216,7 +267,7 @@
 
 
 
-@media (max-width: 450px) {
+@media (max-width: 480px) {
      .settings_icon_wrapper {
          display: block;
          .material-icons {
@@ -228,22 +279,8 @@
     }
 }
 
+
 @media (max-width: 350px) {
-    .doctors_list_header {
-        font-size: 26px;
-        line-height: 35px;
-        margin-top: 20px;
-    }
-
-    .doctors-blogers {
-        font-size: 33px;
-        letter-spacing: 2px;
-    }
-
-    .single-base {
-        font-size: 48px;
-        letter-spacing: 2px;
-    }
 
     .user_card_wrapper {
         width: 100%;
@@ -301,12 +338,6 @@
     }
 
     .navigation_btn .material-icons {
-        font-size: 16px;
-    }
-
-    .doctors_list_header_description {
-        width: 90%;
-        margin: 20px auto 0;
         font-size: 16px;
     }
 

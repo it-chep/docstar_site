@@ -1,6 +1,7 @@
 .doctor_detail_card_container {
     width: 1200px;
-    max-width: 95%;
+    max-width: 100%;
+    padding: 0 20px;
     margin: 0 auto;
     color: white;
     overflow: hidden;
@@ -180,12 +181,17 @@ a {
     width: 100%;
     text-align: center;
     cursor: pointer;
-    padding: 8px 60px;
-    border-radius: 100px;
+    padding: 10px 60px;
+    border-radius: 8px;
     color: white;
-    border: 2px solid #2E99FC;
-    background: #2E99FC;
+    border: 2px solid var(--blue);
+    background: var(--blue);
     transition: background-color 0.5s ease;
+
+    &:hover {
+        background: var(--dark-blue);
+    }
+
 }
 
 .subscribers_link, .social_link {
@@ -216,6 +222,7 @@ a {
 }
 
 .subs_ico_link {
+    display: flex;
     min-width: 10px;
     min-height: 10px;
     width: 10px;

@@ -11,7 +11,7 @@
     .mobile_filter_header {
         margin-top: 14px;
         .close_mobile_burger_btn{
-            margin-right: calc(2.5vw - 20px + 6px);
+            margin-right: 6px;
         }
     }
 }
@@ -132,7 +132,7 @@
     .mobile_filter_header {
         margin-top: 20px;
         .close_mobile_burger_btn{
-            margin-right: calc(2.5vw - 20px + 1px);
+            margin-right: 1px;
         }
     }
 

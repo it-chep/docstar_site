@@ -50,7 +50,6 @@
 }
 
 .search_doctors_modal {
-    max-width: 600px;  /* должно совпадать с input */
     margin-top: 60px;
     position: absolute;
     z-index: 9999;

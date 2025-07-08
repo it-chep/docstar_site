@@ -78,10 +78,10 @@
                     {% endif %}
                 </div>
                 <div class="doctor_actions">
-                    {% if doctor.tg_subs_count != 0 and doctor.tg_channel_url %}
+                    {% if doctor.tg_subs_count != 0 and doctor.tg_subs_count != "0" and doctor.tg_channel_url %}
                         {% include "../includes/subscribers_count.html" with url=doctor.tg_channel_url img_url="img/logos/telegram_logo.png" subs_count=doctor.tg_subs_count subs_count_text=doctor.tg_subs_count_text last_updated_date=doctor.tg_last_updated_date %}
                     {% endif %}
-                    {% if doctor.inst_subs_count and doctor.inst_subs_count != 0 and doctor.inst_url %}
+                    {% if doctor.inst_subs_count and doctor.inst_subs_count != 0 and doctor.inst_subs_count != "0" and doctor.inst_url %}
                         {% include "../includes/subscribers_count.html" with url=doctor.inst_url img_url="img/logos/Instagram_icon.png" subs_count=doctor.inst_subs_count subs_count_text=doctor.inst_subs_count_text last_updated_date=doctor.inst_last_updated_date %}
                     {% endif %}
                     <div class="society_block">

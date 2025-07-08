@@ -81,7 +81,7 @@
 
 .mini_user_card:hover {
     cursor: pointer;
-    background-color: #2E99FC;
+    background-color: var(--blue);
 }
 
 .mini_user_avatar {
@@ -161,12 +161,12 @@
 
 .city-block:hover {
     cursor: pointer;
-    background-color: #2E99FC;
+    background-color: var(--blue);
 }
 
 .speciality-block:hover {
     cursor: pointer;
-    background-color: #2E99FC;
+    background-color: var(--blue);
 }
 
 .search-title {

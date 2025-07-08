@@ -197,15 +197,15 @@ a {
 .user_info_btn {
     cursor: pointer;
     width: 100%;
-    padding: 8px 20px;
-    border-radius: 100px;
-    border: 2px solid #2E99FC;
-    background: #01284B;
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: 2px solid var(--blue);
+    background: var(--blue);
     transition: background-color 0.5s ease;
 }
 
 .user_info_btn:hover {
-    background: #2E99FC
+    background: var(--dark-blue);
 }
 
 

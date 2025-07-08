@@ -32,8 +32,8 @@
 }
 
 .checkbox:checked + .checkbox-view {
-    background-color: #2E99FC;
-    border: 1px solid #2E99FC;
+    background-color: var(--blue);
+    border: 1px solid var(--blue);
 }
 
 .checkbox-text {

@@ -180,12 +180,17 @@ a {
     width: 100%;
     text-align: center;
     cursor: pointer;
-    padding: 8px 60px;
-    border-radius: 100px;
+    padding: 10px 60px;
+    border-radius: 8px;
     color: white;
-    border: 2px solid #2E99FC;
-    background: #2E99FC;
+    border: 2px solid var(--blue);
+    background: var(--blue);
     transition: background-color 0.5s ease;
+
+    &:hover {
+        background: var(--dark-blue);
+    }
+
 }
 
 .subscribers_link, .social_link {

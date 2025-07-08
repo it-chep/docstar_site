@@ -141,6 +141,11 @@ html, body {
     width: 100%;
 }
 
+body{
+    --blue: #2F9BFF;
+    --dark-blue: #01284B;
+}
+
 .main_container{
     max-width: 100%;
 }
@@ -171,7 +176,7 @@ html, body {
     font-size: 26px;
     padding: 18px;
     border-radius: 50px;
-    background: #2E99FC;
+    background: var(--blue);
 }
 
 .burger-container {

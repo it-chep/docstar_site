@@ -40,7 +40,6 @@
     font-size: clamp(12.5px, 1.4vw, 18px);
     opacity: 0.7;
     font-weight: 500;
-    /*font-family: 'Spline Sans';*/
 }
 
 .search-doctors-container {

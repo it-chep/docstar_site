@@ -1,4 +1,6 @@
 from __future__ import annotations
+
+import ast
 from urllib.parse import quote
 from typing import Optional
 
@@ -19,8 +21,14 @@ class SubscribersClient:
         """
         Фильтрует докторов в подписчиках
         """
-        # пока хардкодим ТГ, тк только с тг есть интеграшка
-        api_url = f'{self.url}/doctors/filter?social_media=tg&max_subscribers={request.max_subscribers}&min_subscribers={request.min_subscribers}&offset={request.offset}'
+        api_url = f'{self.url}/doctors/filter/?offset={request.offset}'
+
+        if request.max_subscribers is not None and int(request.max_subscribers) > 0:
+            api_url += f"&max_subscribers={request.max_subscribers}"
+        if request.min_subscribers is not None and int(request.min_subscribers) > 0:
+            api_url += f"&min_subscribers={request.min_subscribers}"
+        if request.social_media is not None:
+            api_url += f"&social_media={request.social_media}"
 
         try:
             response = requests.get(
@@ -41,8 +49,8 @@ class SubscribersClient:
                     doctor_id=doctor["doctor"]['doctor_id'],
                     tg_subs_count=doctor["doctor"]['telegram_short'],
                     tg_subs_count_text=doctor["doctor"]['telegram_text'],
-                    inst_subs_count=doctor["doctor"]['instagram_subs_count'],
-                    inst_subs_count_text=doctor["doctor"]['instagram_subs_text'],
+                    inst_subs_count=doctor["doctor"]['inst_short'],
+                    inst_subs_count_text=doctor["doctor"]['inst_text'],
                 ))
 
             return doctors

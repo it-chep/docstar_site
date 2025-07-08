@@ -7,7 +7,7 @@ from typing import Optional
 @dataclass
 class FilterDoctorsRequest:
     # соц.сеть
-    social_media: str = "tg"
+    social_media: list[str] = list["tg"]
     # офсет
     offset: int = 0
     # лимит

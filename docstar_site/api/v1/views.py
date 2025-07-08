@@ -294,10 +294,10 @@ class BaseDoctorApiView(CitySpecialityMixin):
 
         doctors_map = self.configure_doctors_map(doctors)
         for doctor in doctors_with_subs:
-            doctors_map[doctor['doctor_id']]["tg_subs_count"] = doctor['tg_subs_count']
-            doctors_map[doctor['doctor_id']]["tg_subs_count_text"] = doctor['tg_subs_count_text']
-            doctors_map[doctor['doctor_id']]["inst_subs_count"] = doctor['inst_subs_count']
-            doctors_map[doctor['doctor_id']]["inst_subs_count_text"] = doctor['inst_subs_count_text']
+            doctors_map[doctor.doctor_id]["tg_subs_count"] = doctor.tg_subs_count
+            doctors_map[doctor.doctor_id]["tg_subs_count_text"] = doctor.tg_subs_count_text
+            doctors_map[doctor.doctor_id]["inst_subs_count"] = doctor.inst_subs_count
+            doctors_map[doctor.doctor_id]["inst_subs_count_text"] = doctor.inst_subs_count_text
 
         doctors_list = self.enrich_photo_from_s3(doctors_map.values())
 
@@ -307,11 +307,12 @@ class BaseDoctorApiView(CitySpecialityMixin):
         """Мини фасад либо отдает докторов по фильтрам либо ходит в сервис subscriber и фильтрует по ID"""
         max_subscribers = request.GET.get('max_subscribers', 100_000)
         min_subscribers = request.GET.get('min_subscribers', 300)
+        social_media = request.GET.get('social_media',None)
 
         if (max_subscribers or min_subscribers) and (int(max_subscribers) != 100_000 or int(min_subscribers) != 300):
             doctors = settings.SUBSCRIBERS_CLIENT.filter_doctors_ids(
                 FilterDoctorsRequest(
-                    social_media="tg",
+                    social_media=social_media,
                     offset=0,
                     max_subscribers=max_subscribers,
                     min_subscribers=min_subscribers,

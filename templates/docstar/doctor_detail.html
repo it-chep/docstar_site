@@ -85,7 +85,7 @@
                         {% include "../includes/subscribers_count.html" with url=doctor.inst_url img_url="img/logos/Instagram_icon.png" subs_count=doctor.inst_subs_count subs_count_text=doctor.inst_subs_count_text last_updated_date=doctor.inst_last_updated_date %}
                     {% endif %}
                     <div class="society_block">
-                        {% if doctor.inst_url and doctor.inst_subs_count == 0 or doctor.tg_subs_count == "0" %}
+                        {% if doctor.inst_url and doctor.inst_subs_count == 0 or doctor.inst_subs_count == "0" %}
                             {% include "../includes/social_link.html" with url=doctor.inst_url img_url="img/logos/Instagram_icon.png" label="Профиль в Instagram" %}
                         {% endif %}
 

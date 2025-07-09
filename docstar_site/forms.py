@@ -194,7 +194,10 @@ class CreateDoctorForm(forms.Form):
 
     def clean_instagram_username(self):
         data = self.cleaned_data.get("instagram_username")
-        return self._clean_social_link(data, "https://instagram.com/")
+        inst_link = self._clean_social_link(data, "https://instagram.com/")
+        if inst_link:
+            return inst_link.lower()
+        return inst_link
 
     def clean_vk_username(self):
         data = self.cleaned_data.get("vk_username")

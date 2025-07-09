@@ -4,14 +4,14 @@ from datetime import datetime
 from django.core.management.base import BaseCommand
 from django.conf import settings
 from docstar_site.models import Doctor
-from docstar_site.utils import validate_tg_channel_url
+from docstar_site.utils import validate_inst_url
 
 
 class Command(BaseCommand):
-    help = 'Перенос врачей в базу subscribers'
+    help = 'Перенос врачей инсты в базу subscribers'
 
     def handle(self, *args, **options):
-        doctors = Doctor.objects.all()
+        doctors = Doctor.objects.filter(is_active=True, inst_url__isnull=False)
         total_doctors = doctors.count()
         processed = 0
         skipped = 0
@@ -20,7 +20,7 @@ class Command(BaseCommand):
 
         # Создаем CSV файл для логирования
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        csv_filename = f'doctors_migration_{timestamp}.csv'
+        csv_filename = f'doctors_migration_inst_{timestamp}.csv'
 
         with open(csv_filename, mode='w', newline='', encoding='utf-8') as csv_file:
             fieldnames = [
@@ -40,7 +40,7 @@ class Command(BaseCommand):
 
             for doctor in doctors:
 
-                time.sleep(10)
+                time.sleep(1)
 
                 row = {
                     'doctor_id': doctor.id,
@@ -53,12 +53,16 @@ class Command(BaseCommand):
                 }
 
                 try:
-                    if doctor.tg_channel_url:
-                        telegram_username = validate_tg_channel_url(doctor.tg_channel_url)
-                        created = client.create_doctor(doctor.id, telegram_username, doctor.inst_url)
-                        if created:
+                    if doctor.inst_url:
+                        inst_username = validate_inst_url(doctor.inst_url)
+                        status = client.migrate_instagram(doctor.id, inst_username)
+                        if status == 200:
                             row['status'] = 'SUCCESS'
                             self.stdout.write(self.style.SUCCESS(f'Успешно перенес врача - {doctor.id}: {doctor.name}'))
+                            processed += 1
+                        elif status == 201:
+                            row['status'] = 'UPDATED'
+                            self.stdout.write(self.style.SUCCESS(f'Успешно обновил врача - {doctor.id}: {doctor.name}'))
                             processed += 1
                         else:
                             row['status'] = 'FAILED'
@@ -66,32 +70,6 @@ class Command(BaseCommand):
                             self.stdout.write(self.style.ERROR(
                                 f'Не удалось создать врача в SUBSCRIBERS - {doctor.id}: {doctor.name}'))
                             skipped += 1
-
-                    else:
-                        if not doctor.tg_url:
-                            row['status'] = 'SKIPPED'
-                            row['error_message'] = 'Нет телеграм канала и личного телеграма'
-                            self.stdout.write(self.style.WARNING(f'У врача нет TELEGRAM - {doctor.id}: {doctor.name}'))
-                            skipped += 1
-                            writer.writerow(row)
-                            continue
-
-                        telegram_username = validate_tg_channel_url(doctor.tg_url)
-                        created = client.create_doctor(doctor.id, telegram_username, doctor.inst_url)
-                        if not created:
-                            row['status'] = 'FAILED'
-                            row['error_message'] = 'Не удалось создать врача (личный)'
-                            self.stdout.write(self.style.ERROR(
-                                f'Не удалось создать врача в SUBSCRIBERS - {doctor.id}: {doctor.name}'))
-                            skipped += 1
-                        else:
-                            row['status'] = 'SUCCESS'
-                            row['tg_channel_url'] = doctor.tg_url  # сохраняем личный как канал
-                            self.stdout.write(self.style.SUCCESS(
-                                f'Успешно сохранил ТЕЛЕГУ врача - {doctor.id}: {doctor.name}, ставлю ему тг в поле с каналом'))
-                            processed += 1
-                            doctor.tg_channel_url = doctor.tg_url
-                            doctor.save()
 
                 except Exception as e:
                     row['status'] = 'ERROR'
@@ -103,5 +81,3 @@ class Command(BaseCommand):
 
         self.stdout.write(self.style.SUCCESS(f'Закончил перенос. УСПЕХ - {processed}, СКИП - {skipped}'))
         self.stdout.write(self.style.SUCCESS(f'Подробный отчет сохранен в: {csv_filename}'))
-
-

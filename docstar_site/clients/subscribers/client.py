@@ -1,4 +1,6 @@
 from __future__ import annotations
+
+import ast
 from urllib.parse import quote
 from typing import Optional
 
@@ -6,7 +8,7 @@ import requests
 from django.conf import settings
 
 from docstar_site.clients.subscribers.dto import FilterDoctorsRequest, GetDoctorSubscribersResponse, \
-    GetAllSubscribersInfoResponse,DoctorMiniatureInfoResponse
+    DoctorMiniatureInfoResponse, FilterInfoResponse, GetAllSubscribersInfoResponse
 
 
 class SubscribersClient:
@@ -16,8 +18,17 @@ class SubscribersClient:
         self.limit = settings.LIMIT_DOCTORS_ON_PAGE
 
     def filter_doctors_ids(self, request: FilterDoctorsRequest, *args, **kwargs) -> list[DoctorMiniatureInfoResponse]:
-        # пока хардкодим ТГ, тк только с тг есть интеграшка
-        api_url = f'{self.url}/doctors/filter?social_media=tg&max_subscribers={request.max_subscribers}&min_subscribers={request.min_subscribers}&offset={request.offset}'
+        """
+        Фильтрует докторов в подписчиках
+        """
+        api_url = f'{self.url}/doctors/filter/?offset={request.offset}'
+
+        if request.max_subscribers is not None and int(request.max_subscribers) > 0:
+            api_url += f"&max_subscribers={request.max_subscribers}"
+        if request.min_subscribers is not None and int(request.min_subscribers) > 0:
+            api_url += f"&min_subscribers={request.min_subscribers}"
+        if request.social_media is not None:
+            api_url += f"&social_media={request.social_media}"
 
         try:
             response = requests.get(
@@ -38,6 +49,8 @@ class SubscribersClient:
                     doctor_id=doctor["doctor"]['doctor_id'],
                     tg_subs_count=doctor["doctor"]['telegram_short'],
                     tg_subs_count_text=doctor["doctor"]['telegram_text'],
+                    inst_subs_count=doctor["doctor"]['inst_short'],
+                    inst_subs_count_text=doctor["doctor"]['inst_text'],
                 ))
 
             return doctors
@@ -45,6 +58,9 @@ class SubscribersClient:
             return []
 
     def get_doctor_subscribers(self, doctor_id: int, *args, **kwargs) -> GetDoctorSubscribersResponse:
+        """
+        Получает количество подписчиков у доктора
+        """
         api_url = f'{self.url}/subscribers/{doctor_id}/'
 
         try:
@@ -64,6 +80,9 @@ class SubscribersClient:
                 tg_subs_count=data['telegram_short'],
                 tg_subs_count_text=data['telegram_text'],
                 tg_last_updated_date=data['tg_last_updated_date'],
+                inst_subs_count=data['instagram_short'],
+                inst_subs_count_text=data['instagram_text'],
+                inst_last_updated_date=data['instagram_last_updated_date'],
             )
 
         except (requests.exceptions.Timeout, requests.exceptions.HTTPError, ValueError, Exception) as e:
@@ -173,16 +192,44 @@ class SubscribersClient:
                     doctor_id=int(doctor_data['doctor_id']),
                     tg_subs_count=doctor_data['telegram_subs_count'],
                     tg_subs_count_text=str(doctor_data['telegram_subs_text']),
+                    inst_subs_count=doctor_data['instagram_subs_count'],
+                    inst_subs_count_text=doctor_data['instagram_subs_text'],
                 )
             return dict_response
 
         except (requests.exceptions.Timeout, requests.exceptions.HTTPError, ValueError, Exception) as e:
             return dict()
 
-    def filter_info(self):
-        ...
+    def filter_info(self) -> list[FilterInfoResponse]:
+        """
+        Получает информацию о доступных фильтрах
+        """
+        api_url = f'{self.url}/filter/info/'
+
+        try:
+            response = requests.get(
+                api_url,
+                timeout=3,
+                headers={'Content-Type': 'application/json'}
+            )
+
+            response.raise_for_status()
+            response_data = response.json()
+
+            response = list()
+            for messenger in response_data['messengers']:
+                response.append(
+                    FilterInfoResponse(
+                        name=messenger["name"],
+                        slug=messenger["slug"],
+                    )
+                )
+            return response
+        except (requests.exceptions.Timeout, requests.exceptions.HTTPError, ValueError, Exception) as e:
+            return list()
 
     def get_all_subscribers_info(self) -> GetAllSubscribersInfoResponse:
+        """Получает информацию об общем количестве подписчиков в сервисе"""
         api_url = f'{self.url}/subscribers/count/'
         try:
             response = requests.get(
@@ -204,3 +251,39 @@ class SubscribersClient:
 
         except (requests.exceptions.Timeout, requests.exceptions.HTTPError, ValueError, Exception) as e:
             return GetAllSubscribersInfoResponse("0", "", "")
+
+    def migrate_instagram(self, doctor_id, inst_url) -> int:
+        """
+        Миграция инсты в сервис подписчиков
+        """
+
+        api_url = f'{self.url}/migrate_instagram/'
+
+        if not doctor_id or not inst_url:
+            return 0
+
+        # Подготовка данных для запроса
+        body = {
+            'doctor_id': doctor_id,
+            'instagram': inst_url,
+        }
+
+        # Удаляем None значения из payload
+        payload = {k: v for k, v in body.items() if v is not None}
+
+        headers = {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        }
+
+        try:
+            response = requests.post(
+                api_url,
+                json=payload,
+                headers=headers,
+                timeout=10
+            )
+            return response.status_code
+
+        except (requests.exceptions.Timeout, requests.exceptions.HTTPError, ValueError, Exception) as e:
+            return 0

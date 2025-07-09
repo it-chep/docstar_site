@@ -78,22 +78,27 @@
                 </div>
             </div>
         </div>
+
         <div class="filter-section-dash"></div>
+        <div id="filter-section-wrapper">
 
-        <div class="filter-section">
-            <div class="filter-header" id="subscribers-filter-header">
-                <div class="filter_open_close_arrow search_filter_indicator">
-                    <span class="material-icons next">
-                        navigate_next
-                    </span>
+            <div class="statistics_loader"></div>
+            <div class="filter-section" id="filter-section-subs">
+                <div class="filter-header" id="subscribers-filter-header">
+                    <div class="filter_open_close_arrow search_filter_indicator">
+                        <span class="material-icons next">
+                            navigate_next
+                        </span>
+                    </div>
+                    <div class="filter-title">Подписчики</div>
                 </div>
-                <div class="filter-title">Подписчики TG</div>
-            </div>
-
-            <div id="subscribers-filter" class="filter-content">
-                {% include "includes/subscribers_slider.html" %}
+                <div id="subscribers-filter" class="filter-content">
+                    <div class="filter-list" id="subscribers-list"></div>
+                    {% include "includes/subscribers_slider.html" %}
+                </div>
             </div>
         </div>
+
         <div class="filter-section-dash"></div>
 
         <div class="submit_button">

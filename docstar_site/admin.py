@@ -3,7 +3,7 @@ from django.utils.html import format_html
 from django.template.response import TemplateResponse
 
 from docstar_site.models import *
-from docstar_site.utils import validate_url
+from docstar_site.utils import validate_tg_channel_url, validate_inst_url
 from django.utils import timezone
 
 def custom_admin_index_wrapper(original_index):
@@ -76,7 +76,7 @@ class DoctorAdmin(admin.ModelAdmin):
 
     def save_model(self, request, obj, form, change):
         if change and ('tg_channel_url' in form.changed_data or 'instagram_url' in form.changed_data):
-            success = self._handle_tg_channel_url_change(request, obj.id, obj.tg_channel_url)
+            success = self._handle_subscribers_url_change(request, obj.id, obj.tg_channel_url, obj.inst_url)
             if not success:
                 return
 
@@ -115,15 +115,17 @@ class DoctorAdmin(admin.ModelAdmin):
         return True
 
     @staticmethod
-    def _handle_tg_channel_url_change(request, doctor_id, tg_channel_url):
+    def _handle_subscribers_url_change(request, doctor_id, tg_channel_url, instagram_url):
         """Обработка изменения ссылки на канал телеграм"""
         client = settings.SUBSCRIBERS_CLIENT
-        username = validate_url(tg_channel_url)
+        username = validate_tg_channel_url(tg_channel_url)
+        inst_username = validate_inst_url(instagram_url)
+
         doctor_admin_url = reverse('admin:docstar_site_doctor_change', args=[doctor_id])
 
         try:
             # todo сделать валидацию и отправку инстаграмма
-            status = client.update_doctor(doctor_id, username, "")
+            status = client.update_doctor(doctor_id, username, inst_username)
             if status > 400:
                 messages.error(request,
                                format_html(

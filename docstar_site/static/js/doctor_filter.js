@@ -146,36 +146,45 @@ function clearAllFilters() {
     urlParams.delete('speciality');
     urlParams.delete('max_subscribers');
     urlParams.delete('min_subscribers');
+    urlParams.delete('social_media')
 
     const newUrl = urlParams.toString() ? `${window.location.pathname}?${urlParams}` : window.location.pathname;
 
     history.pushState(null, null, newUrl);
 }
 
+function setParamCheckbox(className, target){
+    $(`.checkbox-label.${className} input[type="checkbox"]:checked`).each(function () {
+        target.push($(this).data('id'));
+    });
+}
+
 function pushQueryParamsToURL() {
     const selectedCities = [];
     const selectedSpecialities = [];
+    const selectedSubs = [];
+
+    setParamCheckbox('sub', selectedSubs)
+
+    // Собираем ID выбранных городов
+    setParamCheckbox('city', selectedCities)
+
+    // Собираем ID выбранных специальностей
+    setParamCheckbox('speciality', selectedSpecialities)
 
     // Получаем значения подписчиков
     const minSubscribers = $('#min_subscribers').val();
     const maxSubscribers = $('#max_subscribers').val();
 
-    // Собираем ID выбранных городов
-    $('.checkbox-label.city input[type="checkbox"]:checked').each(function () {
-        selectedCities.push($(this).data('id'));
-    });
-
-    // Собираем ID выбранных специальностей
-    $('.checkbox-label.speciality input[type="checkbox"]:checked').each(function () {
-        selectedSpecialities.push($(this).data('id'));
-    });
-
     // Формируем URL-параметры
     const params = new URLSearchParams();
 
     if (selectedCities.length > 0) {
-
         params.append('city', selectedCities.join(','));
+    }
+
+    if (selectedSubs.length > 0) {
+        params.append('social_media', selectedSubs.join(','));
     }
 
     if (selectedSpecialities.length > 0) {
@@ -190,7 +199,6 @@ function pushQueryParamsToURL() {
     if (maxSubscribers && maxSubscribers.trim() !== '') {
         params.append('max_subscribers', maxSubscribers);
     }
-
     const newUrl = `${window.location.pathname}?${params.toString()}`;
 
     // Меняем URL в адресной строке (без перезагрузки)
@@ -215,6 +223,7 @@ function setFiltersInlineWrapper(){
     specialities?.forEach(paramSpeciality => {
         $(`#speciality-${paramSpeciality}`).prop('checked', true)
     })
+
     const page = urlParams.get('page') || 1
     setActiveFilters()
     filterDoctors(getFilterQueryParams(), page);
@@ -225,18 +234,22 @@ function setActiveFilters(){
     $('.filters-inline-wrapper input[type="checkbox"]:checked').each(function () {
         const checkbox = $(this);
         const labelText = checkbox.closest('.checkbox-label').find('.checkbox-text').text();
-        const className = checkbox.closest('.checkbox-label').hasClass('speciality') ? 'speciality' : 'city';
-        const ID = checkbox.closest('.checkbox-label').find('input').data('id')
+        const className = checkbox.closest('.checkbox-label').hasClass('speciality')
+            ? 'speciality'
+            : checkbox.closest('.checkbox-label').hasClass('city') ? 'city' : null
+        if(className){
+            const ID = checkbox.closest('.checkbox-label').find('input').data('id')
 
-        // Добавляем фильтр в active_filters_wrapper
-        $('.active_filters_wrapper').append(`
-            <div class="active_filter" data-${className}="${ID}">
-                <p class="active_filter_text" >${labelText}</p>
-                <div class="active_filter_delete_btn">
-                    <span class="material-icons cancel">cancel</span>
+            // Добавляем фильтр в active_filters_wrapper
+            $('.active_filters_wrapper').append(`
+                <div class="active_filter" data-${className}="${ID}">
+                    <p class="active_filter_text" >${labelText}</p>
+                    <div class="active_filter_delete_btn">
+                        <span class="material-icons cancel">cancel</span>
+                    </div>
                 </div>
-            </div>
-        `);
+            `);
+        }
     });
 }
 
@@ -354,11 +367,20 @@ function getFilterQueryParams() {
         }
     });
 
+    const urlParams = new URLSearchParams(window.location.search);
+    const subs = urlParams.get('social_media')?.split(',')
+    if(subs){
+        filters.social_media=[];
+        subs.forEach(sub => filters.social_media.push(sub))
+    }
+
+
     // Добавляем минимальное количество подписчиков
     const minSubscribers = $('#min_subscribers').val();
     if (minSubscribers && minSubscribers.trim() !== '') {
         filters.min_subscribers = [minSubscribers];
     }
+
 
     // Добавляем максимальное количество подписчиков
     const maxSubscribers = $('#max_subscribers').val();
@@ -428,7 +450,6 @@ function filterDoctors(filters, page = 1) {
     $.ajax({
         url: `/api/v1/filter-doctor/?${filters}&page=${page}`, method: 'GET', success: function (response) {
             $doctorListContainer.empty();
-
             if (response.data && response.data.length > 0) {
                 response.data.forEach((doctor, ind) => {
                     const doctorCard = `
@@ -447,21 +468,34 @@ function filterDoctors(filters, page = 1) {
                                             <p>📍${doctor.city}</p>
                                         </div>
                                     </div>
-                                    
                                 </div>
                                 <div class="buttons_wrapper">
-                                    ${doctor.tg_subs_count != 0 ? `<div class="subscribers_link_wrapper miniatures">
-                                        <a class="subscribers_link" href="${doctor.tg_channel_url}" target="_blank" rel="noopener noreferrer">
-                                            <img class="social_icon" src="/static/img/logos/telegram_logo.png">
-                                            <div class="subs_text">
-                                                <span class="subs_count">${doctor.tg_subs_count}</span>
-                                                <span>${doctor.tg_subs_count_text}</span>
-                                            </div>
-                                            <div class="subs_ico_link">
-                                                <img src="/static/img/icons/doc_detail/subs_link_ico.svg">
-                                            </div>
-                                        </a>
-                                    </div>` : ''}
+                                    <div class="subscribers_wrapper">
+                                        ${doctor.tg_subs_count != 0 ? `<div class="subscribers_link_wrapper miniatures">
+                                            <a class="subscribers_link" href="${doctor.tg_channel_url}" target="_blank" rel="noopener noreferrer">
+                                                <img class="social_icon" src="/static/img/logos/telegram_logo.png">
+                                                <div class="subs_text">
+                                                    <span class="subs_count">${doctor.tg_subs_count}</span>
+                                                    <span>${doctor.tg_subs_count_text}</span>
+                                                </div>
+                                                <div class="subs_ico_link">
+                                                    <img src="/static/img/icons/doc_detail/subs_link_ico.svg">
+                                                </div>
+                                            </a>
+                                        </div>` : ''}
+                                        ${doctor.inst_subs_count != 0 ? `<div class="subscribers_link_wrapper miniatures">
+                                            <a class="subscribers_link" href="${doctor.inst_url}" target="_blank" rel="noopener noreferrer">
+                                                <img class="social_icon" src="/static/img/logos/Instagram_icon.png">
+                                                <div class="subs_text">
+                                                    <span class="subs_count">${doctor.inst_subs_count}</span>
+                                                    <span>${doctor.inst_subs_count_text}</span>
+                                                </div>
+                                                <div class="subs_ico_link">
+                                                    <img src="/static/img/icons/doc_detail/subs_link_ico.svg">
+                                                </div>
+                                            </a>
+                                        </div>` : ''}
+                                    </div>
                                     <a class="user_info_btn_container" href="${doctor.doctor_url}">
                                         <div class="user_info_btn">
                                             <div class="user_info_btn_text">Подробнее</div>

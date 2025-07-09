@@ -15,7 +15,7 @@ from docstar_site.clients.subscribers.dto import FilterDoctorsRequest
 
 from docstar_site.models import Doctor, Speciallity, City
 from docstar_site.forms import CreateDoctorForm
-from docstar_site.utils import get_site_url, validate_url
+from docstar_site.utils import get_site_url, validate_tg_channel_url, validate_inst_url
 
 
 class CitySpecialityMixin:
@@ -68,6 +68,7 @@ class BaseDoctorApiView(CitySpecialityMixin):
                 'doctor_url': doctor.get_absolute_url(),
                 'local_file': doctor.get_local_file,
                 'tg_channel_url': doctor.tg_channel_url,
+                'inst_url': doctor.inst_url,
             }
 
         return doctors_dict
@@ -86,11 +87,15 @@ class BaseDoctorApiView(CitySpecialityMixin):
                 doctor_data.update({
                     "tg_subs_count": subscriber_data.tg_subs_count,
                     "tg_subs_count_text": subscriber_data.tg_subs_count_text,
+                    "inst_subs_count": subscriber_data.inst_subs_count,
+                    "inst_subs_count_text": subscriber_data.inst_subs_count_text,
                 })
             else:
                 doctor_data.update({
                     "tg_subs_count": 0,
                     "tg_subs_count_text": "подписчиков",
+                    "inst_subs_count": 0,
+                    "inst_subs_count_text": "подписчиков",
                 })
 
         return doctors_dict
@@ -289,9 +294,10 @@ class BaseDoctorApiView(CitySpecialityMixin):
 
         doctors_map = self.configure_doctors_map(doctors)
         for doctor in doctors_with_subs:
-            if doctors_map.get(doctor.doctor_id):
-                doctors_map[doctor.doctor_id]["tg_subs_count"] = doctor.tg_subs_count
-                doctors_map[doctor.doctor_id]["tg_subs_count_text"] = doctor.tg_subs_count_text
+            doctors_map[doctor.doctor_id]["tg_subs_count"] = doctor.tg_subs_count
+            doctors_map[doctor.doctor_id]["tg_subs_count_text"] = doctor.tg_subs_count_text
+            doctors_map[doctor.doctor_id]["inst_subs_count"] = doctor.inst_subs_count
+            doctors_map[doctor.doctor_id]["inst_subs_count_text"] = doctor.inst_subs_count_text
 
         doctors_list = self.enrich_photo_from_s3(doctors_map.values())
 
@@ -301,11 +307,13 @@ class BaseDoctorApiView(CitySpecialityMixin):
         """Мини фасад либо отдает докторов по фильтрам либо ходит в сервис subscriber и фильтрует по ID"""
         max_subscribers = request.GET.get('max_subscribers', 100_000)
         min_subscribers = request.GET.get('min_subscribers', 300)
+        social_media = request.GET.get('social_media', [])
 
-        if (max_subscribers or min_subscribers) and (int(max_subscribers) != 100_000 or int(min_subscribers) != 300):
+        if (max_subscribers or min_subscribers) and (
+                int(max_subscribers) != 100_000 or int(min_subscribers) != 300) or len(social_media) != 0:
             doctors = settings.SUBSCRIBERS_CLIENT.filter_doctors_ids(
                 FilterDoctorsRequest(
-                    social_media="tg",
+                    social_media=social_media,
                     offset=0,
                     max_subscribers=max_subscribers,
                     min_subscribers=min_subscribers,
@@ -464,9 +472,10 @@ class CreateNewDoctorApiView(views.APIView):
         if not doctor.tg_channel_url:
             return None
 
-        tg_username = validate_url(doctor.tg_channel_url)
+        tg_username = validate_tg_channel_url(doctor.tg_channel_url)
+        inst_username = validate_inst_url(doctor.instagram_url)
 
-        return client.create_doctor(doctor.id, tg_username, doctor.inst_url)
+        return client.create_doctor(doctor.id, tg_username, inst_username)
 
     @staticmethod
     def send_data_to_google_script(doctor):
@@ -574,14 +583,28 @@ class SettingsApiView(CitySpecialityMixin, views.APIView):
     def _get_subscribers_info():
         return settings.SUBSCRIBERS_CLIENT.get_all_subscribers_info()
 
+    @staticmethod
+    def _get_filter_info():
+        filtersDTO = settings.SUBSCRIBERS_CLIENT.filter_info()
+
+        resp = list()
+        for filterDTO in filtersDTO:
+            resp.append({
+                "name": filterDTO.name,
+                "slug": filterDTO.slug,
+            })
+
+        return resp
+
     def get(self, request, *args, **kwargs):
         subscribers_info = self._get_subscribers_info()
         return JsonResponse(
             {
                 'doctors_count': self._serialize_doctors_count(self._get_doctors_count()),
-                'subscribers_count': subscribers_info.subscribers_count,
+                'subscribers_count': subscribers_info.subscribers_count or 0,
                 'subscribers_count_text': subscribers_info.subscribers_count_text,
                 'subscribers_last_updated': subscribers_info.last_updated,
+                'filter_info': self._get_filter_info(),
                 'cities': self._prepare_cities_data(self._get_cities()),
                 'specialities': self._prepare_specialities_data(self._get_specialities()),
                 'new_doctor_banner': True,

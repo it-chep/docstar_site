@@ -11,7 +11,6 @@
         flex-direction: row;
         width: 100%;
 
-
         .doctors_container {
             width: 100%;
 
@@ -31,8 +30,6 @@
                     padding: 10px 10px 20px 10px;
                     border-radius: 20px;
                     background: #1E1E1E;
-
-
                 }
             }
         }
@@ -61,11 +58,8 @@
             aspect-ratio: 1.6/1;
             border-radius: 14px;
         }
-
     }
-
 }
-
 
 .buttons_wrapper{
     width: 100%;
@@ -74,12 +68,11 @@
     padding: 9px;
 }
 
-    .user_info_btn_container {
-        width: 100%;
-        margin-top: 20px;
-        text-align: center;
-    }
-
+.user_info_btn_container {
+    width: 100%;
+    margin-top: 20px;
+    text-align: center;
+}
 
 .doc_info {
     display: flex;
@@ -107,7 +100,6 @@
     display: none;
 }
 
-
 .user_name {
     font-weight: 600;
     font-style: normal;
@@ -128,9 +120,9 @@ a {
     color: white;
 }
 
-  .user_name p {
-      line-height: 20px
-  }
+.user_name p {
+    line-height: 20px
+}
 
 .pagination_container {
     margin-top: 10px;
@@ -189,9 +181,6 @@ a {
     background: var(--dark-blue);
 }
 
-
-
-
 #statistics_wrapper{
     position: relative;
     display: flex;
@@ -213,7 +202,6 @@ a {
             }
         }
     }
-
 
     .statistics{
         display: none;
@@ -242,29 +230,35 @@ a {
         margin-left: 6px;
     }
 
-    .statistics_loader{
-        position: relative;
-        width: 100%;
-        height: 32px;
-        background: #333;
-        background: linear-gradient(
-            110deg,
-            #2a2a2a 8%,
-            #3a3a3a 18%,
-            #2a2a2a 33%
-        );
-        border-radius: 5px;
-        background-size: 300% 100%;
-        animation: 2.5s shine linear infinite;
-        z-index: 10;
-
-        &.hidden {
-            display: none;
-        }
-    }
-
 }
 
+#filter-section-wrapper{
+    .statistics_loader{
+        margin: 0 20px;
+        width: calc(100% - 40px);
+    }
+}
+
+.statistics_loader{
+    position: relative;
+    width: 100%;
+    height: 32px;
+    background: #333;
+    background: linear-gradient(
+        110deg,
+        #2a2a2a 8%,
+        #3a3a3a 18%,
+        #2a2a2a 33%
+    );
+    border-radius: 5px;
+    background-size: 300% 100%;
+    animation: 2.5s shine linear infinite;
+    z-index: 10;
+
+    &.hidden {
+        display: none;
+    }
+}
 
 @keyframes shine {
     to {

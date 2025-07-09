@@ -307,9 +307,10 @@ class BaseDoctorApiView(CitySpecialityMixin):
         """Мини фасад либо отдает докторов по фильтрам либо ходит в сервис subscriber и фильтрует по ID"""
         max_subscribers = request.GET.get('max_subscribers', 100_000)
         min_subscribers = request.GET.get('min_subscribers', 300)
-        social_media = request.GET.get('social_media',None)
+        social_media = request.GET.get('social_media', [])
 
-        if (max_subscribers or min_subscribers) and (int(max_subscribers) != 100_000 or int(min_subscribers) != 300):
+        if (max_subscribers or min_subscribers) and (
+                int(max_subscribers) != 100_000 or int(min_subscribers) != 300) or len(social_media) != 0:
             doctors = settings.SUBSCRIBERS_CLIENT.filter_doctors_ids(
                 FilterDoctorsRequest(
                     social_media=social_media,
@@ -600,7 +601,7 @@ class SettingsApiView(CitySpecialityMixin, views.APIView):
         return JsonResponse(
             {
                 'doctors_count': self._serialize_doctors_count(self._get_doctors_count()),
-                'subscribers_count': subscribers_info.subscribers_count,
+                'subscribers_count': subscribers_info.subscribers_count or 0,
                 'subscribers_count_text': subscribers_info.subscribers_count_text,
                 'subscribers_last_updated': subscribers_info.last_updated,
                 'filter_info': self._get_filter_info(),

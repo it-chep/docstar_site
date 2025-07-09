@@ -234,6 +234,7 @@ function setActiveFilters(){
     $('.filters-inline-wrapper input[type="checkbox"]:checked').each(function () {
         const checkbox = $(this);
         const labelText = checkbox.closest('.checkbox-label').find('.checkbox-text').text();
+        const targetText = labelText.replace(/\s*\(\d+\)\s*$/, ''); // без кол-ва
         const className = checkbox.closest('.checkbox-label').hasClass('speciality')
             ? 'speciality'
             : checkbox.closest('.checkbox-label').hasClass('city') ? 'city' : null
@@ -243,7 +244,7 @@ function setActiveFilters(){
             // Добавляем фильтр в active_filters_wrapper
             $('.active_filters_wrapper').append(`
                 <div class="active_filter" data-${className}="${ID}">
-                    <p class="active_filter_text" >${labelText}</p>
+                    <p class="active_filter_text" >${targetText}</p>
                     <div class="active_filter_delete_btn">
                         <span class="material-icons cancel">cancel</span>
                     </div>
@@ -273,7 +274,6 @@ function initializeSubmitFilterBtn() {
         pushQueryParamsToURL()
 
         // Применяем фильтры
-
         filterDoctors(getFilterQueryParams(), 1);
 
         // убираем на мобилке шторку

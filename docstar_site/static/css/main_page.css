@@ -61,6 +61,12 @@
     }
 }
 
+.subscribers_wrapper{
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
 .buttons_wrapper{
     width: 100%;
     display: flex;
@@ -234,10 +240,12 @@ a {
 
 #filter-section-wrapper{
     .statistics_loader{
+        height: 22.4px;
         margin: 0 20px;
         width: calc(100% - 40px);
     }
 }
+
 
 .statistics_loader{
     position: relative;

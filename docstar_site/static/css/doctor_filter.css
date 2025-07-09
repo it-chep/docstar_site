@@ -172,9 +172,11 @@
 
 .active_filter {
     display: flex;
+    align-items: center;
     flex-direction: row;
     border-radius: 64px;
-    align-items: center;
+    gap: 6px;
+    padding: 10px 16px;
     margin-right: 15px;
     margin-top: 15px;
     background: var(--blue);
@@ -186,17 +188,17 @@
 }
 
 .active_filter_text {
-    padding: 5px 0 5px 15px;
     color: white;
 }
 
 .active_filter_delete_btn {
-    padding: 5px 15px 5px 15px;
+    align-items: center;
+    display: flex;
 }
 
 .material-icons.cancel {
     color: white;
-    padding: 5px 0 0;
+    padding: 0;
 }
 
 .active_filter:hover {

@@ -234,7 +234,7 @@ function setActiveFilters(){
     $('.filters-inline-wrapper input[type="checkbox"]:checked').each(function () {
         const checkbox = $(this);
         const labelText = checkbox.closest('.checkbox-label').find('.checkbox-text').text();
-        const targetText = labelText.replace(/\s*\(\d+\)\s*$/, ''); // без кол-ва
+        const targetText = deletingNumberStr(labelText) // без кол-ва
         const className = checkbox.closest('.checkbox-label').hasClass('speciality')
             ? 'speciality'
             : checkbox.closest('.checkbox-label').hasClass('city') ? 'city' : null
@@ -254,6 +254,9 @@ function setActiveFilters(){
     });
 }
 
+function deletingNumberStr(str){
+    return str.replace(/\s*\(\d+\)\s*$/, '');
+}
 
 // initializeSubmitFilterBtn инициализация кнопки "Применить" фильтры
 function initializeSubmitFilterBtn() {
@@ -326,7 +329,8 @@ $(document).ready(function () {
         const text = $(this).siblings('.active_filter_text').text();
         $(this).parent('.active_filter').remove();
         $(`.checkbox-label`).each(function () {
-            if ($(this).find('.checkbox-text').text() === text) {
+            const currentText = deletingNumberStr($(this).find('.checkbox-text').text())
+            if (currentText === text) {
                 let checkbox = $(this).find('input[type="checkbox"]')
                 cleanFilterQueryParam(checkbox);
                 checkbox.prop('checked', false);

@@ -45,6 +45,8 @@ function setSubscribers(res){
     }
 }
 
+
+
 function setCounts(res){
     const number_of_doctors_container = $('#number_of_doctors')
     const number_of_subs_tg_container = $('#number_of_subs_tg')
@@ -54,8 +56,15 @@ function setCounts(res){
     target.addClass('show')
 
     const {doctors_count, subscribers_count} = res;
+
+    if(!subscribers_count || subscribers_count === 0){
+        const target = number_of_subs_tg_container.closest('.statistic_wrap')
+        target.remove()
+    }
+    else{
+        number_of_subs_tg_container.text(`${subscribers_count}`)
+    }
     number_of_doctors_container.text(`${doctors_count}`)
-    number_of_subs_tg_container.text(`${subscribers_count}`)
 }
 
 function getStatistics() {

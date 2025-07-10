@@ -52,7 +52,7 @@
     gap: 10px;
     border-radius: 61px;
     border: 2px solid #606060;
-    transition: border 0.15s ease;
+    transition: border 0.25s ease;
 }
 
 .search-doctors-container input {
@@ -106,7 +106,7 @@
 
 .search-doctors-container input::placeholder {
     color: grey;
-    transition: color 0.15s ease;
+    transition: color 0.25s ease;
 }
 
 .search-doctors-container input:focus::placeholder {

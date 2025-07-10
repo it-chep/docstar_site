@@ -234,6 +234,7 @@ function setActiveFilters(){
     $('.filters-inline-wrapper input[type="checkbox"]:checked').each(function () {
         const checkbox = $(this);
         const labelText = checkbox.closest('.checkbox-label').find('.checkbox-text').text();
+        const targetText = deletingNumberStr(labelText) // без кол-ва
         const className = checkbox.closest('.checkbox-label').hasClass('speciality')
             ? 'speciality'
             : checkbox.closest('.checkbox-label').hasClass('city') ? 'city' : null
@@ -243,7 +244,7 @@ function setActiveFilters(){
             // Добавляем фильтр в active_filters_wrapper
             $('.active_filters_wrapper').append(`
                 <div class="active_filter" data-${className}="${ID}">
-                    <p class="active_filter_text" >${labelText}</p>
+                    <p class="active_filter_text" >${targetText}</p>
                     <div class="active_filter_delete_btn">
                         <span class="material-icons cancel">cancel</span>
                     </div>
@@ -253,6 +254,9 @@ function setActiveFilters(){
     });
 }
 
+function deletingNumberStr(str){
+    return str.replace(/\s*\(\d+\)\s*$/, '');
+}
 
 // initializeSubmitFilterBtn инициализация кнопки "Применить" фильтры
 function initializeSubmitFilterBtn() {
@@ -273,7 +277,6 @@ function initializeSubmitFilterBtn() {
         pushQueryParamsToURL()
 
         // Применяем фильтры
-
         filterDoctors(getFilterQueryParams(), 1);
 
         // убираем на мобилке шторку
@@ -326,7 +329,8 @@ $(document).ready(function () {
         const text = $(this).siblings('.active_filter_text').text();
         $(this).parent('.active_filter').remove();
         $(`.checkbox-label`).each(function () {
-            if ($(this).find('.checkbox-text').text() === text) {
+            const currentText = deletingNumberStr($(this).find('.checkbox-text').text())
+            if (currentText === text) {
                 let checkbox = $(this).find('input[type="checkbox"]')
                 cleanFilterQueryParam(checkbox);
                 checkbox.prop('checked', false);

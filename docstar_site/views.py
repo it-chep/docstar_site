@@ -90,6 +90,7 @@ class Doctors(TemplateView):
                                                          join docstar_site_doctor d on dc.doctor_id = d.id
                                                 where d.is_active = true) as combined on c.id = combined.city_id
                             group by c.id, c.name
+                            having count(distinct doctor_id) != 0
                             order by c.name
                            """, )
 
@@ -110,6 +111,7 @@ class Doctors(TemplateView):
                                                          join docstar_site_doctor d on dc.doctor_id = d.id
                                                 where d.is_active = true) as combined on s.id = combined.speciallity_id
                             group by s.id, s.name
+                            having count(distinct doctor_id) != 0
                             order by s.name
                            """)
 

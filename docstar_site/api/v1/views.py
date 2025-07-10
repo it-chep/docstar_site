@@ -341,6 +341,7 @@ class SearchDoctorApiView(BaseDoctorApiView, views.APIView):
                                                 where d.is_active = true) as combined on c.id = combined.city_id
                             where c.name ilike %s                   
                             group by c.id, c.name
+                            having count(distinct doctor_id) != 0
                             order by c.name
                             limit %s;
                            """, [f'%{query}%', self.search_city_limit])
@@ -361,6 +362,7 @@ class SearchDoctorApiView(BaseDoctorApiView, views.APIView):
                                                 where d.is_active = true) as combined on s.id = combined.speciallity_id
                             where s.name ilike %s                   
                             group by s.id, s.name
+                            having count(distinct doctor_id) != 0
                             order by s.name
                             limit %s;
                            """, [f'%{query}%', self.search_speciality_limit])
@@ -548,7 +550,8 @@ class SettingsApiView(CitySpecialityMixin, views.APIView):
                                                 from docstar_site_doctor_additional_cities dc
                                                          join docstar_site_doctor d on dc.doctor_id = d.id
                                                 where d.is_active = true) as combined on c.id = combined.city_id
-                            group by c.id, c.name
+                            group by c.id, c.name                            
+                            having count(distinct doctor_id) != 0
                             order by c.name
                            """, )
 
@@ -569,6 +572,7 @@ class SettingsApiView(CitySpecialityMixin, views.APIView):
                                                          join docstar_site_doctor d on dc.doctor_id = d.id
                                                 where d.is_active = true) as combined on s.id = combined.speciallity_id
                             group by s.id, s.name
+                            having count(distinct doctor_id) != 0
                             order by s.name
                            """)
 

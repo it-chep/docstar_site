@@ -244,40 +244,77 @@ class CreateDoctorForm(forms.Form):
 
     def save(self, commit=True):
         try:
-            slug = get_eng_slug(self.name)
-            doctor = Doctor.objects.create(
+            existing_doctor = Doctor.objects.filter(
                 name=self.name,
-                slug=slug,
-                email=self.cleaned_data["email"],
-                inst_url=self.cleaned_data["instagram_username"],
-                vk_url=self.cleaned_data["vk_username"],
-                dzen_url=self.cleaned_data["dzen_username"],
-                tg_url=self.cleaned_data["telegram_username"],
-                tg_channel_url=self.cleaned_data["telegram_channel"],
-                youtube_url=self.cleaned_data["youtube_username"],
-                city_id=self.cleaned_data["city"],
-                speciallity_id=self.cleaned_data["speciallity"],
-                main_blog_theme=self.cleaned_data["main_blog_theme"],
-                birth_date=self.cleaned_data["birth_date"],
-                prodoctorov=self.cleaned_data["prodoctorov"],
-                is_active=False,
-            )
+                email=self.cleaned_data["email"]
+            ).first()
+            if existing_doctor:
+                # Обновляем существующего врача
+                existing_doctor.inst_url = self.cleaned_data["instagram_username"]
+                existing_doctor.vk_url = self.cleaned_data["vk_username"]
+                existing_doctor.dzen_url = self.cleaned_data["dzen_username"]
+                existing_doctor.tg_url = self.cleaned_data["telegram_username"]
+                existing_doctor.tg_channel_url = self.cleaned_data["telegram_channel"]
+                existing_doctor.youtube_url = self.cleaned_data["youtube_username"]
+                existing_doctor.city_id = self.cleaned_data["city"]
+                existing_doctor.speciallity_id = self.cleaned_data["speciallity"]
+                existing_doctor.main_blog_theme = self.cleaned_data["main_blog_theme"]
+                existing_doctor.birth_date = self.cleaned_data["birth_date"]
+                existing_doctor.prodoctorov = self.cleaned_data["prodoctorov"]
 
-            # дополнительные города
-            ids_str = self.cleaned_data["additional_cities"].strip("[]'\"")
-            ids_list = ids_str.split(',')
-            city_ids = [int(city_id.strip()) for city_id in ids_list if city_id.strip().isdigit()]
-            city_ids.append(self.cleaned_data["city"])
-            doctor.additional_cities.set(city_ids)
+                existing_doctor.save()
 
-            # дополнительные специальности
-            ids_str = self.cleaned_data["additional_specialties"].strip("[]'\"")
-            ids_list = ids_str.split(',')
-            specialties_ids = [int(city_id.strip()) for city_id in ids_list if city_id.strip().isdigit()]
-            specialties_ids.append(self.cleaned_data["speciallity"])
-            doctor.additional_specialties.set(specialties_ids)
+                # Обработка дополнительных городов
+                ids_str = self.cleaned_data["additional_cities"].strip("[]'\"")
+                ids_list = ids_str.split(',')
+                city_ids = [int(city_id.strip()) for city_id in ids_list if city_id.strip().isdigit()]
+                city_ids.append(self.cleaned_data["city"])
+                existing_doctor.additional_cities.set(city_ids)
 
-            return doctor
+                ids_str = self.cleaned_data["additional_specialties"].strip("[]'\"")
+                ids_list = ids_str.split(',')
+                specialties_ids = [int(city_id.strip()) for city_id in ids_list if city_id.strip().isdigit()]
+                specialties_ids.append(self.cleaned_data["speciallity"])
+                existing_doctor.additional_specialties.set(specialties_ids)
+
+                return existing_doctor
+            else:
+                # Создаем нового врача (оригинальный код)
+                slug = get_eng_slug(self.name)
+                doctor = Doctor(
+                    name=self.name,
+                    slug=slug,
+                    email=self.cleaned_data["email"],
+                    inst_url=self.cleaned_data["instagram_username"],
+                    vk_url=self.cleaned_data["vk_username"],
+                    dzen_url=self.cleaned_data["dzen_username"],
+                    tg_url=self.cleaned_data["telegram_username"],
+                    tg_channel_url=self.cleaned_data["telegram_channel"],
+                    youtube_url=self.cleaned_data["youtube_username"],
+                    city_id=self.cleaned_data["city"],
+                    speciallity_id=self.cleaned_data["speciallity"],
+                    main_blog_theme=self.cleaned_data["main_blog_theme"],
+                    birth_date=self.cleaned_data["birth_date"],
+                    prodoctorov=self.cleaned_data["prodoctorov"],
+                    is_active=False,
+                )
+
+                doctor.save()
+
+                # Обработка дополнительных городов
+                ids_str = self.cleaned_data["additional_cities"].strip("[]'\"")
+                ids_list = ids_str.split(',')
+                city_ids = [int(city_id.strip()) for city_id in ids_list if city_id.strip().isdigit()]
+                city_ids.append(self.cleaned_data["city"])
+                doctor.additional_cities.set(city_ids)
+
+                ids_str = self.cleaned_data["additional_specialties"].strip("[]'\"")
+                ids_list = ids_str.split(',')
+                specialties_ids = [int(city_id.strip()) for city_id in ids_list if city_id.strip().isdigit()]
+                specialties_ids.append(self.cleaned_data["speciallity"])
+                doctor.additional_specialties.set(specialties_ids)
+
+                return doctor
         except City.DoesNotExist:
             raise ValidationError('Указанный город не найден.')
         except Speciallity.DoesNotExist:

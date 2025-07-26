@@ -445,9 +445,12 @@ class CreateNewDoctorApiView(views.APIView):
             if form.is_valid():
                 doctor = form.save()
 
-                self.send_data_to_google_script(doctor)
-                self.notificator_bot(doctor)
-                self.save_to_subscribers(doctor)
+                try:
+                    self.send_data_to_google_script(doctor)
+                    self.notificator_bot(doctor)
+                    self.save_to_subscribers(doctor)
+                except Exception as e:
+                    print(f"Ошибка при регистрации {e}")
 
                 return JsonResponse(
                     {
@@ -462,6 +465,7 @@ class CreateNewDoctorApiView(views.APIView):
                     status=status.HTTP_400_BAD_REQUEST
                 )
         except Exception as ex:
+            print(f"RESP Ошибка при регистрации {ex}")
             return JsonResponse(
                 {"alert": "Произошла ошибка, пожалуйста обратитесь в техподдержку"},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR

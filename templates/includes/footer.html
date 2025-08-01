@@ -1,0 +1,46 @@
+{% load static %}
+
+{% block extralinks %}
+    {{ super }}
+    <link type="text/css" rel="stylesheet" href="{% static 'css/footer.css' %}">
+{% endblock %}
+
+<div class="footer_wrapper">
+    <div class="footer_container">
+        <div class="footer_content">
+            <span class="footer_title">Информация</span>
+            <ul class="footer_list">
+                <li><a href="">О проекте</a></li>
+                <li><a href="">Политика конфиденциальности</a></li>
+                <li><a href="">Договор оферты</a></li>
+                <li><a href="">О клубе MEDBLOGERS</a></li>
+                <li><a href="">Товарный знак </a></li>
+            </ul>
+            <span class="footer_sign meta">Meta* — компания, владеющая Facebook и Instagram, признана экстремистской в РФ</span>
+        </div>
+        <div class="footer_content">
+            <span class="footer_title">Контакты</span>
+            <ul class="footer_list">
+                <li><a href="">Отдел заботы и техподдержка</a></li>
+                <li><a href="">Telegram-канал</a></li>
+            </ul>
+            <span class="footer_sign">Индивидуальный предприниматель Нечепорук Владимир Алексеевич</span>
+            <ul class="footer_requisites">
+                <li>ИНН: 667360619570</li>
+                <li>ОГРНИП: 323665800095994</li>
+                <li>readydoc@necheporuk.ru</li>
+            </ul>
+        </div>
+        <div class="footer_content placement">
+            <span class="footer_title">Размещение на сайте</span>
+            <div class="footer_banner_new_doctor">
+                <img class="footer_action" src="{% static 'img/footer_action.svg' %}">
+                <span class="footer_sign">Ознакомьтесь с правилами и заполните анкету чтобы ваша карточка появилась на нашем сайте</span>
+                <a class="footer_button" href="{% url "welcome" %}" target="_blank">
+                        <p>Подать заявку</p>
+                </a>
+            </div>
+        </div>
+    </div>
+    <img class="footer_logo" src="{% static 'img/footer_logo.png' %}">
+</div>

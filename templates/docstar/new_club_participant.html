@@ -5,6 +5,8 @@
     <meta charset="UTF-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="robots" content="noindex, nofollow">
+
     <link rel="shortcut icon" href="{% static "img/dcs.png" %}" type="image/png">
 
     <link type="text/css" rel="stylesheet" href="{% static "css/select2.min.css" %}"/>
@@ -186,7 +188,8 @@
                     <div class="tags-input-container" id="additional_cities">
                         <div class="tags-input-wrapper">
                             <div class="tags-list cities-list">
-                                <input type="text" class="tags-input city-input" placeholder="Введите название города...">
+                                <input type="text" class="tags-input city-input"
+                                       placeholder="Введите название города...">
                             </div>
                         </div>
                         <div class="autocomplete-dropdown city-dropdown"></div>
@@ -210,7 +213,8 @@
                     <div class="tags-input-container" id="additional_specialties">
                         <div class="tags-input-wrapper">
                             <div class="tags-list specialties-list">
-                                <input type="text" class="tags-input specialty-input" placeholder="Введите название специальности...">
+                                <input type="text" class="tags-input specialty-input"
+                                       placeholder="Введите название специальности...">
                             </div>
                         </div>
                         <div class="autocomplete-dropdown specialty-dropdown"></div>

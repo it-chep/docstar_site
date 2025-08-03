@@ -1,0 +1,7 @@
+User-agent: *
+Disallow: /admin/
+Disallow: /api/
+Disallow: /new_club_participant
+
+Sitemap: https://doctors.readyschool.ru/sitemap
+Clean-param: ref /sitemap.xml

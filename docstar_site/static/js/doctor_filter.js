@@ -492,7 +492,7 @@ function filterDoctors(filters, page = 1) {
                                                 <img class="social_icon" src="/static/img/logos/Instagram_icon.png">
                                                 <div class="subs_text">
                                                     <span class="subs_count">${doctor.inst_subs_count}</span>
-                                                    <span>${doctor.inst_subs_count_text}</span>
+                                                    <span>${doctor.inst_subs_count_text}*</span>
                                                 </div>
                                                 <div class="subs_ico_link">
                                                     <img src="/static/img/icons/doc_detail/subs_link_ico.svg">

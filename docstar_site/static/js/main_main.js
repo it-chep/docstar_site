@@ -38,9 +38,9 @@ function initMobileBurgerAction() {
                     <h1 class="mobile_filter_header_title">Меню</h1>
                 </div>
                 <div class="mobile_burger_body">
-                    <a href="https://medblogers.ru/">Что такое MEDBLOGERS?</a>
-                    <a href="https://t.me/readydog">Связаться с техподдержкой и задать вопрос</a>
-                    <a href="https://doc.readyschool.ru/base">Как пользоваться базой?</a>
+                    <noindex><a href="https://medblogers.ru/" noindex>Что такое MEDBLOGERS?</a></noindex>
+                    <noindex><a href="https://t.me/readydog" noindex>Связаться с техподдержкой и задать вопрос</a></noindex>
+                    <noindex><a href="https://doc.readyschool.ru/base" noindex>Как пользоваться базой?</a></noindex>
                 </div>
             </div>
         </div>

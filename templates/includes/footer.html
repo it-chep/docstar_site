@@ -1,0 +1,48 @@
+{% load static %}
+
+{% block extralinks %}
+    {{ super }}
+    <link type="text/css" rel="stylesheet" href="{% static 'css/footer.css' %}">
+    <link type="text/css" rel="stylesheet" href="{% static 'css/mobile/mobile_footer.css' %}">
+{% endblock %}
+
+<div class="footer_wrapper">
+    <div class="footer_container">
+        <div class="footer_content">
+            <span class="footer_title">Информация</span>
+            <ul class="footer_list">
+                <li><a href="https://doc.readyschool.ru/base">О проекте</a></li>
+                <li><a href="https://docs.google.com/document/d/1HDwwbqu0n4nQGQ_Ra0BiLvydCgq4nuKCnRzv4uvQ1Yo/">Политика конфиденциальности</a></li>
+                <li><a href="https://docs.google.com/document/d/1Y9TyTYREzPVXLHWkwkCYA0ySw0a3XsxwFkCmVpXPbA8/">Договор оферты</a></li>
+                <li><a href="https://medblogers.ru/">О клубе <span class="footer_bold_text">MEDBLOGERS</span></a></li>
+                <li><a href="https://t.me/it_necheporuk/98">История обновлений </a></li>
+            </ul>
+            <span class="footer_sign meta">*Instagram принадлежит Meta, признанной экстремистской в России</span>
+        </div>
+        <div class="footer_content">
+            <span class="footer_title">Контакты</span>
+            <ul class="footer_list">
+                <li><a href="https://t.me/readydog">Отдел заботы и техподдержка</a></li>
+                <li><a href="https://t.me/readydoctor">Telegram-канал</a></li>
+            </ul>
+            <span class="footer_sign">Индивидуальный предприниматель <span class="footer_nowrap">Нечепорук Владимир Алексеевич</span></span>
+            <ul class="footer_requisites">
+                <li>ИНН: 667360619570</li>
+                <li>ОГРНИП: 323665800095994</li>
+                <li>readydoc@necheporuk.ru</li>
+            </ul>
+        </div>
+        <div class="footer_content placement">
+            <span class="footer_title">Размещение на сайте</span>
+            <div class="footer_banner_new_doctor">
+                <img class="footer_action" src="{% static 'img/footer_action.png' %}">
+                <img class="footer_mobile_action" src="{% static 'img/footer_mobile_action.png' %}">
+                <span class="footer_sign">Ознакомьтесь с правилами и заполните анкету чтобы ваша карточка появилась на нашем сайте</span>
+                <a class="footer_button" href="{% url "welcome" %}" target="_blank">
+                    <p>Подать заявку</p>
+                </a>
+            </div>
+        </div>
+    </div>
+    <img class="footer_logo" src="{% static 'img/footer_logo.png' %}">
+</div>

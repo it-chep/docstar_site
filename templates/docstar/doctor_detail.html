@@ -82,11 +82,25 @@
                         {% include "../includes/subscribers_count.html" with url=doctor.tg_channel_url img_url="img/logos/telegram_logo.png" subs_count=doctor.tg_subs_count subs_count_text=doctor.tg_subs_count_text last_updated_date=doctor.tg_last_updated_date %}
                     {% endif %}
                     {% if doctor.inst_subs_count and doctor.inst_subs_count != 0 and doctor.inst_subs_count != "0" and doctor.inst_url %}
-                        {% include "../includes/subscribers_count.html" with url=doctor.inst_url img_url="img/logos/Instagram_icon.png" subs_count=doctor.inst_subs_count subs_count_text=doctor.inst_subs_count_text last_updated_date=doctor.inst_last_updated_date %}
+                        <div class="subscribers_link_wrapper">
+                            <a class="subscribers_link" href="{{ doctor.inst_url }}" target="_blank"
+                               rel="noopener noreferrer">
+                                <img class="social_icon" src="{% static "img/logos/Instagram_icon.png" %}">
+                                <div class="subs_text">
+                                    <span class="subs_count">{{ doctor.inst_subs_count }}</span>
+                                    <span>{{ doctor.inst_subs_count_text }}*</span>
+                                </div>
+                                <div class="subs_ico_link">
+                                    <img src="{% static "img/icons/doc_detail/subs_link_ico.svg" %}">
+                                </div>
+                            </a>
+                            <div class="last_updated_date">Дата последнего
+                                обновления: {{ doctor.inst_last_updated_date }}</div>
+                        </div>
                     {% endif %}
                     <div class="society_block">
                         {% if doctor.inst_url and doctor.inst_subs_count == 0 or doctor.inst_subs_count == "0" %}
-                            {% include "../includes/social_link.html" with url=doctor.inst_url img_url="img/logos/Instagram_icon.png" label="Профиль в Instagram" %}
+                            {% include "../includes/social_link.html" with url=doctor.inst_url img_url="img/logos/Instagram_icon.png" label="Профиль в Instagram*" %}
                         {% endif %}
 
                         {% if doctor.vk_url %}

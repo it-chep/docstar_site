@@ -218,10 +218,11 @@ class CreateDoctorForm(forms.Form):
     def clean_prodoctorov(self):
         data = self.cleaned_data.get("prodoctorov")
         if not data:
-            data = self.cleaned_data.get("instagram_username")
-            return self._clean_social_link(data, "https://instagram.com/")
+            return ""
+        if "t.me" in data or "@" in data or "vk.com" in data or "instagram.com" in data or "youtube.com" in data or "dzen.ru" in data:
+            raise ValidationError("Пожалуйста, укажите ссылку на сайт, а не на соц.сеть")
         if data and "http" not in data and not data[0:4] == "http":
-            raise ValidationError("Пожалуйста, укажите ссылку на сайт или соц.сеть, ссылка должна содержать http")
+            raise ValidationError("Пожалуйста, укажите ссылку на сайт, ссылка должна содержать http")
         return self._clean_social_link(data, "")
 
     def clean_birth_date(self):

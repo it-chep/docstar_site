@@ -5,6 +5,7 @@
     margin: 0 auto;
     color: white;
     overflow: hidden;
+    min-height: 75vh;
 }
 
 .material-icons{

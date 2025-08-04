@@ -3,6 +3,7 @@
 {% block extralinks %}
     {{ super }}
     <link type="text/css" rel="stylesheet" href="{% static 'css/footer.css' %}">
+    <link type="text/css" rel="stylesheet" href="{% static 'css/mobile/mobile_footer.css' %}">
 {% endblock %}
 
 <div class="footer_wrapper">
@@ -13,10 +14,10 @@
                 <li><a href="">О проекте</a></li>
                 <li><a href="">Политика конфиденциальности</a></li>
                 <li><a href="">Договор оферты</a></li>
-                <li><a href="">О клубе MEDBLOGERS</a></li>
+                <li><a href="">О клубе <span class="footer_bold_text">MEDBLOGERS</span></a></li>
                 <li><a href="">Товарный знак </a></li>
             </ul>
-            <span class="footer_sign meta">Meta* — компания, владеющая Facebook и Instagram, признана экстремистской в РФ</span>
+            <span class="footer_sign meta">*Instagram принадлежит Meta, признанной экстремистской в России</span>
         </div>
         <div class="footer_content">
             <span class="footer_title">Контакты</span>
@@ -24,7 +25,7 @@
                 <li><a href="">Отдел заботы и техподдержка</a></li>
                 <li><a href="">Telegram-канал</a></li>
             </ul>
-            <span class="footer_sign">Индивидуальный предприниматель Нечепорук Владимир Алексеевич</span>
+            <span class="footer_sign">Индивидуальный предприниматель <span class="footer_nowrap">Нечепорук Владимир Алексеевич</span></span>
             <ul class="footer_requisites">
                 <li>ИНН: 667360619570</li>
                 <li>ОГРНИП: 323665800095994</li>
@@ -34,7 +35,8 @@
         <div class="footer_content placement">
             <span class="footer_title">Размещение на сайте</span>
             <div class="footer_banner_new_doctor">
-                <img class="footer_action" src="{% static 'img/footer_action.svg' %}">
+                <img class="footer_action" src="{% static 'img/footer_action.png' %}">
+                <img class="footer_mobile_action" src="{% static 'img/footer_mobile_action.png' %}">
                 <span class="footer_sign">Ознакомьтесь с правилами и заполните анкету чтобы ваша карточка появилась на нашем сайте</span>
                 <a class="footer_button" href="{% url "welcome" %}" target="_blank">
                         <p>Подать заявку</p>

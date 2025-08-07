@@ -19,6 +19,8 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG = os.getenv('DEBUG') == 'True'
 
 CSRF_TRUSTED_ORIGINS = [
+    'https://medblogers-base.ru',
+    'http://medblogers-base.ru',
     'http://doctors.readyschool.ru',
     'http://www.doctors.readyschool.ru',
     'https://www.doctors.readyschool.ru',
@@ -28,7 +30,6 @@ CSRF_TRUSTED_ORIGINS = [
     'http://www.testblogers.readyschool.ru',
     'https://www.testblogers.readyschool.ru',
     'http://127.0.0.1',
-    'http://medblogers-base.ru',
 ]
 
 ADMIN_TITLE = GRAPPELLI_ADMIN_TITLE = 'MEDBLOGERS BASE'

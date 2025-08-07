@@ -3,5 +3,5 @@ Disallow: /admin/
 Disallow: /api/
 Disallow: /new_club_participant
 
-Sitemap: https://doctors.readyschool.ru/sitemap
+Sitemap: https://medblogers-base.ru/sitemap
 Clean-param: ref /sitemap.xml

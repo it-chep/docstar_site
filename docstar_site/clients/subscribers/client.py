@@ -169,6 +169,42 @@ class SubscribersClient:
         except (requests.exceptions.Timeout, requests.exceptions.HTTPError, ValueError, Exception) as e:
             return 500
 
+    def update_doctor_is_active(self, doctor_id: int, is_active: bool, *args, **kwargs) -> int:
+        """
+                Обновляет информацию о докторе
+                """
+        api_url = f'{self.url}/doctors/{doctor_id}/'
+
+        # Подготовка данных для запроса
+        body = {
+            'is_active': is_active
+        }
+
+        # Удаляем None значения из payload
+        payload = {k: v for k, v in body.items() if v is not None}
+
+        headers = {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        }
+
+        try:
+            response = requests.patch(
+                api_url,
+                json=payload,
+                headers=headers,
+                timeout=10
+            )
+            if response.status_code == 400:
+                return response.status_code
+
+            # Проверка статус кода
+            response.raise_for_status()
+            return response.status_code
+
+        except (requests.exceptions.Timeout, requests.exceptions.HTTPError, ValueError, Exception) as e:
+            return 500
+
     def get_subscribers_by_doctors_ids(self, doctor_ids: list[int]) -> dict:
         """
         Получает количество подписчиков для миниатюр по переданным IDs

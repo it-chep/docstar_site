@@ -6,6 +6,7 @@ from docstar_site.models import *
 from docstar_site.utils import validate_tg_channel_url, validate_inst_url
 from django.utils import timezone
 
+
 def custom_admin_index_wrapper(original_index):
     def wrapper(request, extra_context=None):
         # Получаем стандартный response
@@ -80,7 +81,36 @@ class DoctorAdmin(admin.ModelAdmin):
             if not success:
                 return
 
+        if change and ('is_active' in form.changed_data):
+            success = self._handle_change_is_active(request, obj.id, obj.is_active)
+            if not success:
+                return
+
         super().save_model(request, obj, form, change)
+
+    @staticmethod
+    def _handle_change_is_active(request, obj, is_active) -> bool:
+        """Обработка изменения IS_ACTIVE"""
+
+        client = settings.SUBSCRIBERS_CLIENT
+
+        doctor_admin_url = reverse('admin:docstar_site_doctor_change', args=[obj.id])
+
+        try:
+            status = client.update_doctor_is_active(obj.id, is_active)
+            if status > 400:
+                messages.error(request,
+                               format_html(
+                                   'Не удалось обновить данные в сервисе подписчиков.'
+                                   '<a href="{}">Перейти к редактированию доктора</a>',
+                                   doctor_admin_url)
+                               )
+                return False
+            return True
+        except Exception as e:
+            messages.set_level(request, messages.ERROR)
+            messages.error(request, f"Ошибка при обновлении признака АКТИВНОСТИ: {str(e)}")
+            return False
 
     @staticmethod
     def _handle_change_additional_cities(request, obj, cleaned_data) -> bool:
@@ -169,6 +199,7 @@ class SpeciallityAdmin(admin.ModelAdmin):
 
 class ExportAdmin(admin.ModelAdmin):
     list_display = ('export_id', 'export_time')
+
 
 from django.contrib.auth.models import Group
 

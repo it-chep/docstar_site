@@ -30,22 +30,26 @@ class CreateDoctorForm(forms.Form):
     email = forms.EmailField(
         label='Почта',
         widget=forms.EmailInput(attrs={'class': 'input-field'}),
+        required=True,
     )
 
     last_name = forms.CharField(
         label='Фамилия',
         max_length=100,
         widget=forms.TextInput(attrs={'class': 'input-field'}),
+        required=True,
     )
     first_name = forms.CharField(
         label='Имя',
         max_length=100,
         widget=forms.TextInput(attrs={'class': 'input-field'}),
+        required=True,
     )
     middle_name = forms.CharField(
         label='Отчество',
         max_length=100,
         widget=forms.TextInput(attrs={'class': 'input-field'}),
+        required=True,
     )
     birth_date = forms.DateField(
         label='Ваш день рождения',
@@ -53,6 +57,7 @@ class CreateDoctorForm(forms.Form):
             'class': 'datepicker',
             'placeholder': 'Укажите дату в формате ДД.ММ.ГГГГ',
         }),
+        required=True,
     )
 
     additional_cities = forms.CharField(
@@ -120,16 +125,23 @@ class CreateDoctorForm(forms.Form):
     city = forms.ChoiceField(
         label='Выберите город (Если вашего нет, напишите об этом в бота)',
         required=True,
-        choices=[(None, None)] + [(city.id, city.name) for city in City.objects.all()]
+        # choices=[(None, None)] + [(city.id, city.name) for city in City.objects.all()]
     )
     speciallity = forms.ChoiceField(
         label='Выберите вашу специальность (Если ее нет, напишите в бота)',
         required=True,
-        choices=[(None, None)] + [(spec.id, spec.name) for spec in Speciallity.objects.all()]
+        # choices=[(None, None)] + [(spec.id, spec.name) for spec in Speciallity.objects.all()]
     )
     main_blog_theme = forms.CharField(
         label='ТОП-5 заболеваний/тем про которые пишете в блоге',
-        required=False,
+        widget=forms.TextInput(attrs={
+            'placeholder': ''
+        }),
+        required=True,
+    )
+    marketing_preferences = forms.CharField(
+        label='У врачей каких специальностей вы бы хотели приобрести рекламу / договориться о коллаборации? (Планируем сделать вкладку «ищу неврологов, гинекологов и т.д.)',
+        required=True,
     )
     prodoctorov = forms.CharField(
         label='Ваш сайт/таплинк',
@@ -160,6 +172,11 @@ class CreateDoctorForm(forms.Form):
         if self.cleaned_data.get('last_name') and self.cleaned_data.get('first_name') and self.cleaned_data.get(
                 'middle_name'):
             self.name = f"{self.cleaned_data.get('last_name').strip()} {self.cleaned_data.get('first_name').strip()} {self.cleaned_data.get('middle_name').strip()}"
+
+    def clean_last_name(self):
+        last_name = self.cleaned_data.get('last_name')
+        if "(" in last_name or ")" in last_name:
+            raise ValidationError("Указаны недопустимые символы, можно указать только 1 фамилию")
 
     def clean_city(self):
         city_id = self.cleaned_data.get('city')
@@ -262,6 +279,7 @@ class CreateDoctorForm(forms.Form):
                 existing_doctor.main_blog_theme = self.cleaned_data["main_blog_theme"]
                 existing_doctor.birth_date = self.cleaned_data["birth_date"]
                 existing_doctor.prodoctorov = self.cleaned_data["prodoctorov"]
+                existing_doctor.marketing_preferences = self.cleaned_data["marketing_preferences"]
 
                 existing_doctor.save()
 
@@ -280,7 +298,6 @@ class CreateDoctorForm(forms.Form):
 
                 return existing_doctor
             else:
-                # Создаем нового врача (оригинальный код)
                 slug = get_eng_slug(self.name)
                 doctor = Doctor(
                     name=self.name,
@@ -297,6 +314,7 @@ class CreateDoctorForm(forms.Form):
                     main_blog_theme=self.cleaned_data["main_blog_theme"],
                     birth_date=self.cleaned_data["birth_date"],
                     prodoctorov=self.cleaned_data["prodoctorov"],
+                    marketing_preferences=self.cleaned_data["marketing_preferences"],
                     is_active=False,
                 )
 

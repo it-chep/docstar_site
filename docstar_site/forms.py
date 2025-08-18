@@ -30,26 +30,22 @@ class CreateDoctorForm(forms.Form):
     email = forms.EmailField(
         label='Почта',
         widget=forms.EmailInput(attrs={'class': 'input-field'}),
-        required=True,
     )
 
     last_name = forms.CharField(
         label='Фамилия',
         max_length=100,
         widget=forms.TextInput(attrs={'class': 'input-field'}),
-        required=True,
     )
     first_name = forms.CharField(
         label='Имя',
         max_length=100,
         widget=forms.TextInput(attrs={'class': 'input-field'}),
-        required=True,
     )
     middle_name = forms.CharField(
         label='Отчество',
         max_length=100,
         widget=forms.TextInput(attrs={'class': 'input-field'}),
-        required=True,
     )
     birth_date = forms.DateField(
         label='Ваш день рождения',
@@ -57,7 +53,6 @@ class CreateDoctorForm(forms.Form):
             'class': 'datepicker',
             'placeholder': 'Укажите дату в формате ДД.ММ.ГГГГ',
         }),
-        required=True,
     )
 
     additional_cities = forms.CharField(
@@ -125,23 +120,26 @@ class CreateDoctorForm(forms.Form):
     city = forms.ChoiceField(
         label='Выберите город (Если вашего нет, напишите об этом в бота)',
         required=True,
-        # choices=[(None, None)] + [(city.id, city.name) for city in City.objects.all()]
+        choices=[(None, None)] + [(city.id, city.name) for city in City.objects.all()]
     )
     speciallity = forms.ChoiceField(
         label='Выберите вашу специальность (Если ее нет, напишите в бота)',
         required=True,
-        # choices=[(None, None)] + [(spec.id, spec.name) for spec in Speciallity.objects.all()]
+        choices=[(None, None)] + [(spec.id, spec.name) for spec in Speciallity.objects.all()]
     )
     main_blog_theme = forms.CharField(
         label='ТОП-5 заболеваний/тем про которые пишете в блоге',
         widget=forms.TextInput(attrs={
-            'placeholder': ''
+            'placeholder': 'Например: выпадение волос разной этиологии, уход за кожей, акне и розацеа, проверка родинок и рак кожи'
         }),
         required=True,
     )
     marketing_preferences = forms.CharField(
         label='У врачей каких специальностей вы бы хотели приобрести рекламу / договориться о коллаборации? (Планируем сделать вкладку «ищу неврологов, гинекологов и т.д.)',
         required=True,
+        widget=forms.TextInput(attrs={
+            'placeholder': 'Например: Неврологи, педиатры, ревматологи, рентгенологи'
+        })
     )
     prodoctorov = forms.CharField(
         label='Ваш сайт/таплинк',
@@ -169,6 +167,7 @@ class CreateDoctorForm(forms.Form):
             raise ValidationError(error)
 
         super().clean()
+        self.name = self.cleaned_data.get('last_name')
         if self.cleaned_data.get('last_name') and self.cleaned_data.get('first_name') and self.cleaned_data.get(
                 'middle_name'):
             self.name = f"{self.cleaned_data.get('last_name').strip()} {self.cleaned_data.get('first_name').strip()} {self.cleaned_data.get('middle_name').strip()}"
@@ -177,6 +176,7 @@ class CreateDoctorForm(forms.Form):
         last_name = self.cleaned_data.get('last_name')
         if "(" in last_name or ")" in last_name:
             raise ValidationError("Указаны недопустимые символы, можно указать только 1 фамилию")
+        return last_name
 
     def clean_city(self):
         city_id = self.cleaned_data.get('city')
@@ -262,6 +262,8 @@ class CreateDoctorForm(forms.Form):
 
     def save(self, commit=True):
         try:
+            if not self.name:
+                self.name = f"{self.cleaned_data.get('last_name').strip()} {self.cleaned_data.get('first_name').strip()} {self.cleaned_data.get('middle_name').strip()}"
             existing_doctor = Doctor.objects.filter(
                 name=self.name,
                 email=self.cleaned_data["email"]

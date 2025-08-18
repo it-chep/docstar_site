@@ -100,6 +100,13 @@ class Doctor(models.Model):
         blank=True
     )
 
+    marketing_preferences = models.CharField(
+        verbose_name="У врачей каких специальностей вы бы хотели приобрести рекламу / договориться о коллаборации?",
+        max_length=300,
+        null=True,
+        blank=True,
+    )
+
     def __str__(self):
         return self.name
 

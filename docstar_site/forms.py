@@ -129,7 +129,17 @@ class CreateDoctorForm(forms.Form):
     )
     main_blog_theme = forms.CharField(
         label='ТОП-5 заболеваний/тем про которые пишете в блоге',
-        required=False,
+        widget=forms.TextInput(attrs={
+            'placeholder': 'Например: выпадение волос разной этиологии, уход за кожей, акне и розацеа, проверка родинок и рак кожи'
+        }),
+        required=True,
+    )
+    marketing_preferences = forms.CharField(
+        label='У врачей каких специальностей вы бы хотели приобрести рекламу / договориться о коллаборации? (Планируем сделать вкладку «ищу неврологов, гинекологов и т.д.)',
+        required=True,
+        widget=forms.TextInput(attrs={
+            'placeholder': 'Например: Неврологи, педиатры, ревматологи, рентгенологи'
+        })
     )
     prodoctorov = forms.CharField(
         label='Ваш сайт/таплинк',
@@ -157,9 +167,16 @@ class CreateDoctorForm(forms.Form):
             raise ValidationError(error)
 
         super().clean()
+        self.name = self.cleaned_data.get('last_name')
         if self.cleaned_data.get('last_name') and self.cleaned_data.get('first_name') and self.cleaned_data.get(
                 'middle_name'):
             self.name = f"{self.cleaned_data.get('last_name').strip()} {self.cleaned_data.get('first_name').strip()} {self.cleaned_data.get('middle_name').strip()}"
+
+    def clean_last_name(self):
+        last_name = self.cleaned_data.get('last_name')
+        if "(" in last_name or ")" in last_name:
+            raise ValidationError("Указаны недопустимые символы, можно указать только 1 фамилию")
+        return last_name
 
     def clean_city(self):
         city_id = self.cleaned_data.get('city')
@@ -245,6 +262,8 @@ class CreateDoctorForm(forms.Form):
 
     def save(self, commit=True):
         try:
+            if not self.name:
+                self.name = f"{self.cleaned_data.get('last_name').strip()} {self.cleaned_data.get('first_name').strip()} {self.cleaned_data.get('middle_name').strip()}"
             existing_doctor = Doctor.objects.filter(
                 name=self.name,
                 email=self.cleaned_data["email"]
@@ -262,6 +281,7 @@ class CreateDoctorForm(forms.Form):
                 existing_doctor.main_blog_theme = self.cleaned_data["main_blog_theme"]
                 existing_doctor.birth_date = self.cleaned_data["birth_date"]
                 existing_doctor.prodoctorov = self.cleaned_data["prodoctorov"]
+                existing_doctor.marketing_preferences = self.cleaned_data["marketing_preferences"]
 
                 existing_doctor.save()
 
@@ -280,7 +300,6 @@ class CreateDoctorForm(forms.Form):
 
                 return existing_doctor
             else:
-                # Создаем нового врача (оригинальный код)
                 slug = get_eng_slug(self.name)
                 doctor = Doctor(
                     name=self.name,
@@ -297,6 +316,7 @@ class CreateDoctorForm(forms.Form):
                     main_blog_theme=self.cleaned_data["main_blog_theme"],
                     birth_date=self.cleaned_data["birth_date"],
                     prodoctorov=self.cleaned_data["prodoctorov"],
+                    marketing_preferences=self.cleaned_data["marketing_preferences"],
                     is_active=False,
                 )
 

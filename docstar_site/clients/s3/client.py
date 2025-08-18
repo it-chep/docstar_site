@@ -64,16 +64,40 @@ class S3Client:
 
     def _list_files(self, prefix: str) -> list:
         """Возвращает список файлов в бакете с указанным префиксом."""
-        try:
-            response = self.client.list_objects_v2(
-                Bucket=self.bucket_name,
-                Prefix=prefix,
-            )
-            objects = response.get("Contents", [])
-            sorted_objects = sorted(objects, key=lambda x: x["LastModified"])
-            return [obj["Key"] for obj in sorted_objects]
-        except ClientError as e:
-            return []
+        objects = []
+        continuation_token = None
+
+        counter = 0
+        while True:
+            counter += 1
+            try:
+                # Запрашиваем партию объектов
+                kwargs = {
+                    "Bucket": self.bucket_name,
+                    "Prefix": prefix,
+                }
+                if continuation_token:
+                    kwargs["ContinuationToken"] = continuation_token
+
+                response = self.client.list_objects_v2(**kwargs)
+
+                # Добавляем объекты в общий список
+                if "Contents" in response:
+                    objects.extend(response["Contents"])
+
+                # Проверяем, есть ли ещё данные
+                if not response.get("IsTruncated"):
+                    break
+
+                continuation_token = response.get("NextContinuationToken")
+
+            except ClientError as e:
+                print(f"Error listing objects: {e}")
+                break
+
+        # Сортируем по LastModified и возвращаем только ключи
+        sorted_objects = sorted(objects, key=lambda x: x["LastModified"])
+        return [obj["Key"] for obj in sorted_objects]
 
     def get_user_photos(self) -> dict:
         files = self._list_files("images/user_")

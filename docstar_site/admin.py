@@ -82,7 +82,7 @@ class DoctorAdmin(admin.ModelAdmin):
                 return
 
         if change and ('is_active' in form.changed_data):
-            success = self._handle_change_is_active(request, obj.id, obj.is_active)
+            success = self._handle_change_is_active(request, obj, obj.is_active)
             if not success:
                 return
 

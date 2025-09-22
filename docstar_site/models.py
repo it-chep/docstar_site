@@ -256,6 +256,17 @@ class SocialNetworks(models.Model):
         return self.name
 
 
+class FreelancerCooperationType(models.Model):
+    name = models.TextField(verbose_name="Название типа размещения")
+
+    class Meta:
+        verbose_name = "Тип размещения фрилансеров"
+        verbose_name_plural = "Фрилансеры Типы размещения"
+        db_table = "freelancers_cooperation_type"
+
+    def __str__(self):
+        return self.name
+
 class Freelancer(models.Model):
     email = models.CharField(max_length=255, verbose_name="Email фрилансера")
     slug = models.TextField(verbose_name="Slug", null=False, blank=False)
@@ -289,6 +300,14 @@ class Freelancer(models.Model):
         null=True,
         blank=True,
         default='user_photos/zag.png'
+    )
+
+    cooperation_type = models.ForeignKey(
+        FreelancerCooperationType,
+        on_delete=models.SET_NULL,
+        verbose_name="Тип размещения",
+        null=True,
+        blank=True,
     )
 
     class Meta:
@@ -337,6 +356,7 @@ class FreelancerSpecialityM2M(models.Model):
     def __str__(self):
         return self.freelancer.name + self.speciality.name
 
+
 class FreelancerCityM2M(models.Model):
     city = models.ForeignKey(FreelancersCity, on_delete=models.CASCADE)
     freelancer = models.ForeignKey(Freelancer, on_delete=models.CASCADE)
@@ -349,6 +369,7 @@ class FreelancerCityM2M(models.Model):
 
     def __str__(self):
         return self.freelancer.name + self.city.name
+
 
 class FreelancerSocialNetworksM2M(models.Model):
     social_network = models.ForeignKey(SocialNetworks, on_delete=models.CASCADE)

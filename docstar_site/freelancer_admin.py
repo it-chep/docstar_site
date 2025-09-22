@@ -9,9 +9,9 @@ from docstar_site.models import (
     FreelancerSpecialityM2M,
     FreelancerCityM2M,
     FreelancerSocialNetworksM2M,
-    FreelancersPriceList
+    FreelancersPriceList,
+    FreelancerCooperationType
 )
-
 
 
 @admin.register(FreelancersSpeciality)
@@ -71,7 +71,7 @@ class FreelancerAdmin(admin.ModelAdmin):
     list_display = (
         'id', 'name', 'email', 'slug', 'is_active',
         'is_worked_with_doctors', 'price_category',
-        'speciality', 'city', 'display_avatar'
+        'speciality', 'city', 'display_avatar', 'cooperation_type'
     )
     list_display_links = ('id', 'name')
     list_filter = (
@@ -80,12 +80,13 @@ class FreelancerAdmin(admin.ModelAdmin):
     )
     search_fields = ('name', 'email', 'slug', 'tg_username')
     readonly_fields = ('display_avatar',)
-    raw_id_fields = ('city', 'speciality', )
+    raw_id_fields = ('city', 'speciality', 'cooperation_type')
     fieldsets = (
         ('Основная информация', {
             'fields': (
                 'name', 'email', 'slug', 'is_active',
-                'is_worked_with_doctors', 'price_category'
+                'is_worked_with_doctors', 'price_category',
+                'cooperation_type'
             )
         }),
         ('Контакты', {
@@ -95,7 +96,7 @@ class FreelancerAdmin(admin.ModelAdmin):
             'fields': ('speciality', 'city')
         }),
         ('Фотографии', {
-            'fields': ('avatar', 'display_avatar', 's3_image')
+            'fields': ('avatar', 's3_image')
         }),
     )
     inlines = [
@@ -154,3 +155,10 @@ class FreelancersPriceListAdmin(admin.ModelAdmin):
     list_filter = ('freelancer',)
     search_fields = ('freelancer__name', 'name')
     raw_id_fields = ('freelancer',)
+
+
+@admin.register(FreelancerCooperationType)
+class FreelancerCooperationTypeAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name')
+    list_display_links = ('id', 'name')
+    search_fields = ('name',)

@@ -267,6 +267,7 @@ class FreelancerCooperationType(models.Model):
     def __str__(self):
         return self.name
 
+
 class Freelancer(models.Model):
     email = models.CharField(max_length=255, verbose_name="Email фрилансера")
     slug = models.TextField(verbose_name="Slug", null=False, blank=False)
@@ -322,7 +323,7 @@ class Freelancer(models.Model):
     @property
     def get_s3_file(self) -> Optional[str]:
         if self.s3_image:
-            url = settings.S3_CLIENT.generate_presigned_url(self.s3_image)
+            url = settings.S3_FREELANSERS_CLIENT.generate_presigned_url(self.s3_image)
             if url:
                 return url
         return None
@@ -336,11 +337,16 @@ class Freelancer(models.Model):
         file_obj = self.avatar
         if file_obj:
             self.s3_image = f"images/user_{self.slug}_{file_obj.file.name}"
-            if file_obj and not settings.S3_CLIENT.put_object(file_obj.file, self.s3_image):
+            if file_obj and not settings.S3_FREELANSERS_CLIENT.put_object(file_obj.file, self.s3_image):
                 raise Exception("Не удалось сохранить фотку")
             self.avatar = None
 
         super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        """Удаляет файл из S3 при удалении модели"""
+        settings.S3_FREELANSERS_CLIENT.delete_file(self.s3_image)
+        super().delete(*args, **kwargs)
 
 
 class FreelancerSpecialityM2M(models.Model):

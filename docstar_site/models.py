@@ -246,6 +246,7 @@ class FreelancersCity(models.Model):
 
 class SocialNetworks(models.Model):
     name = models.CharField(max_length=30, verbose_name="Название соцсети")
+    slug = models.CharField(max_length=30, verbose_name="Слаг")
 
     class Meta:
         verbose_name = "Социальная сеть"
@@ -330,9 +331,9 @@ class Freelancer(models.Model):
 
     def save(self, *args, **kwargs):
         """Сохраняет файл в S3 и записывает ключ"""
-        if settings.DEBUG:
-            super().save(*args, **kwargs)
-            return
+        # if settings.DEBUG:
+        #     super().save(*args, **kwargs)
+        #     return
 
         file_obj = self.avatar
         if file_obj:

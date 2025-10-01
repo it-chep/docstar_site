@@ -79,7 +79,7 @@ class FreelancerAdmin(admin.ModelAdmin):
         'speciality', 'city'
     )
     search_fields = ('name', 'email', 'slug', 'tg_username')
-    readonly_fields = ('display_avatar',)
+    readonly_fields = ('display_avatar','s3_image')
     raw_id_fields = ('city', 'speciality', 'cooperation_type')
     fieldsets = (
         ('Основная информация', {

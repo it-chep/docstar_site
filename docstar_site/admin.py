@@ -6,6 +6,8 @@ from docstar_site.models import *
 from docstar_site.utils import validate_tg_channel_url, validate_inst_url
 from django.utils import timezone
 
+from docstar_site.freelancer_admin import *
+
 
 def custom_admin_index_wrapper(original_index):
     def wrapper(request, extra_context=None):

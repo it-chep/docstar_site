@@ -187,8 +187,8 @@ class Speciallity(models.Model):
         return self.name
 
     class Meta:
-        verbose_name = 'Специальность'
-        verbose_name_plural = 'Специальности'
+        verbose_name = 'Специальность врача'
+        verbose_name_plural = 'Специальности врачей'
         ordering = ["name"]
 
 
@@ -201,8 +201,8 @@ class City(models.Model):
         return self.name
 
     class Meta:
-        verbose_name = 'Город'
-        verbose_name_plural = 'Города'
+        verbose_name = 'Город врача'
+        verbose_name_plural = 'Города врачей'
         ordering = ["name"]
 
 
@@ -216,3 +216,192 @@ class GetCourseExportID(models.Model):
     class Meta:
         verbose_name = 'Айдишник'
         verbose_name_plural = 'Айдишники'
+
+
+# ------------- Фрилансеры -----------------------
+
+class FreelancersSpeciality(models.Model):
+    name = models.CharField(max_length=255, verbose_name="Название специальности")
+
+    class Meta:
+        verbose_name = "Специальность фрилансера"
+        verbose_name_plural = "Специальности фрилансеров"
+        db_table = "freelancers_speciality"
+
+    def __str__(self):
+        return self.name
+
+
+class FreelancersCity(models.Model):
+    name = models.CharField(max_length=255, verbose_name="Название города")
+
+    class Meta:
+        verbose_name = "Город фрилансера"
+        verbose_name_plural = "Города фрилансеров"
+        db_table = "freelancers_city"
+
+    def __str__(self):
+        return self.name
+
+
+class SocialNetworks(models.Model):
+    name = models.CharField(max_length=30, verbose_name="Название соцсети")
+    slug = models.CharField(max_length=30, verbose_name="Слаг")
+
+    class Meta:
+        verbose_name = "Социальная сеть"
+        verbose_name_plural = "Социальные сети"
+        db_table = "social_networks"
+
+    def __str__(self):
+        return self.name
+
+
+class FreelancerCooperationType(models.Model):
+    name = models.TextField(verbose_name="Название типа размещения")
+
+    class Meta:
+        verbose_name = "Тип размещения фрилансеров"
+        verbose_name_plural = "Фрилансеры Типы размещения"
+        db_table = "freelancers_cooperation_type"
+
+    def __str__(self):
+        return self.name
+
+
+class Freelancer(models.Model):
+    email = models.CharField(max_length=255, verbose_name="Email фрилансера")
+    slug = models.TextField(verbose_name="Slug", null=False, blank=False)
+    name = models.CharField(max_length=255, verbose_name="Имя", null=False, blank=False)
+    is_worked_with_doctors = models.BooleanField(verbose_name="Опыт работы с врачами", default=False)
+    is_active = models.BooleanField(verbose_name="Активен", default=False)
+    tg_username = models.CharField(max_length=255, verbose_name="Telegram username", null=True, blank=True)
+    portfolio_link = models.CharField(max_length=255, verbose_name="Ссылка на портфолио", null=True, blank=True)
+    speciality = models.ForeignKey(
+        FreelancersSpeciality,
+        on_delete=models.SET_NULL,
+        verbose_name="Основная специальность",
+        null=True,
+        blank=True,
+        related_name='primary_freelancers'
+    )
+    city = models.ForeignKey(
+        FreelancersCity,
+        on_delete=models.SET_NULL,
+        verbose_name="Основной город",
+        null=True,
+        blank=True,
+        related_name='primary_freelancers'
+    )
+    price_category = models.IntegerField(verbose_name="Ценовая категория", null=True, blank=True)
+    s3_image = models.TextField(verbose_name="Фотография", null=True, blank=True)
+
+    avatar = models.ImageField(
+        verbose_name="Личное фото",
+        upload_to="user_photos/",
+        null=True,
+        blank=True,
+        default='user_photos/zag.png'
+    )
+
+    cooperation_type = models.ForeignKey(
+        FreelancerCooperationType,
+        on_delete=models.SET_NULL,
+        verbose_name="Тип размещения",
+        null=True,
+        blank=True,
+    )
+
+    class Meta:
+        verbose_name = "Фрилансер"
+        verbose_name_plural = "Фрилансеры"
+        unique_together = ('email', 'name')
+        db_table = "freelancer"
+
+    def __str__(self):
+        return self.name
+
+    @property
+    def get_s3_file(self) -> Optional[str]:
+        if self.s3_image:
+            url = settings.S3_FREELANSERS_CLIENT.generate_presigned_url(self.s3_image)
+            if url:
+                return url
+        return None
+
+    def save(self, *args, **kwargs):
+        """Сохраняет файл в S3 и записывает ключ"""
+        # if settings.DEBUG:
+        #     super().save(*args, **kwargs)
+        #     return
+
+        file_obj = self.avatar
+        if file_obj:
+            self.s3_image = f"images/user_{self.slug}_{file_obj.file.name}"
+            if file_obj and not settings.S3_FREELANSERS_CLIENT.put_object(file_obj.file, self.s3_image):
+                raise Exception("Не удалось сохранить фотку")
+            self.avatar = None
+
+        super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        """Удаляет файл из S3 при удалении модели"""
+        settings.S3_FREELANSERS_CLIENT.delete_file(self.s3_image)
+        super().delete(*args, **kwargs)
+
+
+class FreelancerSpecialityM2M(models.Model):
+    speciality = models.ForeignKey(FreelancersSpeciality, on_delete=models.CASCADE)
+    freelancer = models.ForeignKey(Freelancer, on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name = "Специальность фрилансера (M2M)"
+        verbose_name_plural = "Специальности фрилансеров (M2M)"
+        unique_together = ('speciality', 'freelancer')
+        db_table = "freelancer_speciality_m2m"
+
+    def __str__(self):
+        return self.freelancer.name + self.speciality.name
+
+
+class FreelancerCityM2M(models.Model):
+    city = models.ForeignKey(FreelancersCity, on_delete=models.CASCADE)
+    freelancer = models.ForeignKey(Freelancer, on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name = "Город фрилансера (M2M)"
+        verbose_name_plural = "Города фрилансеров (M2M)"
+        unique_together = ('city', 'freelancer')
+        db_table = "freelancer_city_m2m"
+
+    def __str__(self):
+        return self.freelancer.name + self.city.name
+
+
+class FreelancerSocialNetworksM2M(models.Model):
+    social_network = models.ForeignKey(SocialNetworks, on_delete=models.CASCADE)
+    freelancer = models.ForeignKey(Freelancer, on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name = "Соцсеть фрилансера (M2M)"
+        verbose_name_plural = "Соцсети фрилансеров (M2M)"
+        unique_together = ('social_network', 'freelancer')
+        db_table = "freelancer_social_networks_m2m"
+
+    def __str__(self):
+        return self.freelancer.name + self.social_network.name
+
+
+class FreelancersPriceList(models.Model):
+    freelancer = models.ForeignKey(Freelancer, on_delete=models.CASCADE, verbose_name="Фрилансер")
+    name = models.CharField(max_length=255, verbose_name="Название услуги")
+    price = models.IntegerField(verbose_name="Стоимость услуги")
+
+    class Meta:
+        verbose_name = "Прайс-лист фрилансера"
+        verbose_name_plural = "Прайс-листы фрилансеров"
+        unique_together = ('freelancer', 'name')
+        db_table = "freelancers_price_list"
+
+    def __str__(self):
+        return self.freelancer.name + self.name
